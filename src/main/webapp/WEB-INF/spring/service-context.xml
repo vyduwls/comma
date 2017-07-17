@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Model(DB)와 관련있는 애들 -->
+	<bean name="ds" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+		<property name="url" value="jdbc:mysql://comma-web.czmeditwxmnl.ap-northeast-2.rds.amazonaws.com:3306/comma"></property>	
+		<property name="username" value="comma"></property>
+		<property name="password" value="20170711"></property>
+	</bean>
+	
+	<bean name="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="ds"></property>
+		<!-- value에 값 앞에 classpath:들어가야 함(약속임), NoticeDAO 부분은 DAO가 여러개가 되면 *로 대체하면 된다. -->
+		<property name="mapperLocations" value="classpath:com/comma/albaman/dao/mapper/*.xml"></property>
+	</bean>
+	
+	<bean name="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<!-- index는 약속 -->
+		<constructor-arg index="0" ref="sqlSessionFactory"></constructor-arg>	
+	</bean>
+	
+	<bean name="ptm" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    	<property name="dataSource" ref="ds"></property>
+    </bean>		
+</beans>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+	<!-- 경로를 그에 맞게 변경해줘야 한다.(WEB-INF로 옮기고 나서) -->
+
+
+	<!-- index 관련 -->
+	<definition name="index" template="/WEB-INF/views/include/layout.jsp">
+	  <put-attribute name="css" value="index.css" />
+	  <put-attribute name="header" value="/WEB-INF/views/include/header.jsp" />
+	  <put-attribute name="content" value="/WEB-INF/views/index.jsp" />
+	  <put-attribute name="footer" value="/WEB-INF/views/include/footer.jsp" />
+	</definition>
+	
+	<!-- ★★최종본★★ -->
+	<!-- customer과 joinus를 통합시킬수도 있다. -->
+	<definition name="*.*" template="/WEB-INF/views/{1}/include/layout.jsp">
+	  <!-- CSS 때문에 묶기가 힘들어짐(join.css과 login.css통일하거나 해야 했었다. => 그러면 애초에 여기에 css를 적용시킬 필요가 없었음)
+	  	        나머지 css파일은 없는 파일이니까 그냥 이렇게 써도 문제가 없어서 이렇게 씀  -->
+	  <put-attribute name="css" value="{2}.css" />
+	  <put-attribute name="header" value="/WEB-INF/views/include/header.jsp" />
+	  <put-attribute name="visual" value="/WEB-INF/views/{1}/include/visual.jsp" />
+	  <put-attribute name="aside" value="/WEB-INF/views/{1}/include/aside.jsp" />
+	  <put-attribute name="content" value="/WEB-INF/views/{1}/{2}.jsp" />
+	  <put-attribute name="footer" value="/WEB-INF/views/include/footer.jsp" />
+	</definition>
+</tiles-definitions>
