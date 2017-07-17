@@ -7,7 +7,7 @@ public class Schedule {
 		private String preOffWork;
 		private String onWork;
 		private String offWork;
-		private String mid;
+		private String rid;
 		
 		public String getSseq() {
 			return sseq;
@@ -40,12 +40,13 @@ public class Schedule {
 		public void setOffWork(String offWork) {
 			this.offWork = offWork;
 		}
-		public String getMid() {
-			return mid;
+		public String getRid() {
+			return rid;
 		}
-		public void setMid(String mid) {
-			this.mid = mid;
+		public void setRid(String rid) {
+			this.rid = rid;
 		}
+
 		
 	
 }

@@ -8,7 +8,6 @@ public class Recruit {
 		private int wage;
 		private String joinDate;
 		private String resignDate;
-		private String mid;
 		private String sid;
 		
 		public String getRid() {
@@ -46,12 +45,6 @@ public class Recruit {
 		}
 		public void setResignDate(String resignDate) {
 			this.resignDate = resignDate;
-		}
-		public String getMid() {
-			return mid;
-		}
-		public void setMid(String mid) {
-			this.mid = mid;
 		}
 		public String getSid() {
 			return sid;
