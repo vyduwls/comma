@@ -1,20 +1,19 @@
 package com.comma.albaman.vo;
 
-public class Notice {
+public class Qna {
 	
-		private String nseq;
+		private String qseq;
 		private String title;
 		private String content;
 		private String regDate;
 		private String image;
 		private String mid;
-		private String sid;
 		
-		public String getNseq() {
-			return nseq;
+		public String getQseq() {
+			return qseq;
 		}
-		public void setNseq(String nseq) {
-			this.nseq = nseq;
+		public void setQseq(String qseq) {
+			this.qseq = qseq;
 		}
 		public String getTitle() {
 			return title;
@@ -46,13 +45,6 @@ public class Notice {
 		public void setMid(String mid) {
 			this.mid = mid;
 		}
-		public String getSid() {
-			return sid;
-		}
-		public void setSid(String sid) {
-			this.sid = sid;
-		}
-	
 		
-	
+			
 }

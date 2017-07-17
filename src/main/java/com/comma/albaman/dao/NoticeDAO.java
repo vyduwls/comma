@@ -9,18 +9,18 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
 
-import com.comma.albaman.vo.Notice;
+import com.comma.albaman.vo.Schedule;
 
 
 public interface NoticeDAO {
 
 	//�Խñۺ���
 	@Select("SELECT * FROM NOTICES WHERE SEQ = #{seq}")
-	public abstract Notice getNotice(String seq);
+	public abstract Schedule getNotice(String seq);
 	
 	//�Խñ� ��� - ArrayList<Notice>
 	@Select("SELECT * FROM (SELECT ROWNUM RN, N.* FROM (SELECT * FROM NOTICES WHERE ${field} LIKE '%${query}%' ORDER BY TO_NUMBER(SEQ) DESC) N) WHERE RN BETWEEN 1+(#{pg}-1)*10 AND 10+(#{pg}-1)*10 ")
-	public List<Notice> getNotices(@Param("pg")int pg, @Param("field")String field, @Param("query")String query);
+	public List<Schedule> getNotices(@Param("pg")int pg, @Param("field")String field, @Param("query")String query);
 	
 	@Update("UPDATE NOTICES SET TITLE=#{param1}, CONTENT=#{param2} WHERE SEQ=#{param3}")
 	public int updateNotice(String title, String content, String seq);
