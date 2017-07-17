@@ -2,4 +2,5 @@
     pageEncoding="UTF-8"%>
 <div id="main">
 <!-- 이미지 들어가는 공간 -->
+<p>p 태그 들어간다.</p>
 </div>
