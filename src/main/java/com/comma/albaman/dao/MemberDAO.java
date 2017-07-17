@@ -12,7 +12,7 @@ import com.comma.albaman.vo.Member;
 
 public interface MemberDAO {
 
-	//ȸ����ȸ
+	// 한글이다 한글 한글 1234 ㅅㄷㅇㄹ마름나름너룬머루먼루
 	@Select("SELECT * FROM MEMBERS WHERE MID = #{mid}")
 	public Member getMember(String mid);
 	//ȸ������
