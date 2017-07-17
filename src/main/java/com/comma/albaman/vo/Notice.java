@@ -7,7 +7,6 @@ public class Notice {
 		private String content;
 		private String regDate;
 		private String image;
-		private String mid;
 		private String sid;
 		
 		public String getNseq() {
@@ -39,12 +38,6 @@ public class Notice {
 		}
 		public void setImage(String image) {
 			this.image = image;
-		}
-		public String getMid() {
-			return mid;
-		}
-		public void setMid(String mid) {
-			this.mid = mid;
 		}
 		public String getSid() {
 			return sid;
