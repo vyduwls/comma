@@ -8,7 +8,7 @@
 
 	<!-- index 관련 -->
 	<definition name="index" template="/WEB-INF/views/include/layout.jsp">
-	  <put-attribute name="css" value="index.css" />
+	  <put-attribute name="css" value="css/index.css" />
 	  <put-attribute name="header" value="/WEB-INF/views/include/header.jsp" />
 	  <put-attribute name="content" value="/WEB-INF/views/index.jsp" />
 	  <put-attribute name="footer" value="/WEB-INF/views/include/footer.jsp" />
