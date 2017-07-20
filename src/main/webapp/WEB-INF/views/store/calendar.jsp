@@ -1,29 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<title>풀캘린더</title>
-<style type="text/css">
-    body {
-        margin: 40px 10px;
-        padding: 0;
-        font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
-        font-size: 16px;
-    }
-
-    #calendar {
-        max-width: 70%;
-        margin: 0 auto;
-    }
-
-    .fc-day-number.fc-sat.fc-past { color:#0000FF; }
-    .fc-day-number.fc-sun.fc-past { color:#FF0000; }
-</style>
-<link href="./css/fullcalendar.css" rel="stylesheet"/>
-<link href="./css/fullcalendar.print.css" rel="stylesheet" media="print"/>
-<script type="text/javascript" src="./js/moment.min.js"></script>
-<script type="text/javascript" src="./js/jquery.min.js"></script>
-<script type="text/javascript" src="./js/fullcalendar.js" charset="UTF-8"></script>
-<script type="text/javascript" src="./js/locale-all.js"></script>
+    
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/moment.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/fullcalendar.js" charset="UTF-8"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/locale-all.js"></script>
 <script type="text/javascript">
     jQuery(document).ready(function() {
         jQuery("#calendar").fullCalendar({
@@ -96,7 +77,8 @@
         });
     });
 </script>
-<body>
-<br><br>
-    <div id="calendar"></div>
-</body>
+
+<div class="container">
+	<div id="calendar">
+	</div>
+</div>

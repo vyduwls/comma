@@ -26,7 +26,7 @@
 						<li><a href="">점포 이름1</a></li>
 					</ul>
 				</li>
-				<li class="col-lg-2"><a>스케줄 관리</a>
+				<li class="col-lg-2"><a href="store/calendar.do">스케줄 관리</a>
 					<ul class="col-lg-12">
 						<li><a href="">점포 이름1</a></li>
 						<li><a href="">점포 이름1</a></li>

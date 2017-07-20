@@ -120,5 +120,4 @@
 <button id="bttnAllEvents">bttnAllEvents</button>
 <button id="bttnRecreateEvents">bttnRecreateEvents</button>
 <div id='calendar'></div>
-<pre id="myPre"></pre>
 </body>

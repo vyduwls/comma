@@ -13,13 +13,13 @@ public class indexController {
 	@Autowired
 	private SqlSession sqlSession;
 	
-	@RequestMapping(value={"/index.do"},method=RequestMethod.GET)
+	@RequestMapping(value={"index.do"},method=RequestMethod.GET)
 	public String index(String mid, Model model) {
 		
 		return "index";
 	}
 
-	@RequestMapping(value={"/calendar.do"},method=RequestMethod.GET)
+	@RequestMapping(value={"store/calendar.do"},method=RequestMethod.GET)
 	public String calendar() {
 		
 		return "calendar";

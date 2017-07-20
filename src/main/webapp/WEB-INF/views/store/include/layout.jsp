@@ -21,6 +21,8 @@
 		
 		<!-- CSS -->
 		<link href="<tiles:getAsString name="css"/>" type="text/css" rel="stylesheet"/>
+		<link href="${pageContext.request.contextPath}/css/fullcalendar.css" rel="stylesheet"/>
+		<link href="${pageContext.request.contextPath}/css/fullcalendar.print.css" rel="stylesheet" media="print"/>
 	</head>
 	<body>
 	

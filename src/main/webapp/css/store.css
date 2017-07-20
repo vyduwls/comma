@@ -1,0 +1,208 @@
+/* body {
+	margin: 40px 10px;
+	padding: 0;
+	font-size: 16px;
+} */
+
+#calendar {
+	margin: 40px 0px 40px 0px;
+}
+
+.fc-day-number.fc-sat.fc-past {
+	color: #0000FF;
+}
+
+.fc-day-number.fc-sun.fc-past {
+	color: #FF0000;
+}
+/* 폰트 */
+@font-face{
+   font-family: 'sense'; 
+   src:url("../font/sense.ttf") format('truetype');
+   src:url("../font/sense.eot") format('truetype');
+   src:url("../font/sense.woff") format('truetype');
+}
+* {
+   font-family: 'sense';
+}
+
+/* 네비바 */
+.navbar {
+	margin-bottom: 50px;
+	border-radius: 0;
+	background: rgb(34, 34, 34);
+}
+.menubar {
+	font-size: 14px;
+	font-weight: bold;
+	text-align: center;
+	margin: 0 auto;
+}
+
+.menubar ul {
+	/* background: rgb(34, 34, 34); */
+	height: 50px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.menubar li {
+	padding: 0px;
+	margin: 0;
+	display: inline-block;
+}
+
+.menubar li a {
+	/* background: rgb(34, 34, 34); */
+	color: #cccccc;
+	display: block;
+	font-weight: normal;
+	line-height: 50px;
+	margin: 0px;
+	padding: 0px 25px;
+	text-align: center;
+	text-decoration: none;
+}
+
+.menubar li a:hover, .menubar ul li:hover a {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+.menubar li ul {
+	background: rgb(34, 34, 34);
+	display: none;
+	height: auto;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+	position: absolute;
+	/* width: 200px; */
+	z-index: 200;
+}
+
+.menubar li:hover ul {
+	display: block;
+}
+
+.menubar li li {
+	background: rgb(34, 34, 34);
+	display: block;
+	float: none;
+	margin: 0px;
+	padding: 0px;
+	/* width: 200px; */
+}
+
+.menubar li:hover li a {
+	background: none;
+}
+
+.menubar li ul a {
+	display: block;
+	height: 50px;
+	font-size: 12px;
+	font-style: normal;
+	margin: 0px;
+	padding: 0px 10px 0px 15px;
+	text-align: center;
+}
+
+.menubar li ul a:hover, .menubar li ul li:hover a {
+	background: rgb(71, 71, 71);
+	border: 0px;
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.menubar p {
+	clear: left;
+}
+
+/* 배너 이미지 */
+#banner {
+	background: url('../images/banner.jpg') no-repeat;
+	background-size: cover;
+	padding-top: 30px;
+	margin-top: 50px;
+	height: 500px;
+}
+
+#banner-content {
+	background: rgba(50, 50, 50, 0.5);
+	position: absolute;
+	top: 50px;
+	right: 0px;
+	margin-left: -50px;
+	width: 100%;
+	height: 500px;
+}
+
+#banner-info {
+	position: absolute;
+	bottom: 50px;
+	right: 50px;
+	color: white;	
+	text-align: right;
+	font-weight: bold;
+}
+
+/* 푸터 */
+#footer {
+	padding-top: 40px;
+	text-align: center;
+	background-color: rgb(82, 82, 82);
+}
+
+#footer-company h5 {
+	font-weight: bold;
+	color: white;
+	padding-bottom: 10px;
+}
+
+#footer-company p {
+	color: white;
+}
+
+#footer-company a {
+	text-decoration: none;
+	color: white;
+}
+
+#footer-policies h5 {
+	font-weight: bold;
+	color: white;
+	padding-bottom: 10px;
+}
+
+#footer-policies p {
+	color: white;
+}
+
+#footer-policies a {
+	text-decoration: none;
+	color: white;
+}
+
+#footer-support h5 {
+	font-weight: bold;
+	color: white;
+	padding-bottom: 10px;
+}
+
+#footer-support p {
+	color: white;
+}
+
+#footer-support a {
+	text-decoration: none;
+	color: white;
+}
+
+#footer-certificate {
+	margin-top: 50px;
+	padding: 40px 0px 40px 0px;
+	border-top: 1px solid white;
+	color: white;
+}

@@ -14,11 +14,11 @@
 	  <put-attribute name="footer" value="/WEB-INF/views/include/footer.jsp" />
 	</definition>
 	
-	<definition name="calendar" template="/WEB-INF/views/include/layout.jsp">
-	  <put-attribute name="css" value="css/index.css" />
-	  <put-attribute name="header" value="/WEB-INF/views/include/header.jsp" />
-	  <put-attribute name="content" value="/WEB-INF/views/calendar.jsp" />
-	  <put-attribute name="footer" value="/WEB-INF/views/include/footer.jsp" />
+	<definition name="calendar" template="/WEB-INF/views/store/include/layout.jsp">
+	  <put-attribute name="css" value="../css/store.css" />
+	  <put-attribute name="header" value="/WEB-INF/views/store/include/header.jsp" />
+	  <put-attribute name="content" value="/WEB-INF/views/store/calendar.jsp" />
+	  <put-attribute name="footer" value="/WEB-INF/views/store/include/footer.jsp" />
 	</definition>
 	
 	<!-- ★★최종본★★ -->
