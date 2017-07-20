@@ -18,4 +18,10 @@ public class indexController {
 		
 		return "index";
 	}
+
+	@RequestMapping(value={"/calendar.do"},method=RequestMethod.GET)
+	public String calendar() {
+		
+		return "calendar";
+	}
 }
