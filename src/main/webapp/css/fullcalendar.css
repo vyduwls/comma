@@ -17,7 +17,9 @@
 body .fc { /* extra precedence to overcome jqui */
 	font-size: 1em;
 }
-
+.fc-day-top {
+	cursor: pointer;
+}
 
 /* Colors
 --------------------------------------------------------------------------------------------------*/
@@ -34,6 +36,12 @@ body .fc { /* extra precedence to overcome jqui */
 .fc-unthemed .fc-list-heading td {
 	border-color: #ddd;
 }
+.fc-sat {
+	color:blue;
+	}
+.fc-sun {
+	color:red;
+	}
 
 .fc-unthemed .fc-popover {
 	background-color: #fff;
