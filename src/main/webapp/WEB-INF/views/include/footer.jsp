@@ -46,11 +46,11 @@
 			<div class="modal-body" style="padding: 40px 50px;">
 				<div class="form-group">
 					<label>아이디</label> 
-					<input type="text" class="form-control" id="modal-login-mid" name="modal-login-mid" placeholder="ID" required="required">
+					<input type="text" class="form-control" id="modal-login-mid" name="mid" placeholder="ID" required="required">
 				</div>
 				<div class="form-group">
 					<label>비밀번호</label> 
-					<input type="password" class="form-control" id="modal-login-pwd" name="modal-login-pwd" placeholder="PASSWORD" required="required">
+					<input type="password" class="form-control" id="modal-login-pwd" name="pwd" placeholder="PASSWORD" required="required">
 				</div>
 				<br>
 				<button type="button" class="btn btn-success btn-block" id="loginButton">로그인</button>
@@ -80,36 +80,36 @@
 			</div>
 			
 			<div class="modal-body" style="padding: 40px 50px;">
-				<form action="" method="post">
+				<form action="customer/join.do" method="post" onsubmit="return check()">
 					<div class="form-group">
 						<label>아이디</label> 
 						<input type="button" class="btn btn-success btn-xs" style="float: right" id="checkId" value="중복 확인">
-						<input type="text" class="form-control" id="modal-join-mid" name="modal-join-mid" placeholder="ID" required="required">
+						<input type="text" class="form-control" id="modal-join-mid" name="mid" placeholder="ID" required="required">
 					</div>
 
 					<div class="form-group">
 						<label>비밀번호</label>
-						<input type="password" class="form-control" id="modal-join-pwd" name="modal-join-pwd" placeholder="PASSWORD" required="required">
+						<input type="password" class="form-control" id="modal-join-pwd" name="pwd" placeholder="PASSWORD" required="required">
 					</div>
 
 					<div class="form-group">
 						<label>비밀번호 확인</label>
-						<input type="password" class="form-control" id="modal-join-pwd-check" name="modal-join-pwd-check" placeholder="PASSWORD CHECK" required="required">
+						<input type="password" class="form-control" id="modal-join-pwdCheck" name="pwdCheck" placeholder="PASSWORD CHECK" required="required">
 					</div>
 
 					<div class="form-group">
 						<label>이름</label>
-						<input type="text" class="form-control" id="modal-join-name" name="modal-join-name" placeholder="NAME" required="required">
+						<input type="text" class="form-control" id="modal-join-name" name="name" placeholder="NAME" required="required">
 					</div>
 
 					<div class="form-group">
 						<label>전화번호</label>
-						<input type="text" class="form-control" id="modal-join-phone" name="modal-join-phone" placeholder="PHONE NUMBER" required="required">
+						<input type="text" class="form-control" id="modal-join-phone" name="phone" placeholder="PHONE NUMBER" required="required">
 					</div>
 
 					<div class="form-group">
 						<label for="usremail">이메일</label>
-						<input type="text" class="form-control" id="modal-join-email" name="modal-join-email" placeholder="E-MAIL" required="required">
+						<input type="text" class="form-control" id="modal-join-email" name="email" placeholder="E-MAIL" required="required">
 					</div>
 					<br>
 					<button id="joinButton" type="submit" class="btn btn-success btn-block">회원가입</button>

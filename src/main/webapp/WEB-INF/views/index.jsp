@@ -2,6 +2,10 @@
     pageEncoding="UTF-8"%>
 
 <script type="text/javascript">
+
+	/* 아이디 중복 검사 여부 확인 */
+	var idCheck = 0;
+
 	$(document).ready(function() {
 		
 		/* 모달 */
@@ -35,19 +39,57 @@
 					'pwd' : $("#modal-login-pwd").val()
 				},
 				success : function(data) {
-					alert(data);
 					if ($.trim(data) == "1") {
 						alert("아이디나 비밀번호를 다시 확인해주세요.");
 					} else {
 						location.reload();
 					}
-				}/* ,
+				} ,
 				error:function(request,status,error){
-			        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-		       } */
+			        alert("code:"+request.status+"\n\nmessage:"+request.responseText+"\n\nerror:"+error);
+		       }
 			});
 		});
+		
+		/* 아이디 중복 확인 */
+		$("#checkId").click(function() {
+			$.ajax({
+				url : 'customer/checkId.do',
+				type : 'post',
+				datatype : 'text',
+				data : {
+					'mid' : $("#modal-join-mid").val()
+				},
+				success : function(data) {
+					if ($.trim(data) == "0") {
+						idCheck = 1;
+						alert("사용가능한 아이디입니다.");
+					} else {
+						alert("이미 존재하는 아이디입니다.");
+					}
+				}
+			});
+		});
+		$("#modal-join-mid").change(function() {
+			idCheck = 0;
+		});
 	});
+	
+	/* 회원가입 검사 */
+	function check() {
+		if (idCheck != 1) {
+			alert("아이디 중복 확인을 해주세요.");
+			return false;
+		}
+
+		if ($("#modal-join-pwd").val() != $("#modal-join-pwdCheck").val()) {
+			alert("비밀번호를 다시 확인해주세요.");
+			return false;
+		} else {
+			alert("회원가입을 축하합니다!");
+			return true;
+		}
+	}
 </script>
 		
 <div id="content" class="container-fluid">
