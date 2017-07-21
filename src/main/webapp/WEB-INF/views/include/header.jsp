@@ -54,8 +54,8 @@
 						<li><a><span class="glyphicon glyphicon-user"></span>
 								GUEST</a>
 							<ul class="col-lg-12">
-								<li><a id="login" href="#">로그인</a></li>
-								<li><a id="join" href="#">회원가입</a></li>
+								<li><a id="login">로그인</a></li>
+								<li><a id="join">회원가입</a></li>
 							</ul></li>
 					</c:if>
 

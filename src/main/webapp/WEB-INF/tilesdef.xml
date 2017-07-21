@@ -14,23 +14,17 @@
 	  <put-attribute name="footer" value="/WEB-INF/views/include/footer.jsp" />
 	</definition>
 	
-	<definition name="calendar" template="/WEB-INF/views/store/include/layout.jsp">
+	<definition name="store.*" template="/WEB-INF/views/store/include/layout.jsp">
 	  <put-attribute name="css" value="../css/store.css" />
 	  <put-attribute name="header" value="/WEB-INF/views/store/include/header.jsp" />
-	  <put-attribute name="content" value="/WEB-INF/views/store/calendar.jsp" />
+	  <put-attribute name="content" value="/WEB-INF/views/store/{1}.jsp" />
 	  <put-attribute name="footer" value="/WEB-INF/views/store/include/footer.jsp" />
 	</definition>
 	
-	<!-- ★★최종본★★ -->
-	<!-- customer과 joinus를 통합시킬수도 있다. -->
-	<definition name="*.*" template="/WEB-INF/views/{1}/include/layout.jsp">
-	  <!-- CSS 때문에 묶기가 힘들어짐(join.css과 login.css통일하거나 해야 했었다. => 그러면 애초에 여기에 css를 적용시킬 필요가 없었음)
-	  	        나머지 css파일은 없는 파일이니까 그냥 이렇게 써도 문제가 없어서 이렇게 씀  -->
-	  <put-attribute name="css" value="{2}.css" />
-	  <put-attribute name="header" value="/WEB-INF/views/include/header.jsp" />
-	  <put-attribute name="visual" value="/WEB-INF/views/{1}/include/visual.jsp" />
-	  <put-attribute name="aside" value="/WEB-INF/views/{1}/include/aside.jsp" />
-	  <put-attribute name="content" value="/WEB-INF/views/{1}/{2}.jsp" />
-	  <put-attribute name="footer" value="/WEB-INF/views/include/footer.jsp" />
+	<definition name="customer.*" template="/WEB-INF/views/customer/include/layout.jsp">
+	  <put-attribute name="css" value="../css/customer.css" />
+	  <put-attribute name="header" value="/WEB-INF/views/customer/include/header.jsp" />
+	  <put-attribute name="content" value="/WEB-INF/views/customer/{1}.jsp" />
+	  <put-attribute name="footer" value="/WEB-INF/views/customer/include/footer.jsp" />
 	</definition>
 </tiles-definitions>

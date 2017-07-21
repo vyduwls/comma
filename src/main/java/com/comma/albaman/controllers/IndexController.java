@@ -8,20 +8,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-public class indexController {
+public class IndexController {
 
 	@Autowired
 	private SqlSession sqlSession;
 	
 	@RequestMapping(value={"index.do"},method=RequestMethod.GET)
-	public String index(String mid, Model model) {
+	public String index(Model model) {
+		System.out.println("\nIndexController의 index.do(GET)");
 		
 		return "index";
-	}
-
-	@RequestMapping(value={"store/calendar.do"},method=RequestMethod.GET)
-	public String calendar() {
-		
-		return "calendar";
 	}
 }

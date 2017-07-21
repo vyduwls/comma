@@ -1,5 +1,55 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		
+		/* 모달 */
+		$("#login").click(function() {
+			$("#modal-login").modal();
+		});
+		$("#join").click(function() {
+			$("#modal-join").modal();
+		});
+		$("#goToFindPwd").click(function() {
+			$("#modal-login").modal('toggle');
+			$("#modal-findPwd").modal();
+		});
+		$("#goToJoin").click(function() {
+			$("#modal-login").modal('toggle');
+			$("#modal-join").modal();
+		});
+		$("#goToLogin").click(function() {
+			$("#modal-join").modal('toggle');
+			$("#modal-login").modal();
+		});
+		
+		/* 로그인 */
+		$("#loginButton").click(function() {
+			$.ajax({
+				url : 'customer/login.do',
+				type : 'post',
+				datatype : 'text',
+				data : {
+					'mid' : $("#modal-login-mid").val(),
+					'pwd' : $("#modal-login-pwd").val()
+				},
+				success : function(data) {
+					alert(data);
+					if ($.trim(data) == "1") {
+						alert("아이디나 비밀번호를 다시 확인해주세요.");
+					} else {
+						location.reload();
+					}
+				}/* ,
+				error:function(request,status,error){
+			        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+		       } */
+			});
+		});
+	});
+</script>
+		
 <div id="content" class="container-fluid">
 	<div id="introduce" class="container">
 		

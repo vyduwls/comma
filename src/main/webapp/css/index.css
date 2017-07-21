@@ -242,3 +242,32 @@
 	border-top: 1px solid white;
 	color: white;
 }
+
+/* 모달 */
+.modal-header, .close {
+	background-color: orange;
+	color: white ;
+	text-align: center;
+	font-size: 30px;
+}
+.modal-header h5{
+	color:white;
+	font-weight: bold;
+	text-align: center;
+	font-size: 30px;
+}
+.modal-header p{
+	font-size: 14px;
+	color: white ;
+}
+.modal-footer {
+	background-color: #f9f9f9;
+	font-size: 12px;
+}
+.modal-footer a {
+	text-decoration: none;
+}
+.modal-footer p {
+	margin-top: 5px;
+	color: rgb(68,68,68);
+}
