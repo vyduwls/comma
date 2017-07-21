@@ -4,10 +4,10 @@
 	font-size: 16px;
 } */
 
+/*calendar.jsp css*/
 #calendar {
 	margin: 40px 0px 40px 0px;
 }
-
 .fc-day-number.fc-sat.fc-past {
 	color: #0000FF;
 }
@@ -16,6 +16,49 @@
 	color: #FF0000;
 }
 
+/*edit_Schedule.jsp css*/
+#body_menu {
+	width: 20%;
+	height : 800px;
+	border-right: 1px solid #a8b0ad;
+	text-align: center;	
+	background-color:white;
+	float: left;
+}
+#body_content {
+	width: 80%;
+	height : 800px;
+	text-align: center;
+	background-color:white;	
+	float: left;
+}
+.body_menu_ptag{
+	text-align: center;
+	font-size: 150%;
+	color: #545c59;
+	padding-bottom: 3%;
+	border-bottom: 1px solid #a8b0ad;
+}
+#miniCalendar {
+	margin: 20px 5px 20px 5px;
+}
+#miniCalendar.fc-view-container{
+	height:30%;
+}
+.select_Store{
+	width: 75%;
+	height: 5%;
+	margin: 40px 0px 40px 5px;
+	font-size: 110%;
+	float: left;
+}
+.changeStorebtn{
+	width: 20%;
+	height: 5%;
+	margin: 40px 5px 40px 5px;
+	font-size: 110%;
+	float: left;
+}
 /* 폰트 */
 @font-face{
    font-family: 'sense'; 

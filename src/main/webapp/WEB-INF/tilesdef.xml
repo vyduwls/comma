@@ -8,23 +8,26 @@
 
 	<!-- index 관련 -->
 	<definition name="index" template="/WEB-INF/views/include/layout.jsp">
-	  <put-attribute name="css" value="css/index.css" />
-	  <put-attribute name="header" value="/WEB-INF/views/include/header.jsp" />
-	  <put-attribute name="content" value="/WEB-INF/views/index.jsp" />
-	  <put-attribute name="footer" value="/WEB-INF/views/include/footer.jsp" />
+		<put-attribute name="css" value="css/index.css" />
+		<put-attribute name="header" value="/WEB-INF/views/include/header.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/index.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/views/include/footer.jsp" />
 	</definition>
-	
+
+	<!--store 관련 -->
 	<definition name="store.*" template="/WEB-INF/views/store/include/layout.jsp">
-	  <put-attribute name="css" value="../css/store.css" />
-	  <put-attribute name="header" value="/WEB-INF/views/store/include/header.jsp" />
-	  <put-attribute name="content" value="/WEB-INF/views/store/{1}.jsp" />
-	  <put-attribute name="footer" value="/WEB-INF/views/store/include/footer.jsp" />
+		<put-attribute name="css" value="../css/store.css" />
+		<put-attribute name="header" value="/WEB-INF/views/store/include/header.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/store/{1}.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/views/store/include/footer.jsp" />
 	</definition>
-	
+
+	<!-- customer 관련 -->
 	<definition name="customer.*" template="/WEB-INF/views/customer/include/layout.jsp">
-	  <put-attribute name="css" value="../css/customer.css" />
-	  <put-attribute name="header" value="/WEB-INF/views/customer/include/header.jsp" />
-	  <put-attribute name="content" value="/WEB-INF/views/customer/{1}.jsp" />
-	  <put-attribute name="footer" value="/WEB-INF/views/customer/include/footer.jsp" />
+		<put-attribute name="css" value="../css/customer.css" />
+		<put-attribute name="header" value="/WEB-INF/views/customer/include/header.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/customer/{1}.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/views/customer/include/footer.jsp" />
 	</definition>
+
 </tiles-definitions>

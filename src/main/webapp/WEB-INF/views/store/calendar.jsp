@@ -11,8 +11,8 @@
         jQuery("#calendar").fullCalendar({
               defaultDate : Date()
             , locale : "ko"
-            , editable : true
-            , eventLimit : true
+            , editable : false
+            , eventLimit : false
             , googleCalendarApiKey : "AIzaSyDcnW6WejpTOCffshGDDb4neIrXVUA1EAE"      // Google API KEY
             , eventSources : [
                     // 대한민국의 공휴일
@@ -94,7 +94,7 @@
 </script>
 
 <div class="container">
-	<button class="btn btn-default" style="margin: 3% 0% 0% 90%">스케쥴 등록/변경</button>
+	<a href="editSchedule.do" class="btn btn-default" style="margin: 3% 0% 0% 90%">스케줄 등록/변경</a>
 	<div id="calendar">
 	</div>
 </div>
