@@ -27,6 +27,17 @@
 			$("#modal-join").modal('toggle');
 			$("#modal-login").modal();
 		});
+		$("#modal-login-mid").keypress(function(key) {
+			if(key.which == 13) {
+				$("#loginButton").click();
+			}
+		});
+		$("#modal-login-pwd").keypress(function(key) {
+			if(key.which == 13) {
+				$("#loginButton").click();
+			}
+		});
+		
 		
 		/* 로그인 */
 		$("#loginButton").click(function() {
@@ -72,6 +83,43 @@
 		});
 		$("#modal-join-mid").change(function() {
 			idCheck = 0;
+		});
+		
+		// 인증번호 보내기
+		$("#sendAuthentication").click(function() {
+			$.ajax({
+				url : 'customer/sendAuthentication.do',
+				type : 'post',
+				datatype : 'text',
+				data : {'mid' : $("#modal-findPwd-mid").val(),
+					'email' : $("#modal-findPwd-email").val()},
+				success : function(data) {
+					if ($.trim(data) == "1") {
+						alert("인증번호가 발송되었습니다.");
+					} else {
+						alert("아이디 혹은 이메일이 일치하지 않습니다.");
+					}
+				}
+			});
+		});
+		
+		// 비밀번호 찾기
+		$("#findPwdButton").click(function() {
+			$.ajax({
+				url : 'customer/findPwd.do',
+				type : 'post',
+				datatype : 'text',
+				data : {'mid' : $("#modal-findPwd-mid").val(),
+					'checkAuthNum' : $("#modal-findPwd-authentication").val()},
+				success : function(data) {
+					if ($.trim(data) == "1") {
+						alert("인증번호가 일치하지 않습니다.");
+					} else {
+						alert("비밀번호는 " + $.trim(data) + " 입니다.");
+						$("#modal-findPwd").modal('toggle');
+					}
+				}
+			});
 		});
 	});
 	

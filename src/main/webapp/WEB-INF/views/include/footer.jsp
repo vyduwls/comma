@@ -53,7 +53,7 @@
 					<input type="password" class="form-control" id="modal-login-pwd" name="pwd" placeholder="PASSWORD" required="required">
 				</div>
 				<br>
-				<button type="button" class="btn btn-success btn-block" id="loginButton">로그인</button>
+				<button type="button" class="btn btn-info btn-block" id="loginButton">로그인</button>
 			</div>
 			
 			<div class="modal-footer">
@@ -83,7 +83,7 @@
 				<form action="customer/join.do" method="post" onsubmit="return check()">
 					<div class="form-group">
 						<label>아이디</label> 
-						<input type="button" class="btn btn-success btn-xs" style="float: right" id="checkId" value="중복 확인">
+						<input type="button" class="btn btn-info btn-xs" style="float: right" id="checkId" value="중복 확인">
 						<input type="text" class="form-control" id="modal-join-mid" name="mid" placeholder="ID" required="required">
 					</div>
 
@@ -112,7 +112,7 @@
 						<input type="text" class="form-control" id="modal-join-email" name="email" placeholder="E-MAIL" required="required">
 					</div>
 					<br>
-					<button id="joinButton" type="submit" class="btn btn-success btn-block">회원가입</button>
+					<button id="joinButton" type="submit" class="btn btn-info btn-block">회원가입</button>
 				</form>
 			</div>
 			
@@ -147,7 +147,7 @@
 
 				<div class="form-group">
 					<label>이메일</label> 
-					<input type="button" class="btn btn-success btn-xs" style="float: right" id="sendAuthentication" value="인증번호 받기">
+					<input type="button" class="btn btn-info btn-xs" style="float: right" id="sendAuthentication" value="인증번호 받기">
 					<input type="text" class="form-control" id="modal-findPwd-email" name="modal-findPwd-email" placeholder="E-MAIL" required="required">
 				</div>
 
@@ -156,7 +156,7 @@
 					<input type="text" class="form-control" id="modal-findPwd-authentication" name="modal-findPwd-authentication" placeholder="AUTHENTICATION NUMBER" required="required">
 				</div>
 				<br>
-				<button id="findPwdButton" type="submit" class="btn btn-success btn-block">비밀번호 찾기</button>
+				<button id="findPwdButton" type="submit" class="btn btn-info btn-block">비밀번호 찾기</button>
 			</div>
 			
 			<div class="modal-footer"></div>

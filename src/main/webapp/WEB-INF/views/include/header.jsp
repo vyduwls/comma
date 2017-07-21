@@ -50,26 +50,34 @@
 		<div class="collapse navbar-collapse col-lg-1" id="myNavbar">
 			<div class="menubar">
 				<ul class="navbar-right">
-					<c:if test="${empty mid}">
-						<li><a><span class="glyphicon glyphicon-user"></span>
-								GUEST</a>
+					<c:if test="${empty member.mid}">
+						<li><a><span class="glyphicon glyphicon-user"></span> GUEST</a>
 							<ul class="col-lg-12">
 								<li><a id="login" style="cursor: pointer;">로그인</a></li>
 								<li><a id="join" style="cursor: pointer;">회원가입</a></li>
 							</ul></li>
 					</c:if>
 
-					<%-- <!-- 로그인 후 -->
-					<c:if test="${!empty mid}">
-						<li><a id="info"><span class="glyphicon glyphicon-user"></span>
-								${mid}
-								<button class="btn btn-success btn-xs btn-count"
-									onclick="location.href='customer/getMessage.do'">0</button> </a>
-							<ul>
-								<li><a href="customer/myPage.do">마이페이지</a></li>
+					<!-- 로그인 후 -->
+					<c:if test="${!empty member.mid}">
+						<li><a><span class="glyphicon glyphicon-user"></span> ${sessionScope.mid} 님</a>
+							<ul class="col-lg-12">
+								<c:choose>
+									<c:when test="${member.position == '관리자'}">
+										<li><a href="">관리페이지</a></li>
+									</c:when>
+									<c:when test="${member.position == '점주'}">
+										<li><a href="">마이페이지</a></li>
+									</c:when>
+									<c:otherwise>
+										<li><a href="">출근하기</a></li>
+										<li><a href="">퇴근하기</a></li>
+									</c:otherwise>
+								</c:choose>
 								<li><a href="customer/logout.do">로그아웃</a></li>
-							</ul></li>
-					</c:if> --%>
+							</ul>
+						</li>
+					</c:if>
 				</ul>
 			</div>
 		</div>

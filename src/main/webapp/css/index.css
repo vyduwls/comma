@@ -245,7 +245,7 @@
 
 /* 모달 */
 .modal-header, .close {
-	background-color: orange;
+	background-color: rgb(244,177,131);
 	color: white ;
 	text-align: center;
 	font-size: 30px;
