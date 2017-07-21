@@ -14,10 +14,25 @@
 	  <put-attribute name="footer" value="/WEB-INF/views/include/footer.jsp" />
 	</definition>
 	
+	<!--store 관련-->
 	<definition name="calendar" template="/WEB-INF/views/store/include/layout.jsp">
 	  <put-attribute name="css" value="../css/store.css" />
 	  <put-attribute name="header" value="/WEB-INF/views/store/include/header.jsp" />
 	  <put-attribute name="content" value="/WEB-INF/views/store/calendar.jsp" />
+	  <put-attribute name="footer" value="/WEB-INF/views/store/include/footer.jsp" />
+	</definition>
+	
+	<definition name="edit_Schedule" template="/WEB-INF/views/store/include/layout.jsp">
+	  <put-attribute name="css" value="../css/store.css" />
+	  <put-attribute name="header" value="/WEB-INF/views/store/include/header.jsp" />
+	  <put-attribute name="content" value="/WEB-INF/views/store/edit_Schedule.jsp" />
+	  <put-attribute name="footer" value="/WEB-INF/views/store/include/footer.jsp" />
+	</definition>
+	
+	<definition name="test" template="/WEB-INF/views/store/include/layout.jsp">
+	  <put-attribute name="css" value="../css/store.css" />
+	  <put-attribute name="header" value="/WEB-INF/views/store/include/header.jsp" />
+	  <put-attribute name="content" value="/WEB-INF/views/store/test.jsp" />
 	  <put-attribute name="footer" value="/WEB-INF/views/store/include/footer.jsp" />
 	</definition>
 	

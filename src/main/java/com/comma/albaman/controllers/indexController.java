@@ -19,9 +19,4 @@ public class indexController {
 		return "index";
 	}
 
-	@RequestMapping(value={"store/calendar.do"},method=RequestMethod.GET)
-	public String calendar() {
-		
-		return "calendar";
-	}
 }
