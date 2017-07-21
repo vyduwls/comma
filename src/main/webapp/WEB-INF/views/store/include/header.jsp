@@ -11,7 +11,7 @@
 				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="index.do"><b>ALBAMAN</b></a>
+			<a class="navbar-brand" href="../index.do"><b>ALBAMAN</b></a>
 		</div>
 		
 		<div class="col-lg-1"></div>
@@ -25,7 +25,7 @@
 						<li><a href="">직원 정보 조회</a></li>
 					</ul>
 				</li>
-				<li class="col-lg-2"><a href="">스케줄 관리</a>
+				<li class="col-lg-2"><a href="calandar.do">스케줄 관리</a>
 					<ul class="col-lg-12">
 						<li><a href="">스케줄 등록</a></li>
 						<li><a href="">스케줄 조회</a></li>

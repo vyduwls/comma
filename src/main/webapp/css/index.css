@@ -131,6 +131,59 @@
 	font-weight: bold;
 }
 
+/* 콘텐츠 */
+#content {
+	padding: 40px 0px 70px 0px;
+}
+
+#introduce {
+	text-align: center;
+}
+
+#introduce-header {
+	margin-bottom: 40px;
+}
+
+#introduce-header h1 {
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+#introduce-header h4 {
+	color: rgb(71,71,71);
+}
+
+#function-left {
+	text-align: right;
+}
+
+#function-left div {
+	height: 150px
+}
+
+#function-left h4 {
+	color: black;
+	font-weight: bold;
+}
+
+#introduce-image {
+	background: url('../images/introduce.png') no-repeat;
+	background-size: cover;
+	height: 500px;
+}
+
+#function-right {
+	text-align: left;
+}
+
+#function-right div {
+	height: 150px
+}
+
+#function-right h4 {
+	font-weight: bold;
+}
+
 /* 푸터 */
 #footer {
 	padding-top: 40px;
