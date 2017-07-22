@@ -19,7 +19,7 @@
 		<!-- 상단 메뉴 -->
 		<div class="menubar col-lg-9">
 			<ul>
-				<li class="col-lg-2"><a href="">인사 관리</a>
+				<li class="col-lg-2"><a href="recruit.do">인사 관리</a>
 					<ul class="col-lg-12">
 						<li><a href="">직원 정보 등록</a></li>
 						<li><a href="">직원 정보 조회</a></li>

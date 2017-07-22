@@ -29,5 +29,14 @@
 		<put-attribute name="content" value="/WEB-INF/views/customer/{1}.jsp" />
 		<put-attribute name="footer" value="/WEB-INF/views/customer/include/footer.jsp" />
 	</definition>
+	
+	<!-- admin 관련 -->
+	<definition name="admin.*" template="/WEB-INF/views/admin/include/layout.jsp">
+		<put-attribute name="css" value="../css/admin.css" />
+		<put-attribute name="header" value="/WEB-INF/views/admin/include/header.jsp" />
+		<put-attribute name="side" value="/WEB-INF/views/admin/include/side.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/admin/{1}.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/views/admin/include/footer.jsp" />
+	</definition>
 
 </tiles-definitions>
