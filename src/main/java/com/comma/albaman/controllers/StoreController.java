@@ -108,7 +108,6 @@ public class StoreController {
 		String prework=year+"-"+preMonth;
 //      sid와 prework 날짜로 해당 달의 전체 스케줄 받기		
 		List<Schedule> allSchedule=scheduleDAO.getSchedule(storeInfo.getSid(), prework);
-		
 		model.addAttribute("storeList", storeList);
 		model.addAttribute("storeInfo", storeInfo);
 		model.addAttribute("memberList", memberList);
@@ -138,6 +137,26 @@ public class StoreController {
 		model.addAttribute("employeeList",employeeList);
 		
 		return "store.recruit";
+	}
+
+	//스케줄 저장 ajax
+	@RequestMapping(value={"saveSchedule.do"},method=RequestMethod.GET)
+	public String saveSchedule(String stringSchedule,Model model){
+		System.out.println("\nStoreController의 saveSchedule.do(GET)");	
+		String[] schedules=stringSchedule.split(",");
+		ScheduleDAO scheduleDAO=sqlSession.getMapper(ScheduleDAO.class);
+		int data=0;
+		for (int i = 0; i < schedules.length; i++) {
+			Schedule schedule=new Schedule();
+			String[] info=schedules[i].split("-");
+			String date=info[1]+"-"+info[2]+"-"+info[3];
+			schedule.setRid(info[0]);
+			schedule.setPreOnWork(date);
+			schedule.setPreOffWork(date);
+			data+=scheduleDAO.insertSchedule(schedule);
+		}
+		model.addAttribute("data", data);
+		return "store.saveSchedule";
 	}
 	
 	@RequestMapping(value={"addRecruit.do"},method=RequestMethod.GET)
@@ -191,10 +210,6 @@ public class StoreController {
 		recruit.setWage(wage);
 		recruit.setJoinDate(joinDate);
 		recruit.setSid(store);
-		
-		System.out.println("birth : " + birth);
-		System.out.println("joinDate : " + joinDate);
-		System.out.println("store : " + store);
 		
 		int result = 0;
 		TransactionDefinition td = new DefaultTransactionDefinition();

@@ -31,16 +31,24 @@
 	
     jQuery(document).ready(function() {
 
-
-	    today();
+    	today();
 		$("#h2_selectMonth").text(year+"년"+month+"월 근무일정표");
-	   	for (var day = lastDay; day >= 1; day--) {	
-    	$(".scheduleTable_time_th").after("<th class='scheduleTable_date_th' >"+day+"<th>");
-    	$(".scheduleTable_time_td").after("<td class='scheduleTable_date_td' ><input type='hidden' name='day' value="+day+"><input type='hidden' name='color' value='0'><td>");
-    	$(".scheduleTable_totalTime_td").after("<td class='scheduleTable_totalDate_td' ><span id="+day+">0</span><td>");
-	   	}
+		   	for (var day = lastDay; day >= 1; day--) {
+		    	$(".scheduleTable_time_th").after("<th class='scheduleTable_date_th' >"+day+"</th>");
+		    	$(".scheduleTable_time_td").after("<td class='scheduleTable_date_td'><input type='hidden' name='day' value="+day+"><input type='hidden' name='color' value='0'></td>");
+		    	$(".scheduleTable_totalTime_td").after("<td class='scheduleTable_totalDate_td' ><span id="+day+">0</span></td>");
+		   	}			
+// 		}
 
-    	
+
+/* 
+		for (var i = 0; i < allSchedule.size(); i++) {
+			var date=allSchedule[i].preOnWork.subString(8,10);
+			$("td[id="+allSchedule[i].rid+"-"+Number(date)+"]").css("background-color","red");
+			$("td[id="+allSchedule[i].rid+"-"+Number(date)+"]").children("input[name=color]").val("1");
+			alert(allSchedule[i].rid+"-"+Number(date));
+		}
+    	 */
 		/*미니달력 설정*/
         jQuery("#miniCalendar").fullCalendar({
               defaultDate : Date()
@@ -72,7 +80,7 @@
       		var color=$(this).children("input[name=color]").val();
       		var sumWork=Number($(this).siblings(".scheduleTable_day_td").children(".sumWork").text());
       		var sumTime=Number($(this).siblings(".scheduleTable_time_td").children(".sumTime").text());
-      		var employName=$(this).siblings(".scheduleTable_td").children(".employName").text();
+      		var employName=$(this).siblings(".scheduleTable_td").children("input").val();
 
 	   	     /*데이터 넣기위한 날짜 변환*/
 	   	     if(Number(selectDay)<=9){
@@ -127,6 +135,22 @@
 	    			stringSchedule+=scheduleArray[i]+",";
 	    		}
 	   	    }
+	   	     $.ajax({
+	   	    	 url:"saveSchedule.do",
+	   	    	 type:"GET",
+	   	    	 data:{
+	   	    		 "stringSchedule":stringSchedule
+	   	    	 },
+	   	    	 dateType:"text",
+	   	    	 success : function(data){
+	   	    		 if($.trim(data)!="0"){
+	   	    			 alert("스케줄 저장 완료!");
+	   	    		 }else{
+	   	    			 alert("스케줄 저장 실패하셨습니다.");
+	   	    		 }
+	   	    	 }
+	   	    	 
+	   	     });
 	   	     
 	   	     
     	});
@@ -208,10 +232,10 @@
 			<c:forEach items="${memberList}" var="n">
 			<tr class="scheduleTable_tr" >
 				<c:if test="${n.name==emName}">
-				<td class="scheduleTable_td" style="color:red"><span class="employName">${n.name}</span></td>
+				<td class="scheduleTable_td" style="color:red"><input type="hidden" name="rid" value="${n.mid}"><span class="employName">${n.name}</span></td>
 				</c:if>
 				<c:if test="${n.name!=emName}">
-				<td class="scheduleTable_td"><span class="employName">${n.name}</span></td>
+				<td class="scheduleTable_td"><input type="hidden" name="rid" value="${n.mid}"><span class="employName">${n.name}</span></td>
 				</c:if>
 				<td class="scheduleTable_day_td"><span class="sumWork">0</span></td>
 				<td class="scheduleTable_time_td"><span class="sumTime">0</span></td>
