@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <script type="text/javascript">
 	$(document).ready(function() {
 		$("#joindatePicker").datepicker({
@@ -34,10 +36,14 @@
 				<!-- 매장 선택 -->
 				<div class="form-group">
 					<select class="form-control" name="store">
-						<option value="" selected="selected">매장 1</option>
-					    <option value="">매장 2</option>
-					    <option value="">매장 3</option>
-					    <option value="">매장 4</option>
+						<c:forEach items="${storeList}"  var="storeList" varStatus="status">
+							<c:if test="${status.index==0}">
+								<option selected="selected" value="${storeList.sid}">${storeList.name}</option>
+							</c:if>
+							<c:if test="${status.index!=0}">
+								<option value="${storeList.sid}">${storeList.name}</option>
+							</c:if>
+						</c:forEach>
 			  		</select>
 		  		</div>
 				
@@ -86,31 +92,20 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>심규진</td>
-					<td>jin</td>
-					<td>123</td>
-					<td>직원</td>
-					<td>010-3945-6685</td>
-					<td>1991-12-04</td>
-					<td>인천광역시 계양구 용종동 동아아파트 321동 703호</td>
-					<td>6200원</td>
-					<td>2017-07-11</td>
-					<td>2017-08-11</td>
-				</tr>
-				
-				<tr>
-					<td>표여진</td>
-					<td>pyo</td>
-					<td>123</td>
-					<td>직원</td>
-					<td>010-5008-0449</td>
-					<td>1993-10-17</td>
-					<td>서울특별시 연신내 로데오거리 그 근처 어딘가 주택</td>
-					<td>5400원</td>
-					<td>2017-07-11</td>
-					<td>2017-08-11</td>
-				</tr>
+				<c:forEach items="${employeeList}" var="employeeList">
+					<tr>
+						<td>${employeeList.name}</td>
+						<td>${employeeList.mid}</td>
+						<td>${employeeList.pwd}</td>
+						<td>${employeeList.position}</td>
+						<td>${employeeList.phone}</td>
+						<td>${employeeList.birth}</td>
+						<td>${employeeList.address}</td>
+						<td>${employeeList.wage}</td>
+						<td>${employeeList.joinDate}</td>
+						<td>${employeeList.resignDate}</td>
+					</tr>
+				</c:forEach>
 			</tbody>
 		</table>
 

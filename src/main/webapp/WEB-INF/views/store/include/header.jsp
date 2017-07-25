@@ -21,8 +21,8 @@
 			<ul>
 				<li class="col-lg-2"><a href="recruit.do">인사 관리</a>
 					<ul class="col-lg-12">
-						<li><a href="">직원 정보 등록</a></li>
-						<li><a href="">직원 정보 조회</a></li>
+						<li><a href="addRecruit.do">직원 정보 등록</a></li>
+						<li><a href="recruit.do">직원 정보 조회</a></li>
 					</ul>
 				</li>
 				<li class="col-lg-2"><a href="calendar.do">스케줄 관리</a>

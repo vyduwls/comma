@@ -10,14 +10,20 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.comma.albaman.dao.MemberDAO;
 import com.comma.albaman.dao.RecruitDAO;
 import com.comma.albaman.dao.ScheduleDAO;
 import com.comma.albaman.dao.StoreDAO;
+import com.comma.albaman.vo.Employee;
 import com.comma.albaman.vo.Member;
 import com.comma.albaman.vo.Recruit;
 import com.comma.albaman.vo.Schedule;
@@ -29,6 +35,9 @@ public class StoreController {
 
 	@Autowired
 	private SqlSession sqlSession;
+	
+	@Autowired
+	PlatformTransactionManager ptm;
 	
 	@RequestMapping(value={"calendar.do"},method=RequestMethod.GET)
 	public String calendar() {
@@ -112,16 +121,100 @@ public class StoreController {
 	
 	
 	@RequestMapping(value={"recruit.do"},method=RequestMethod.GET)
-	public String recruit() {
+	public String recruit(HttpServletRequest request, Model model) {
 		System.out.println("\nStoreController의 recruit.do(GET)");
+		
+		String mid = (String) request.getSession().getAttribute("mid");
+		
+		// 소유한 가게 가져오기
+		StoreDAO storeDAO = sqlSession.getMapper(StoreDAO.class);
+		List<Store> storeList = storeDAO.getAllStore(mid);
+		model.addAttribute("storeList", storeList);
+		
+		// 직원 전체 정보 가져오기
+		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
+		System.out.println("storeList.get(0).getSid() : " + storeList.get(0).getSid());
+		List<Employee> employeeList = memberDAO.getEmployee(storeList.get(0).getSid());
+		model.addAttribute("employeeList",employeeList);
 		
 		return "store.recruit";
 	}
 	
 	@RequestMapping(value={"addRecruit.do"},method=RequestMethod.GET)
-	public String addRecruit() {
+	public String addRecruit(HttpServletRequest request, Model model) {
 		System.out.println("\nStoreController의 addRecruit.do(GET)");
 		
+		String mid = (String) request.getSession().getAttribute("mid");
+		
+		// 소유한 가게 가져오기
+		StoreDAO storeDAO = sqlSession.getMapper(StoreDAO.class);
+		List<Store> storeList = storeDAO.getAllStore(mid);
+		model.addAttribute("storeList", storeList);
+		
 		return "store.addRecruit";
+	}
+	
+	@RequestMapping(value={"createId.do"},method=RequestMethod.POST)
+	@ResponseBody
+	public String createId(String sid) {
+		System.out.println("\nStoreController의 createId.do(AJAX)");
+		
+		System.out.println("선택된 sid : " + sid);
+		
+		RecruitDAO recruitDAO = sqlSession.getMapper(RecruitDAO.class);
+		int last = recruitDAO.getLastRecruit(sid)+1;
+
+		String mid = sid + "-" + Integer.toString(last);
+		
+		return mid;
+	}
+	
+	@RequestMapping(value={"addRecruit.do"},method=RequestMethod.POST)
+	public String addRecruit(String store, String mid, String pwd, String name, String phone, String email, 
+			String position, String birth, String address, int wage, String joinDate) {
+		System.out.println("\nStoreController의 addRecruit.do(GET)");
+		
+		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
+		Member member = new Member();
+		member.setMid(mid);
+		member.setPwd(pwd);
+		member.setName(name);
+		member.setPhone(phone);
+		member.setEmail(email);
+		member.setPosition(position);
+		
+		RecruitDAO recruitDAO = sqlSession.getMapper(RecruitDAO.class);
+		Recruit recruit = new Recruit();
+		recruit.setRid(mid);
+		recruit.setBirth(birth);
+		recruit.setAddress(address);
+		recruit.setWage(wage);
+		recruit.setJoinDate(joinDate);
+		recruit.setSid(store);
+		
+		System.out.println("birth : " + birth);
+		System.out.println("joinDate : " + joinDate);
+		System.out.println("store : " + store);
+		
+		int result = 0;
+		TransactionDefinition td = new DefaultTransactionDefinition();
+		TransactionStatus ts = ptm.getTransaction(td);
+		 try {
+			 System.out.println("트랜잭션 완료");
+			 result = memberDAO.addMember(member);
+			 result += recruitDAO.addRecruit(recruit);
+			 ptm.commit(ts);
+		 } catch (Exception e) {
+			 ptm.rollback(ts);
+			 System.out.println("트랜잭션 실패");
+		}
+		
+		if(result ==2) {
+			System.out.println("직원 회원가입 성공");
+			return "redirect:recruit.do";			
+		} else {
+			System.out.println("직원 회원가입 실패");
+			return null;
+		}
 	}
 }
