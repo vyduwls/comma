@@ -1,3 +1,11 @@
+/* recruit.jsp css */
+#content {
+	padding: 40px 0px 70px 0px;
+}
+#recruitList {
+	margin-top: 70px;
+}
+
 /*calendar.jsp css*/
 #calendar {
 	margin: 40px 0px 40px 0px;

@@ -116,6 +116,7 @@ public class StoreController {
 		
 		return "store.recruit";
 	}
+
 	//스케줄 저장 ajax
 	@RequestMapping(value={"saveSchedule.do"},method=RequestMethod.GET)
 	public String saveSchedule(String stringSchedule,Model model){
@@ -136,4 +137,13 @@ public class StoreController {
 		return "store.saveSchedule";
 	}
 	
+
+	
+	@RequestMapping(value={"addRecruit.do"},method=RequestMethod.GET)
+	public String addRecruit() {
+		System.out.println("\nStoreController의 addRecruit.do(GET)");
+		
+		return "store.addRecruit";
+	}
+
 }
