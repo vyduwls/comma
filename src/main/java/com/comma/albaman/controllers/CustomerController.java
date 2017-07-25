@@ -40,8 +40,15 @@ public class CustomerController {
 			
 		} else {
 			System.out.println("로그인 성공");
-			request.getSession().setAttribute("mid", mid);
-			error = "0";
+			if(member.getPosition().equals("점주")){
+				request.getSession().setAttribute("mid", mid);
+				request.getSession().setAttribute("checkPosition", "1");
+				error = "0";
+			}else{
+				request.getSession().setAttribute("mid", mid);
+				request.getSession().setAttribute("checkPosition", "2");
+				error = "0";
+			}
 		}
 		
 		return error;

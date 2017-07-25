@@ -21,15 +21,16 @@
 /*editSchedule.jsp css*/
 #body_menu {
 	width: 20%;
-	height : 800px;
+	height : 700px;
 	border-right: 1px solid #a8b0ad;
 	text-align: center;	
 	background-color:white;
 	float: left;
 }
 #body_content {
+	padding: 40px 0px 70px 0px;
 	width: 80%;
-	height : 800px;
+	height : 700px;
 	text-align: center;
 	background-color:white;	
 	float: left;
@@ -48,7 +49,7 @@
 	height:30%;
 }
 .select_Store{
-	width: 75%;
+	width: 70%;
 	height: 5%;
 	margin: 40px 0px 40px 5px;
 	font-size: 110%;
@@ -62,6 +63,41 @@
 	float: left;
 }
 
+/*  */
+#h2_selectMonth{
+	margin: 40px 0px 0px 50px;
+	text-align: left;
+	float : left;
+	wid
+}
+/* .selectYear, .selectMonth, .emName{ */
+/* 	margin: 40px 0px 0px 10px; */
+/* 	text-align: center; */
+/* 	float : left; */
+/* 	width: 70%; */
+/* } */
+/* editSchedule.jsp 스케줄 테이블 css*/
+#detailSchedule{
+	margin: 30px 50px 50px 50px;
+	width: 1300px;
+	height: auto;
+}
+.scheduleTable_totalDate_td, .scheduleTable_date_th, .scheduleTable_date_td{
+	text-align: center;
+	width:40px;
+	height:40px;
+	border: 1px solid #a8b0ad;	
+}
+.scheduleTable_totalDay_td, .scheduleTable_totalTime_td, .scheduleTable_day_th, .scheduleTable_day_td, .scheduleTable_td, .scheduleTable_th,.scheduleTable_time_td,.scheduleTable_time_th{
+	text-align: center;
+	width: 70px;
+	height: 40px;
+	border: 1px solid #a8b0ad;
+}
+.scheduleTable_tr{
+	text-align: center;
+	height: 40px;
+}
 /* 폰트 */
 @font-face{
    font-family: 'sense'; 
@@ -195,6 +231,7 @@
 	font-weight: bold;
 }
 
+
 /* 푸터 */
 #footer {
 	padding-top: 40px;
@@ -252,4 +289,33 @@
 	padding: 40px 0px 40px 0px;
 	border-top: 1px solid white;
 	color: white;
+}
+
+/* 모달 */
+.modal-header, .close {
+	background-color: rgb(244,177,131);
+	color: white ;
+	text-align: center;
+	font-size: 30px;
+}
+.modal-header h5{
+	color:white;
+	font-weight: bold;
+	text-align: center;
+	font-size: 30px;
+}
+.modal-header p{
+	font-size: 14px;
+	color: white ;
+}
+.modal-footer {
+	background-color: #f9f9f9;
+	font-size: 12px;
+}
+.modal-footer a {
+	text-decoration: none;
+}
+.modal-footer p {
+	margin-top: 5px;
+	color: rgb(68,68,68);
 }
