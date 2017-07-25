@@ -40,4 +40,11 @@ public class StoreController {
 		
 		return "store.recruit";
 	}
+	
+	@RequestMapping(value={"addRecruit.do"},method=RequestMethod.GET)
+	public String addRecruit() {
+		System.out.println("\nStoreController의 addRecruit.do(GET)");
+		
+		return "store.addRecruit";
+	}
 }
