@@ -18,4 +18,19 @@
     	<property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView"></property>
     </bean>
     <bean name="" class="org.springframework.web.servlet.view.InternalResourceViewResolver"></bean>
+    
+    <!-- ResponseBody로 return할 경우 한글 깨짐 문제 해결 -->
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+	    <property name="messageConverters">
+	        <list>
+	            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+	                <property name="supportedMediaTypes">
+	                    <list>
+	                        <value>text/html;charset=UTF-8</value>
+	                    </list>
+	                </property>
+	            </bean>
+	        </list>
+	    </property>
+	</bean>
 </beans>

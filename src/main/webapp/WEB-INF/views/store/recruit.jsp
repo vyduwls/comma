@@ -4,6 +4,8 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
+		
+		/* 입사일, 퇴사일 선택 */
 		$("#joindatePicker").datepicker({
 			dateFormat: "yy-mm-dd",
 			changeMonth : true,
@@ -13,7 +15,6 @@
                 $("#resigndatePicker").datepicker("option", "minDate", selectedDate);
             } 
 		});
-		
 		$("#resigndatePicker").datepicker({
 			dateFormat: "yy-mm-dd",
 			changeMonth : true,
@@ -22,6 +23,36 @@
 			onClose: function( selectedDate ) { 
                 $("#joindatePicker").datepicker("option", "maxDate", selectedDate);
             } 
+		});
+		
+		/* 셀렉트 박스 변경 시 테이블 변경 */
+		$("#store").change(function() {
+			$.ajax({
+				url : 'changeRecruit.do',
+				type : 'post',
+				datatype : 'json',
+				data : {'sid' : $("#store option:selected").val()},
+				success : function(data) {
+					var result = $.trim(data);
+					var test = JSON.parse(result);
+					
+					/* 테이블 초기화 */
+					$("#recruitList tbody .recruit_tr").remove();
+					
+					/* 테이블 갱신 */
+					$.each(test, function(index,item) {
+						var tr = $("<tr class='recruit_tr'></tr>");
+						
+						$.each(item, function(key,value) {
+							if(key!="rid" && key!="sid") {
+								$("<td></td>").text(value).appendTo(tr);								
+							}
+						});
+						
+						tr.appendTo($("#recruitList tbody"));
+					});
+				}
+			});
 		});
 	});
 
@@ -35,7 +66,7 @@
 								
 				<!-- 매장 선택 -->
 				<div class="form-group">
-					<select class="form-control" name="store">
+					<select id="store" class="form-control" name="store">
 						<c:forEach items="${storeList}"  var="storeList" varStatus="status">
 							<c:if test="${status.index==0}">
 								<option selected="selected" value="${storeList.sid}">${storeList.name}</option>
@@ -49,10 +80,10 @@
 				
 				<!-- 날짜 선택 -->
 				<div class="form-group">
-		  			<input class="form-control" type="text" id="joindatePicker" name="joindate" placeholder="입사일 선택">
+		  			<input class="form-control" type="text" id="joindatePicker" name="joindate" placeholder="시작날짜 선택">
 				</div>
 				<div class="form-group">
-		  			<input class="form-control" type="text" id="resigndatePicker" name="resigndate" placeholder="퇴사일 선택">
+		  			<input class="form-control" type="text" id="resigndatePicker" name="resigndate" placeholder="끝날짜 선택">
 				</div>
 				
 				<!-- 카테고리 선택 -->
@@ -79,11 +110,12 @@
 		<table id="recruitList" class="table">
 			<thead>
 				<tr>
-					<th>이름</th>
 					<th>아이디</th>
 					<th>비밀번호</th>
-					<th>직급</th>
+					<th>이름</th>
 					<th>전화번호</th>
+					<th>이메일</th>					
+					<th>직급</th>
 					<th>생년월일</th>
 					<th>주소</th>
 					<th>시급</th>
@@ -93,12 +125,13 @@
 			</thead>
 			<tbody>
 				<c:forEach items="${employeeList}" var="employeeList">
-					<tr>
-						<td>${employeeList.name}</td>
+					<tr class="recruit_tr">
 						<td>${employeeList.mid}</td>
 						<td>${employeeList.pwd}</td>
-						<td>${employeeList.position}</td>
+						<td>${employeeList.name}</td>
 						<td>${employeeList.phone}</td>
+						<td>${employeeList.email}</td>
+						<td>${employeeList.position}</td>
 						<td>${employeeList.birth}</td>
 						<td>${employeeList.address}</td>
 						<td>${employeeList.wage}</td>

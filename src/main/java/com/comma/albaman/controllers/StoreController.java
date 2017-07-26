@@ -1,5 +1,7 @@
 package com.comma.albaman.controllers;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,6 +30,8 @@ import com.comma.albaman.vo.Member;
 import com.comma.albaman.vo.Recruit;
 import com.comma.albaman.vo.Schedule;
 import com.comma.albaman.vo.Store;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Controller
 @RequestMapping("/store/*")
@@ -118,7 +122,26 @@ public class StoreController {
 		return "store.editSchedule";
 	}
 	
-	
+	//스케줄 저장 ajax
+	@RequestMapping(value={"saveSchedule.do"},method=RequestMethod.GET)
+	public String saveSchedule(String stringSchedule,Model model){
+		System.out.println("\nStoreController의 saveSchedule.do(GET)");	
+		String[] schedules=stringSchedule.split(",");
+		ScheduleDAO scheduleDAO=sqlSession.getMapper(ScheduleDAO.class);
+		int data=0;
+		for (int i = 0; i < schedules.length; i++) {
+			Schedule schedule=new Schedule();
+			String[] info=schedules[i].split("-");
+			String date=info[1]+"-"+info[2]+"-"+info[3];
+			schedule.setRid(info[0]);
+			schedule.setPreOnWork(date);
+			schedule.setPreOffWork(date);
+			data+=scheduleDAO.insertSchedule(schedule);
+		}
+		model.addAttribute("data", data);
+		return "store.saveSchedule";
+	}
+		
 	@RequestMapping(value={"recruit.do"},method=RequestMethod.GET)
 	public String recruit(HttpServletRequest request, Model model) {
 		System.out.println("\nStoreController의 recruit.do(GET)");
@@ -139,26 +162,6 @@ public class StoreController {
 		return "store.recruit";
 	}
 
-	//스케줄 저장 ajax
-	@RequestMapping(value={"saveSchedule.do"},method=RequestMethod.GET)
-	public String saveSchedule(String stringSchedule,Model model){
-		System.out.println("\nStoreController의 saveSchedule.do(GET)");	
-		String[] schedules=stringSchedule.split(",");
-		ScheduleDAO scheduleDAO=sqlSession.getMapper(ScheduleDAO.class);
-		int data=0;
-		for (int i = 0; i < schedules.length; i++) {
-			Schedule schedule=new Schedule();
-			String[] info=schedules[i].split("-");
-			String date=info[1]+"-"+info[2]+"-"+info[3];
-			schedule.setRid(info[0]);
-			schedule.setPreOnWork(date);
-			schedule.setPreOffWork(date);
-			data+=scheduleDAO.insertSchedule(schedule);
-		}
-		model.addAttribute("data", data);
-		return "store.saveSchedule";
-	}
-	
 	@RequestMapping(value={"addRecruit.do"},method=RequestMethod.GET)
 	public String addRecruit(HttpServletRequest request, Model model) {
 		System.out.println("\nStoreController의 addRecruit.do(GET)");
@@ -231,5 +234,21 @@ public class StoreController {
 			System.out.println("직원 회원가입 실패");
 			return null;
 		}
+	}
+	
+	@RequestMapping(value={"changeRecruit.do"},method=RequestMethod.POST)
+	@ResponseBody
+	public String changeRecruit(String sid) {
+		System.out.println("\nStoreController의 changeRecruit.do(AJAX)");
+		
+		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
+		List<Employee> employeeList = memberDAO.getEmployee(sid);
+		
+		// null값을 가진 컬럼이 json에 들어가지 않던 것을 해결
+		Gson gson = new GsonBuilder().serializeNulls().create();
+		String result = gson.toJson(employeeList);
+		System.out.println(result);
+		
+		return result;
 	}
 }
