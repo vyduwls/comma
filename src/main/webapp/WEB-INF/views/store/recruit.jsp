@@ -6,22 +6,22 @@
 	$(document).ready(function() {
 		
 		/* 입사일, 퇴사일 선택 */
-		$("#joindatePicker").datepicker({
+		$("#joinDatePicker").datepicker({
 			dateFormat: "yy-mm-dd",
 			changeMonth : true,
 			changeYear : true,
 			maxDate : 0,
 			onClose: function( selectedDate ) {    
-                $("#resigndatePicker").datepicker("option", "minDate", selectedDate);
+                $("#resignDatePicker").datepicker("option", "minDate", selectedDate);
             } 
 		});
-		$("#resigndatePicker").datepicker({
+		$("#resignDatePicker").datepicker({
 			dateFormat: "yy-mm-dd",
 			changeMonth : true,
 			changeYear : true,
 			maxDate : 0,
 			onClose: function( selectedDate ) { 
-                $("#joindatePicker").datepicker("option", "maxDate", selectedDate);
+                $("#joinDatePicker").datepicker("option", "maxDate", selectedDate);
             } 
 		});
 		
@@ -54,6 +54,36 @@
 				}
 			});
 		});
+		
+		/* 검색 기능 */
+		$("#frm").ajaxForm({
+			beforeSubmit : function(data, form, option) {
+				return true;
+			},
+			success : function(data) {
+				var result = $.trim(data);
+				var test = JSON.parse(result);
+				
+				/* 테이블 초기화 */
+				$("#recruitList tbody .recruit_tr").remove();
+				
+				/* 테이블 갱신 */
+				$.each(test, function(index,item) {
+					var tr = $("<tr class='recruit_tr'></tr>");
+					
+					$.each(item, function(key,value) {
+						if(key!="rid" && key!="sid") {
+							$("<td></td>").text(value).appendTo(tr);								
+						}
+					});
+					
+					tr.appendTo($("#recruitList tbody"));
+				});
+			},
+			error : function() {
+				alert("submit 실패");
+			}
+		});
 	});
 
 </script>
@@ -62,7 +92,7 @@
 		<h2><b>직원 정보 조회</b></h2>
 		<br><br>
 		<div style="float: right">
-			<form class="form-inline" action="" method="post">
+			<form id="frm" class="form-inline" action="searchRecruit.do" method="post">
 								
 				<!-- 매장 선택 -->
 				<div class="form-group">
@@ -80,10 +110,10 @@
 				
 				<!-- 날짜 선택 -->
 				<div class="form-group">
-		  			<input class="form-control" type="text" id="joindatePicker" name="joindate" placeholder="시작날짜 선택">
+		  			<input class="form-control" type="text" id="joinDatePicker" name="joinDate" placeholder="입사일 선택">
 				</div>
 				<div class="form-group">
-		  			<input class="form-control" type="text" id="resigndatePicker" name="resigndate" placeholder="끝날짜 선택">
+		  			<input class="form-control" type="text" id="resignDatePicker" name="resignDate" placeholder="퇴사일 선택">
 				</div>
 				
 				<!-- 카테고리 선택 -->

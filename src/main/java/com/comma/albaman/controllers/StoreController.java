@@ -251,4 +251,26 @@ public class StoreController {
 		
 		return result;
 	}
+	
+	
+	@RequestMapping(value={"searchRecruit.do"},method=RequestMethod.POST)
+	@ResponseBody
+	public String searchRecruit(String store, String joinDate, String resignDate, String category, String query) {
+		System.out.println("\nStoreController의 searchRecruit.do(AJAX)");
+		
+		System.out.println("sid : " + store);
+		System.out.println("category : " + category);
+		System.out.println("query : " + query);
+		System.out.println("joinDate : " + joinDate);
+		System.out.println("resignDate : " + resignDate);
+		
+		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
+		List<Employee> employeeList = memberDAO.searchEmployee(store, category, query, joinDate, resignDate);
+
+		Gson gson = new GsonBuilder().serializeNulls().create();
+		String result = gson.toJson(employeeList);
+		System.out.println(result);
+		
+		return result;
+	}
 }
