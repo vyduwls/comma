@@ -76,6 +76,8 @@
 /* 	float : left; */
 /* 	width: 70%; */
 /* } */
+
+
 /* editSchedule.jsp 스케줄 테이블 css*/
 #detailSchedule{
 	margin: 30px 50px 50px 50px;
@@ -94,7 +96,45 @@
 	height: 40px;
 	border: 1px solid #a8b0ad;
 }
+
 .scheduleTable_tr{
+	text-align: center;
+	height: 40px;
+}
+
+/* editTimeSchedule.jsp 스케줄 테이블 css*/
+
+#detailTimeSchedule{
+	margin: 30px 50px 50px 50px;
+	width: 1500px;
+	height: auto;
+}
+.timeTable_totalDate_td, .timeTable_date_th, .timeTable_date_td{
+	text-align: center;
+	width:60px;
+	height:40px;
+	border: 1px solid #a8b0ad;	
+}
+.timeTable_totalTime_td, .timeTable_td, .timeTable_th,.timeTable_time_td,.timeTable_time_th{
+	text-align: center;
+	width: 70px;
+	height: 40px;
+	border: 1px solid #a8b0ad;
+}
+.timeTable_time_td1,.timeTable_time_th1{
+	text-align: center;
+	width: 25%;;
+	height: 40px;
+	border: 1px solid #a8b0ad;
+}
+.timeSelect{
+	width:23%;
+	float:left;
+	font-size:12px;
+	margin-right:2px;
+	margin-left:3px;
+}
+.timeTable_tr{
 	text-align: center;
 	height: 40px;
 }

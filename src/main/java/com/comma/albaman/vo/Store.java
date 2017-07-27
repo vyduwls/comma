@@ -9,7 +9,15 @@ public class Store {
 		private String ip;
 		private String image;
 		private String mid;
+		private String regDate;
 		
+		
+		public String getRegDate() {
+			return regDate;
+		}
+		public void setRegDate(String regDate) {
+			this.regDate = regDate;
+		}
 		public String getSid() {
 			return sid;
 		}
