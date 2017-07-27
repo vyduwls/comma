@@ -19,10 +19,15 @@ public interface RecruitDAO {
 	@Select("SELECT * FROM RECRUIT WHERE SID=#{sid} AND RESIGNDATE IS NULL")
 	public List<Recruit> getAllRecruit(String sid);
 	
+	// 직원 수 조회
+	@Select("SELECT COUNT(*) FROM RECRUIT WHERE SID = #{sid}")
+	public int getRecruitCount(String sid);
+	
 	// 가장 높은 번호를 가진 사원번호 가져오기
 	@Select("SELECT MAX(CAST(SUBSTRING_INDEX(RID, '-', -1) AS UNSIGNED)) FROM RECRUIT WHERE SID = #{sid}")
 	public int getLastRecruit(String sid);
 
+	// 사원 추가
 	@Insert("INSERT INTO RECRUIT VALUES(#{rid},#{birth},#{address},${wage},#{joinDate},#{resignDate, jdbcType=VARCHAR},#{sid})")
 	public int addRecruit(Recruit recruit);
 }

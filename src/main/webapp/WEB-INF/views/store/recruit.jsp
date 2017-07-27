@@ -5,23 +5,23 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		
-		/* 입사일, 퇴사일 선택 */
-		$("#joinDatePicker").datepicker({
+		/* 근무 기간 선택 */
+		$("#startDatePicker").datepicker({
 			dateFormat: "yy-mm-dd",
 			changeMonth : true,
 			changeYear : true,
 			maxDate : 0,
 			onClose: function( selectedDate ) {    
-                $("#resignDatePicker").datepicker("option", "minDate", selectedDate);
+                $("#endDatePicker").datepicker("option", "minDate", selectedDate);
             } 
 		});
-		$("#resignDatePicker").datepicker({
+		$("#endDatePicker").datepicker({
 			dateFormat: "yy-mm-dd",
 			changeMonth : true,
 			changeYear : true,
 			maxDate : 0,
 			onClose: function( selectedDate ) { 
-                $("#joinDatePicker").datepicker("option", "maxDate", selectedDate);
+                $("#startDatePicker").datepicker("option", "maxDate", selectedDate);
             } 
 		});
 		
@@ -84,6 +84,12 @@
 				alert("submit 실패");
 			}
 		});
+		
+		/* 엑셀로 다운로드하기 */
+		$("#toExcelButton").click(function(e) {
+			window.open('data:application/vnd.ms-excel,' + encodeURIComponent($('#toExcel').html()));
+			e.preventDefault();
+		});
 	});
 
 </script>
@@ -107,14 +113,17 @@
 						</c:forEach>
 			  		</select>
 		  		</div>
+				&nbsp;
 				
 				<!-- 날짜 선택 -->
 				<div class="form-group">
-		  			<input class="form-control" type="text" id="joinDatePicker" name="joinDate" placeholder="입사일 선택">
+		  			<input class="form-control" type="text" id="startDatePicker" name="startDate" placeholder="근무기간(시작) 선택" required="required">
 				</div>
+				~
 				<div class="form-group">
-		  			<input class="form-control" type="text" id="resignDatePicker" name="resignDate" placeholder="퇴사일 선택">
+		  			<input class="form-control" type="text" id="endDatePicker" name="endDate" placeholder="근무기간(끝) 선택" required="required">
 				</div>
+				&nbsp;
 				
 				<!-- 카테고리 선택 -->
 				<div class="form-group">
@@ -133,55 +142,50 @@
 	   					</div>
 		  			</div>
 		  		</div>
+		  		&nbsp;
+		  		&nbsp;
+		  		
+		  		<!-- 직원 등록 버튼 / 엑셀 다운로드 버튼 -->
 				<button type="button" class="btn btn-success" onClick="javascript:self.location='addRecruit.do'">직원 등록</button>
+				<button id="toExcelButton" class="btn btn-warning">엑셀 다운로드</button>	
 			</form>
 		</div>
 		
-		<table id="recruitList" class="table">
-			<thead>
-				<tr>
-					<th>아이디</th>
-					<th>비밀번호</th>
-					<th>이름</th>
-					<th>전화번호</th>
-					<th>이메일</th>					
-					<th>직급</th>
-					<th>생년월일</th>
-					<th>주소</th>
-					<th>시급</th>
-					<th>입사일</th>
-					<th>퇴사일</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach items="${employeeList}" var="employeeList">
-					<tr class="recruit_tr">
-						<td>${employeeList.mid}</td>
-						<td>${employeeList.pwd}</td>
-						<td>${employeeList.name}</td>
-						<td>${employeeList.phone}</td>
-						<td>${employeeList.email}</td>
-						<td>${employeeList.position}</td>
-						<td>${employeeList.birth}</td>
-						<td>${employeeList.address}</td>
-						<td>${employeeList.wage}</td>
-						<td>${employeeList.joinDate}</td>
-						<td>${employeeList.resignDate}</td>
+		<div id="toExcel">
+			<table id="recruitList" class="table table-bordered">
+				<thead>
+					<tr>
+						<th>아이디</th>
+						<th>비밀번호</th>
+						<th>이름</th>
+						<th>전화번호</th>
+						<th>이메일</th>					
+						<th>직급</th>
+						<th>생년월일</th>
+						<th>주소</th>
+						<th>시급</th>
+						<th>입사일</th>
+						<th>퇴사일</th>
 					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
-
-		<div style="text-align: center">
-			<ul class="pagination">
-				<li><a href="#" aria-label="Previous"> <span aria-hidden="true">«</span></a></li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li><a href="#" aria-label="Next"> <span aria-hidden="true">»</span></a></li>
-			</ul>
-		</div>
+				</thead>
+				<tbody>
+					<c:forEach items="${employeeList}" var="employeeList">
+						<tr class="recruit_tr">
+							<td>${employeeList.mid}</td>
+							<td>${employeeList.pwd}</td>
+							<td>${employeeList.name}</td>
+							<td>${employeeList.phone}</td>
+							<td>${employeeList.email}</td>
+							<td>${employeeList.position}</td>
+							<td>${employeeList.birth}</td>
+							<td>${employeeList.address}</td>
+							<td>${employeeList.wage}</td>
+							<td>${employeeList.joinDate}</td>
+							<td>${employeeList.resignDate}</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>		
+		</div>		
 	</div>
 </div>
