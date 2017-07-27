@@ -213,7 +213,10 @@ public class StoreController {
 		System.out.println("선택된 sid : " + sid);
 		
 		RecruitDAO recruitDAO = sqlSession.getMapper(RecruitDAO.class);
-		int last = recruitDAO.getLastRecruit(sid)+1;
+		int last = 0;
+		if(recruitDAO.getRecruitCount(sid)!=0) {
+			last = recruitDAO.getLastRecruit(sid)+1;
+		}
 
 		String mid = sid + "-" + Integer.toString(last);
 		
@@ -281,20 +284,19 @@ public class StoreController {
 		return result;
 	}
 	
-	
 	@RequestMapping(value={"searchRecruit.do"},method=RequestMethod.POST)
 	@ResponseBody
-	public String searchRecruit(String store, String joinDate, String resignDate, String category, String query) {
+	public String searchRecruit(String store, String startDate, String endDate, String category, String query) {
 		System.out.println("\nStoreController의 searchRecruit.do(AJAX)");
 		
 		System.out.println("sid : " + store);
 		System.out.println("category : " + category);
 		System.out.println("query : " + query);
-		System.out.println("joinDate : " + joinDate);
-		System.out.println("resignDate : " + resignDate);
+		System.out.println("startDate : " + startDate);
+		System.out.println("endDate : " + endDate);
 		
 		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
-		List<Employee> employeeList = memberDAO.searchEmployee(store, category, query, joinDate, resignDate);
+		List<Employee> employeeList = memberDAO.searchEmployee(store, category, query, startDate, endDate);
 
 		Gson gson = new GsonBuilder().serializeNulls().create();
 		String result = gson.toJson(employeeList);
