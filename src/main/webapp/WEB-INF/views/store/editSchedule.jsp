@@ -50,8 +50,8 @@
 		var color=new Array();
 		color[0]="rgb(23, 144, 214)";
 		color[1]="rgb(255, 177, 0)";
-		color[2]="rgba(255, 99, 8, 0.67)";
-		color[3]="rgba(127, 255, 85, 0.83)";
+		color[2]="rgba(127, 255, 85, 0.83)";
+		color[3]="rgba(255, 99, 8, 0.67)";
 
  		for (var i = 0; i < ridList.length; i++) {
 			ridColorList[i]=new Array();
@@ -111,7 +111,7 @@
 	   	     if(Number(editDay)<=9){
 	   	    	editDay="0"+editDay;
 		     }
-      		var schedule=employName+"-"+year+"-"+month+"-"+editDay;
+      		var schedule=employName+"_"+year+"-"+month+"-"+editDay;
       		
       		if( (month>(nowDate.getMonth()+1)) ||( month==(nowDate.getMonth()+1) && selectDay>=nowDate.getDate())){
 			/*근무 지정할 때, 데이터 변화시켜주기*/
@@ -159,11 +159,7 @@
 	   	    	 },
 	   	    	 dateType:"text",
 	   	    	 success : function(data){
-	   	    		 if($.trim(data)!="0"){
-	   	    			 alert("스케줄 저장 완료!");
-	   	    		 }else{
-	   	    			 alert("스케줄 저장 실패하셨습니다.");
-	   	    		 }
+	   	    		 alert("스케줄 저장 완료!");   
 	   	    	 }
 	   	    	 
 	   	     });
@@ -201,8 +197,8 @@
     		
 			var allSchedules=allScheduleString.split(",");
 			for (var i = 0; i < allSchedules.length; i++) {
-				var mid=allSchedules[i].split("-")[0];
-	 			var scheduledate=Number(allSchedules[i].split("-")[3]);	
+				var mid=allSchedules[i].split("_")[0];
+	 			var scheduledate=Number(allSchedules[i].split("_")[1].split("-")[2]);	
 	 			scheduleArray.push(allSchedules[i]);
 	 			for (var j = 0; j < ridColorList.length; j++) {
 					if(mid==ridColorList[j][0]){

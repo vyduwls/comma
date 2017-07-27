@@ -81,6 +81,7 @@ public class StoreController {
 		}
 //		가져온 직원 정보에서 sid로 전체 직원 추출
 		List<Recruit> allEmployee=recruitDao.getAllRecruit(storeInfo.getSid());
+		System.out.println("storeInfo.getSid()====="+storeInfo.getSid());
 //		전체 직원 rid String 으로 변환
 		String allEmployeeRid="";
 		String allEmployeeRids="";
@@ -110,23 +111,25 @@ public class StoreController {
 		int month=Integer.parseInt(selectMonth);
 		String preMonth="";
 		if(month<=9){
-			preMonth="0"+selectMonth;
+			preMonth="0"+month;
 		}
 		String prework=year+"-"+preMonth;
+
 //      sid와 prework 날짜로 해당 달의 전체 스케줄 받기		
 		List<Schedule> allSchedule=scheduleDAO.getSchedule(storeInfo.getSid(), prework);
 		
 		
 //  	멤버 mid-날짜 스트링으로 만들어서 가져가기	
 		String allScheduleString="";
-		String memberRidArray="";
+
 		for (int i = 0; i < allSchedule.size(); i++) {
 			if(i==allSchedule.size()-1){
-				allScheduleString+=allSchedule.get(i).getRid()+"-"+allSchedule.get(i).getPreOnWork().substring(0, 10);
+				allScheduleString+=allSchedule.get(i).getRid()+"_"+allSchedule.get(i).getPreOnWork().substring(0, 10);
 			}else{
-				allScheduleString+=allSchedule.get(i).getRid()+"-"+allSchedule.get(i).getPreOnWork().substring(0, 10)+",";
+				allScheduleString+=allSchedule.get(i).getRid()+"_"+allSchedule.get(i).getPreOnWork().substring(0, 10)+",";
 			}
 		}
+
 		model.addAttribute("allEmployeeRids", allEmployeeRids);
 		model.addAttribute("allScheduleString", allScheduleString);
 		model.addAttribute("storeList", storeList);
@@ -145,10 +148,7 @@ public class StoreController {
 	public String saveSchedule(String stringSchedule,String allEmployeeRids,String deleteDate){
 		System.out.println("\nStoreController의 saveSchedule.do(GET)");	
 		ScheduleDAO scheduleDAO=sqlSession.getMapper(ScheduleDAO.class);
-
-		if(stringSchedule.equals("")||stringSchedule==null){
-			stringSchedule="0";
-		}		
+		
 		String[] schedules=stringSchedule.split(",");
 		String[] memberRids=allEmployeeRids.split(",");
 		//기존 스케줄 지우기
@@ -157,17 +157,15 @@ public class StoreController {
 			scheduleDAO.deleteSchedule(rid, deleteDate);
 		}
 		// 스케줄 추가
-		for (int i = 0; i < schedules.length; i++) {
-			Schedule schedule=new Schedule();
-			String[] info=schedules[i].split("-");
-			String date=deleteDate+"-"+info[3];
-			schedule.setRid(info[0]);
-			schedule.setPreOnWork(date);
-			schedule.setPreOffWork(date);
-
-			scheduleDAO.insertSchedule(schedule);
+		if(stringSchedule!=null && !stringSchedule.equals("")){
+			for (int i = 0; i < schedules.length; i++) {
+				String rid=schedules[i].split("_")[0];
+				String date=deleteDate+"-"+schedules[i].split("_")[1].split("-")[2];
+				scheduleDAO.insertSchedule(date,rid);
+			}	
+		}else{
+			stringSchedule="0";
 		}
-
 		return stringSchedule;
 	}
 		
@@ -380,10 +378,10 @@ public class StoreController {
 		String memberRidArray="";
 		for (int i = 0; i < allSchedule.size(); i++) {
 			if(i==allSchedule.size()-1){
-				allScheduleString+=allSchedule.get(i).getRid()+"-"+allSchedule.get(i).getPreOnWork().substring(11, 16);
+				allScheduleString+=allSchedule.get(i).getRid()+"_"+allSchedule.get(i).getPreOnWork().substring(11, 16);
 				memberRidArray+=allSchedule.get(i).getRid();
 			}else{
-				allScheduleString+=allSchedule.get(i).getRid()+"-"+allSchedule.get(i).getPreOnWork().substring(11, 16)+",";
+				allScheduleString+=allSchedule.get(i).getRid()+"_"+allSchedule.get(i).getPreOnWork().substring(11, 16)+",";
 				memberRidArray+=allSchedule.get(i).getRid()+",";
 			}
 		}
