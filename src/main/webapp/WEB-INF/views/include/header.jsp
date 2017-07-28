@@ -2,6 +2,48 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		
+		// 출근하기
+		$("#onWork").click(function() {
+			$.ajax({
+				url : 'customer/onWork.do',
+				type : 'post',
+				datatype : 'text',
+				data : {'rid' : '${sessionScope.mid}'},
+				success : function(data) {
+					if($.trim(data)=="1") {
+						alert("출근 완료");
+					} else {
+						alert("출근 실패");
+					}
+				}
+			});
+		});
+		
+		// 퇴근하기
+		$("#offWork").click(function() {
+			$.ajax({
+				url : 'customer/offWork.do',
+				type : 'post',
+				datatype : 'text',
+				data : {'rid' : '${sessionScope.mid}'},
+				success : function(data) {
+					if($.trim(data)=="1") {
+						alert("퇴근 완료");
+					} else {
+						alert("퇴근 실패");
+					}
+				}
+			});
+		});
+	});
+
+</script>
+
+
 <!-- 네비바 -->
 <nav class="navbar navbar-collapse navbar-inverse navbar-fixed-top">
 	<div class="container-fluid">
@@ -70,8 +112,8 @@
 										<li><a href="">마이페이지</a></li>
 									</c:when>
 									<c:otherwise>
-										<li><a href="">출근하기</a></li>
-										<li><a href="">퇴근하기</a></li>
+										<li><a id="onWork" style="cursor: pointer;">출근하기</a></li>
+										<li><a id="offWork" style="cursor: pointer;">퇴근하기</a></li>
 									</c:otherwise>
 								</c:choose>
 								<li><a href="customer/logout.do">로그아웃</a></li>

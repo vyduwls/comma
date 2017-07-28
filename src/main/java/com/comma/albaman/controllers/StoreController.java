@@ -236,7 +236,8 @@ public class StoreController {
 		}
 		return stringSchedule;
 	}
-		
+	
+	// 직원 정보 조회 페이지
 	@RequestMapping(value={"recruit.do"},method=RequestMethod.GET)
 	public String recruit(HttpServletRequest request, Model model) {
 		System.out.println("\nStoreController의 recruit.do(GET)");
@@ -257,6 +258,7 @@ public class StoreController {
 		return "store.recruit";
 	}
 
+	// 직원 정보 등록 페이지
 	@RequestMapping(value={"addRecruit.do"},method=RequestMethod.GET)
 	public String addRecruit(HttpServletRequest request, Model model) {
 		System.out.println("\nStoreController의 addRecruit.do(GET)");
@@ -271,6 +273,7 @@ public class StoreController {
 		return "store.addRecruit";
 	}
 	
+	// 사원 아이디 발급
 	@RequestMapping(value={"createId.do"},method=RequestMethod.POST)
 	@ResponseBody
 	public String createId(String sid) {
@@ -289,6 +292,7 @@ public class StoreController {
 		return mid;
 	}
 	
+	// 직원 정보 등록
 	@RequestMapping(value={"addRecruit.do"},method=RequestMethod.POST)
 	public String addRecruit(String store, String mid, String pwd, String name, String phone, String email, 
 			String position, String birth, String address, int wage, String joinDate) {
@@ -334,6 +338,7 @@ public class StoreController {
 		}
 	}
 	
+	// 다른 매장 직원 정보 검색
 	@RequestMapping(value={"changeRecruit.do"},method=RequestMethod.POST)
 	@ResponseBody
 	public String changeRecruit(String sid) {
@@ -350,6 +355,7 @@ public class StoreController {
 		return result;
 	}
 	
+	// 직원 정보 검색
 	@RequestMapping(value={"searchRecruit.do"},method=RequestMethod.POST)
 	@ResponseBody
 	public String searchRecruit(String store, String startDate, String endDate, String category, String query) {
