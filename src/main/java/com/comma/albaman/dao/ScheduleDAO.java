@@ -27,6 +27,9 @@ public interface ScheduleDAO {
 	//시간별 직원 스케줄 추출
 	@Select("SELECT * FROM SCHEDULE S JOIN RECRUIT R ON S.RID=R.RID WHERE SID =#{sid} AND SUBSTRING_INDEX(PREONWORK,' ','1')=#{prework}")
 	public List<Schedule> getDaySchedule(@Param("sid") String sid,@Param("prework") String prework);
+
+	@Select("SELECT * FROM SCHEDULE S JOIN RECRUIT R ON S.RID=R.RID WHERE SID =#{sid} ")	
+	public List<Schedule> getAllSchedule(String sid);
 }
 
 

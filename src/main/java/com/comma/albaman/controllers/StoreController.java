@@ -44,9 +44,77 @@ public class StoreController {
 	PlatformTransactionManager ptm;
 	
 	@RequestMapping(value={"calendar.do"},method=RequestMethod.GET)
-	public String calendar() {
+	public String calendar(HttpServletRequest request,Model model,String sid) {
 		System.out.println("\nStoreController의 calendar.do(GET)");
 		
+		String mid=(String) request.getSession().getAttribute("mid");
+		String checkPosition=(String) request.getSession().getAttribute("checkPosition");
+	
+		RecruitDAO recruitDao=sqlSession.getMapper(RecruitDAO.class);
+		MemberDAO memberDAO=sqlSession.getMapper(MemberDAO.class);
+		ScheduleDAO scheduleDAO=sqlSession.getMapper(ScheduleDAO.class);
+		StoreDAO storeDAO=sqlSession.getMapper(StoreDAO.class);
+		
+		Recruit employee=new Recruit();
+		Store storeInfo=new Store();
+		List<Store> storeList=new ArrayList<Store>();
+		if(checkPosition.equals("2")){
+//		rid로 직원 정보 가져오기
+			employee=recruitDao.getRecruit(mid);
+			storeInfo=storeDAO.getStore(employee.getSid());
+		}else if(checkPosition.equals("1")){
+			storeList=storeDAO.getAllStore(mid);
+			if(sid==null || sid.equals("")){
+				storeInfo=storeList.get(0);
+			}else{
+				storeInfo=storeDAO.getStore(sid);
+			}
+			
+		}
+//		가져온 직원 정보에서 sid로 전체 직원 추출
+		List<Recruit> allEmployee=recruitDao.getAllRecruit(storeInfo.getSid());
+		System.out.println("storeInfo.getSid()====="+storeInfo.getSid());
+//		전체 직원 rid String 으로 변환
+		//SQL BETEEN 사용하기 위한 STRING 변환
+		String allEmployeeRid="";
+		for (int i = 0; i < allEmployee.size(); i++) {
+			if(i==allEmployee.size()-1){
+				allEmployeeRid+="'"+allEmployee.get(i).getRid()+"'";
+			}else{
+				allEmployeeRid+="'"+allEmployee.get(i).getRid()+"'"+",";
+			}
+		}
+		List<Member> memberList=new ArrayList<Member>();
+//		스트링으로 변환한 rid로 멤버 리스트 추출
+		if(allEmployeeRid!=null && !allEmployeeRid.equals("")){
+		memberList=memberDAO.getAllMember(allEmployeeRid);	
+		}
+
+//      sid와 prework 날짜로 해당 달의 전체 스케줄 받기		
+		List<Schedule> allSchedule=scheduleDAO.getAllSchedule(storeInfo.getSid());
+		
+//  	멤버 mid-날짜 스트링으로 만들어서 가져가기	
+		String allScheduleString="";
+
+		for (int i = 0; i < allSchedule.size(); i++) {
+			for (int j = 0; j < memberList.size(); j++) {
+				if(memberList.get(j).getMid().equals(allSchedule.get(i).getRid())){
+					if(i==allSchedule.size()-1){
+						allScheduleString+=allSchedule.get(i).getRid()+"_"+memberList.get(j).getName()+"_"
+				    	+allSchedule.get(i).getPreOnWork().substring(0, 10)+"T"+allSchedule.get(i).getPreOnWork().substring(11, 16);
+					}else{
+						allScheduleString+=allSchedule.get(i).getRid()+"_"+memberList.get(j).getName()+"_"
+						+allSchedule.get(i).getPreOnWork().substring(0, 10)+"T"+allSchedule.get(i).getPreOnWork().substring(11, 16)+",";
+					}					
+				}
+			}
+		}
+		System.out.println("allScheduleString===="+allScheduleString);
+		model.addAttribute("allScheduleString", allScheduleString);
+		model.addAttribute("storeList", storeList);
+		model.addAttribute("storeInfo", storeInfo);
+		model.addAttribute("memberList", memberList);
+
 		return "store.calendar";
 	}
 	

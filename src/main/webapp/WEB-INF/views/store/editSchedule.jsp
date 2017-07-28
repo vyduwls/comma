@@ -31,15 +31,14 @@
  	    return date.getDate();
  	 }
 	
-    jQuery(document).ready(function() {
+    $(document).ready(function() {
 
-    	
     	today();
 		$("#h2_selectMonth").text(year+"년"+month+"월 근무일정표");
 		   	for (var day = lastDay; day >= 1; day--) {
  		    	$(".scheduleTable_time_th").after("<th class='scheduleTable_date_th' >"+day+"</th>");
  		    	if("${checkPosition}"=="1"){
-		    		$(".scheduleTable_time_td").after("<td class='scheduleTable_date_td' id="+day+" style='cursor:pointer;'><input type='hidden' name='color' value='0'></td>");
+		    		$(".scheduleTable_time_td").after("<td class='scheduleTable_date_td' id="+day+" style='cursor:pointer;' ><input type='hidden' name='color' value='0'></td>");
  		    	}else{
  		    		$(".scheduleTable_time_td").after("<td class='scheduleTable_date_td' id="+day+"><input type='hidden' name='color' value='0'></td>");
  		    	}
@@ -100,6 +99,7 @@
     	}); 
     	
     	$('.scheduleTable_date_td').click(function(){
+    		
     		/*스케줄 날짜, 해당 직원의 총 근무시간, 총 근무일 잡아오기*/
       		var selectDay=$(this).attr("id");
       		var color=$(this).children("input[name=color]").val();
@@ -212,7 +212,6 @@
     	
 </script>
 
-    
 <div id="body_menu" >
 	<form action="editSchedule.do" method="get">
 	<select class="select_Store form-control" name="sid">
@@ -245,6 +244,28 @@
 	<c:if test="${checkPosition!='1'}">
 		<h2 class="body_menu_ptag"><a href="editTimeSchedule.do">시간별 스케줄 조회</a></h2>
 	</c:if>
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4>
+        </div>
+        <div class="modal-body">
+          <p>Some text in the modal.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
 
 
 </div>
@@ -287,6 +308,7 @@
 			</div>
 	</div>		
 
+
 	<table id="detailSchedule">
  		<thead>	
 			<tr class="scheduleTable_tr" >
@@ -304,7 +326,7 @@
 				<c:if test="${n.name!=emName}">
 				<td class="scheduleTable_td" id="${n.mid}" ><span class="employName">${n.name}</span></td>
 				</c:if>
-				<td class="scheduleTable_day_td"><span id="${n.mid}SumWork">0</span></td>
+				<td class="scheduleTable_day_td dropdown-toggle" data-toggle="dropdown"  ><span id="${n.mid}SumWork">0</span></td>
 				<td class="scheduleTable_time_td"><span id="${n.mid}SumTime">0</span></td>
 			</tr>
 			</c:forEach>
