@@ -137,11 +137,11 @@
 	border: 1px solid #a8b0ad;
 }
 .timeSelect{
-	width:23%;
+	width:20%;
 	float:left;
 	font-size:12px;
-	margin-right:2px;
-	margin-left:3px;
+/* 	margin-right:2px; */
+	margin-left:1%;
 }
 .timeTable_tr{
 	text-align: center;

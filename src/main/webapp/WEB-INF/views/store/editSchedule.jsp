@@ -32,15 +32,15 @@
  	 }
 	
     $(document).ready(function() {
-
+		$(".modal-title").text(year+"년"+month+"월"+"일 근무시간표");
     	today();
 		$("#h2_selectMonth").text(year+"년"+month+"월 근무일정표");
 		   	for (var day = lastDay; day >= 1; day--) {
  		    	$(".scheduleTable_time_th").after("<th class='scheduleTable_date_th' >"+day+"</th>");
  		    	if("${checkPosition}"=="1"){
-		    		$(".scheduleTable_time_td").after("<td class='scheduleTable_date_td' id="+day+" style='cursor:pointer;' ><input type='hidden' name='color' value='0'></td>");
+		    		$(".scheduleTable_time_td").after("<td class='scheduleTable_date_td' id="+day+" style='cursor:pointer;' data-toggle='modal' data-target='#myModal'><input type='hidden' name='color' value='0'></td>");
  		    	}else{
- 		    		$(".scheduleTable_time_td").after("<td class='scheduleTable_date_td' id="+day+"><input type='hidden' name='color' value='0'></td>");
+ 		    		$(".scheduleTable_time_td").after("<td class='scheduleTable_date_td' id="+day+" data-toggle='modal' data-target='#myModal'><input type='hidden' name='color' value='0'></td>");
  		    	}
 		    	$(".scheduleTable_totalTime_td").after("<td class='scheduleTable_totalDate_td' ><span id="+day+">0</span></td>"); 
 
@@ -98,47 +98,54 @@
 	    $("#miniCal").submit();
     	}); 
     	
-    	$('.scheduleTable_date_td').click(function(){
+    	 $('.scheduleTable_date_td').click(function(){
     		
+    	
     		/*스케줄 날짜, 해당 직원의 총 근무시간, 총 근무일 잡아오기*/
       		var selectDay=$(this).attr("id");
       		var color=$(this).children("input[name=color]").val();
-      		var employName=$(this).siblings(".scheduleTable_td").attr("id");
+      		var employRid=$(this).siblings(".scheduleTable_td").attr("id");
+      		var employName=$(this).siblings(".scheduleTable_td").children("span").text();
+			$(".modal-title").text(employName+"의 "+year+"년 "+month+"월 "+selectDay+"일 근무시간표");
+			$("input[name=modai_rid]").val(employRid);
+// 			var editDay=selectDay;
+// 	   	     /*데이터 넣기위한 날짜 변환*/
+// 	   	     if(Number(editDay)<=9){
+// 	   	    	editDay="0"+editDay;
+// 		     }
+//       		var schedule=employRid+"_"+year+"-"+month+"-"+editDay;
       		
+//       		if( (month>(nowDate.getMonth()+1)) ||( month==(nowDate.getMonth()+1) && selectDay>=nowDate.getDate())){
+// 			/*근무 지정할 때, 데이터 변화시켜주기*/
+//       		if(color=="0"){
+//       			/*배열에 저장*/
+// 	   	    	scheduleArray.push(schedule);
+// 	 			for (var j = 0; j < ridColorList.length; j++) {
+// 					if(employRid==ridColorList[j][0]){
+// 		      			$(this).css("background-color",ridColorList[j][1]);
+// 					}
+// 				}
+//       			$(this).children("input[name=color]").val("1");
+//            		totalScheduleCalcu(color,selectDay,employRid);
+//       		}else{
+//       			/*배열에 스케줄 저장한 것 삭제*/
+//       			scheduleArray.splice($.inArray(schedule, scheduleArray),1);
+//       			$(this).css("background-color","");    
+//       			$(this).children("input[name=color]").val("0");
+//            		totalScheduleCalcu(color,selectDay,employRid);
+//       		}
 
-			var editDay=selectDay;
-	   	     /*데이터 넣기위한 날짜 변환*/
-	   	     if(Number(editDay)<=9){
-	   	    	editDay="0"+editDay;
-		     }
-      		var schedule=employName+"_"+year+"-"+month+"-"+editDay;
-      		
-      		if( (month>(nowDate.getMonth()+1)) ||( month==(nowDate.getMonth()+1) && selectDay>=nowDate.getDate())){
-			/*근무 지정할 때, 데이터 변화시켜주기*/
-      		if(color=="0"){
-      			/*배열에 저장*/
-	   	    	scheduleArray.push(schedule);
-	 			for (var j = 0; j < ridColorList.length; j++) {
-					if(employName==ridColorList[j][0]){
-		      			$(this).css("background-color",ridColorList[j][1]);
-					}
-				}
-      			$(this).children("input[name=color]").val("1");
-           		totalScheduleCalcu(color,selectDay,employName);
-      		}else{
-      			/*배열에 스케줄 저장한 것 삭제*/
-      			scheduleArray.splice($.inArray(schedule, scheduleArray),1);
-      			$(this).css("background-color","");    
-      			$(this).children("input[name=color]").val("0");
-           		totalScheduleCalcu(color,selectDay,employName);
-      		}
+//       		}else{
+//       			alert("지난 날짜는 변경이 불가합니다.");
+//       		}
 
-      		}else{
-      			alert("지난 날짜는 변경이 불가합니다.");
-      		}
-
-    	});
+    	}); 
     	
+    	$(".saveTimebtn").click(function(){
+    		alert("111");
+    		$("#myModal").modal("display","none");
+    		
+    	});
     	$(".saveBtn").click(function(){
 	   	     /*ajax로 스케줄 저장시 스케줄배열 String 변환*/
 	   	     var stringSchedule="";
@@ -244,23 +251,45 @@
 	<c:if test="${checkPosition!='1'}">
 		<h2 class="body_menu_ptag"><a href="editTimeSchedule.do">시간별 스케줄 조회</a></h2>
 	</c:if>
-
+ <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
 
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
     
       <!-- Modal content-->
-      <div class="modal-content">
+      <div class="modal-content" style="width: 80%;margin-left:10%">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Modal Header</h4>
+          <h4 class="modal-title"></h4>
+          <input type="hidden" name="modai_rid">
         </div>
-        <div class="modal-body">
-          <p>Some text in the modal.</p>
+        <div class="modal-body" style="padding-bottom: 10%;">
+         	<select name="startHour" class="form-control timeSelect" style="margin-left: 7%">
+				<c:forEach begin="0" end="23" var="n">
+					<option value="${n}">${n}시</option>
+				</c:forEach>
+			</select>
+			<select name="startMinute" class="form-control timeSelect" >
+				<c:forEach begin="0" end="11" var="n">
+					<option value="${n*5}">${n*5}분</option>
+				</c:forEach>
+			</select>
+			<span style="float: left;font-size: 20px;">~</span>
+			<select name="endHour" class="form-control timeSelect" >
+				<c:forEach begin="0" end="23" var="n">
+					<option value="${n}">${n}시</option>
+				</c:forEach>
+			</select>
+			<select name="endMinute" class="form-control timeSelect" >
+				<c:forEach begin="0" end="11" var="n">
+					<option value="${n*5}">${n*5}분</option>
+				</c:forEach>
+			</select>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-info saveTimebtn" >Save</button>
         </div>
       </div>
       
@@ -326,7 +355,7 @@
 				<c:if test="${n.name!=emName}">
 				<td class="scheduleTable_td" id="${n.mid}" ><span class="employName">${n.name}</span></td>
 				</c:if>
-				<td class="scheduleTable_day_td dropdown-toggle" data-toggle="dropdown"  ><span id="${n.mid}SumWork">0</span></td>
+				<td class="scheduleTable_day_td "><span id="${n.mid}SumWork">0</span></td>
 				<td class="scheduleTable_time_td"><span id="${n.mid}SumTime">0</span></td>
 			</tr>
 			</c:forEach>
