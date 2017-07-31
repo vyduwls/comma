@@ -8,8 +8,8 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/gcal.js"></script>
 <script type="text/javascript">
     jQuery(document).ready(function() {
-        jQuery("#calendar").fullCalendar({
-              defaultDate : Date()
+        $("#calendar").fullCalendar({
+           /*    defaultDate : Date()
             , locale : "ko"
             , editable : false
             , eventLimit : false
@@ -23,64 +23,18 @@
                         , textColor : "#FFFFFF" 
                     }
               ]
-            , events: [
-                {
-                      title : "All Day Event"
-                    , start : "2017-07-01"
-                },
-                {
-                      title : "Long Event"
-                    , start : "2017-07-07"
-                    , end : "2017-07-10"
-                },
-                {
-                      id : 999
-                    , title : "Repeating Event"
-                    , start : "2017-07-09T16:00:00"
-                },
-                {
-                      id : 999
-                    , title : "Repeating Event"
-                    , start : "2017-07-16T16:00:00"
-                },
-                {
-                      title : "Conference"
-                    , start : "2017-07-11"
-                    , end : "2017-07-13"
-                },
-                {
-                      title : "Meeting"
-                    , start : "2017-07-12T10:30:00"
-                    , end : "2017-07-12T12:30:00"
-                },
-                {
-                      title : "Lunch"
-                    , start : "2017-07-12T12:00:00"
-                },
-                {
-                      title : "Meeting"
-                    , start : "2017-07-12T14:30:00"
-                },
-                {
-                      title : "Happy Hour"
-                    , start : "2017-07-12T17:30:00"
-                },
-                {
-                      title : "Dinner"
-                    , start : "2017-07-12T20:00:00"
-                },
-                {
-                      title : "Birthday Party"
-                    , start : "2017-07-13T07:00:00"
-                },
-                {
-                      title : "Click for Google"
-                    , url : "http://google.com/"
-                    , start : "2017-07-28"
-                }
-            ]
+            , */ events: function(start, end, callback) {
+        		$.ajax({
+        		    url: 'fullSchedule.do',
+        		    dataType: 'json',
+        		    success: function(data) {
+        		    	alert(data);
+        		    	var events =data;
+        		        callback(events);
+        		    }
+        		});
+            }
         });
-        
 /*          $(".fc-day").click(function(){
     	     var date=$(this).attr("data-date");
 			 alert(date);
@@ -91,6 +45,9 @@
     	}); 
         
     });
+    
+
+   
 </script>
 
 <div class="container">

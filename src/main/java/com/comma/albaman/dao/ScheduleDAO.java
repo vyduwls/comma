@@ -50,7 +50,7 @@ public interface ScheduleDAO {
 	public int setOffWork(String sseq);
 	
 	// 출근 시간 15분 전부터 출근 가능
-	@Select("SELECT COUNT(*) FROM SCHEDULE WHERE RID=#{rid} AND DATE(PREONWORK)=CURDATE() AND TIMESTAMPDIFF(MINUTE,PREONWORK,NOW())<=15 AND ONWORK IS NULL")
+	@Select("SELECT COUNT(*) FROM SCHEDULE WHERE RID=#{rid} AND DATE(PREONWORK)=CURDATE() AND TIMESTAMPDIFF(MINUTE,NOW(),PREONWORK)<=15 AND ONWORK IS NULL")
 	public int possibleOnWork(String rid);
 	
 	// 퇴근 시간부터 퇴근 가능

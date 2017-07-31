@@ -40,7 +40,7 @@
  		    	if("${checkPosition}"=="1"){
 		    		$(".scheduleTable_time_td").after("<td class='scheduleTable_date_td' id="+day+" style='cursor:pointer;' data-toggle='modal' data-target='#myModal'><input type='hidden' name='color' value='0'></td>");
  		    	}else{
- 		    		$(".scheduleTable_time_td").after("<td class='scheduleTable_date_td' id="+day+" data-toggle='modal' data-target='#myModal'><input type='hidden' name='color' value='0'></td>");
+ 		    		$(".scheduleTable_time_td").after("<td class='scheduleTable_date_td' id="+day+" style='cursor:pointer;' data-toggle='modal' data-target='#myModal'><input type='hidden' name='color' value='0'></td>");
  		    	}
 		    	$(".scheduleTable_totalTime_td").after("<td class='scheduleTable_totalDate_td' ><span id="+day+">0</span></td>"); 
 
