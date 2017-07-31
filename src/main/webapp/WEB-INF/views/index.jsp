@@ -1,14 +1,15 @@
+<%@page import="java.net.Inet4Address"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%
+	
+%>
 <script type="text/javascript">
 
 	/* 아이디 중복 검사 여부 확인 */
 	var idCheck = 0;
 
 	$(document).ready(function() {
-		
-		alert("<%=request.getRemoteAddr()%>");
 		
 		/* 모달 */
 		$("#login").click(function() {

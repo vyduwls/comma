@@ -49,13 +49,17 @@ public interface ScheduleDAO {
 	@Update("UPDATE SCHEDULE SET OFFWORK = NOW() WHERE SSEQ = #{sseq} AND OFFWORK IS NULL AND ONWORK IS NOT NULL")
 	public int setOffWork(String sseq);
 	
-	// 출근 시간 15분 전부터 출근 가능
-	@Select("SELECT COUNT(*) FROM SCHEDULE WHERE RID=#{rid} AND DATE(PREONWORK)=CURDATE() AND TIMESTAMPDIFF(MINUTE,NOW(),PREONWORK)<=15 AND ONWORK IS NULL")
-	public int possibleOnWork(String rid);
-	
-	// 퇴근 시간부터 퇴근 가능
-	@Select("SELECT COUNT(*) FROM SCHEDULE WHERE RID=#{rid} AND DATE(PREOFFWORK)=CURDATE() AND ONWORK IS NOT NULL AND OFFWORK IS NULL ORDER BY ABS(TIMESTAMPDIFF(SECOND,PREOFFWORK,NOW())) LIMIT 1")
-	public int possibleOffWork(String rid);
+
+	// 출근 시간 15분 전부터 퇴근시간 전 사이에 출근 가능 (해당 IP에서만)
+	@Select("SELECT COUNT(*) FROM SCHEDULE WHERE RID=#{rid} AND DATE(PREONWORK)=CURDATE() AND TIMESTAMPDIFF(MINUTE,NOW(),PREONWORK)<=15 AND ONWORK IS NULL "
+			+ "AND (SELECT STORE.IP FROM STORE INNER JOIN RECRUIT ON STORE.SID = RECRUIT.SID AND RECRUIT.RID = #{rid}) = #{ip}")
+	public int possibleOnWork(@Param("rid") String rid, @Param("ip") String ip);
+
+	// 퇴근 시간부터 퇴근 가능 (해당 IP에서만)
+	@Select("SELECT COUNT(*) FROM SCHEDULE WHERE RID=#{rid} AND DATE(PREOFFWORK)=CURDATE() AND ONWORK IS NOT NULL AND OFFWORK IS NULL "
+			+ "AND (SELECT STORE.IP FROM STORE INNER JOIN RECRUIT ON STORE.SID = RECRUIT.SID AND RECRUIT.RID = #{rid}) = #{ip} "
+			+ "ORDER BY ABS(TIMESTAMPDIFF(SECOND,PREOFFWORK,NOW())) LIMIT 1")
+	public int possibleOffWork(@Param("rid") String rid, @Param("ip") String ip);
 }
 
 
