@@ -1,7 +1,5 @@
 package com.comma.albaman.controllers;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -391,6 +389,7 @@ public class StoreController {
 		
 		return result;
 	}
+	
 	@RequestMapping(value={"editTimeSchedule.do"},method=RequestMethod.GET)
 	public String editTimeSchedule(HttpServletRequest request,Model model,String selectMonth,String selectYear,String selectDay,String emName,String sid) {
 		System.out.println("\nStoreController의 editTimeSchedule.do(GET)");
