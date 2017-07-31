@@ -8,11 +8,11 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/gcal.js"></script>
 <script type="text/javascript">
     jQuery(document).ready(function() {
-        jQuery("#calendar").fullCalendar({
+        $("#calendar").fullCalendar({
               defaultDate : Date()
             , locale : "ko"
             , editable : false
-            , eventLimit : false
+            , eventLimit : true
             , googleCalendarApiKey : "AIzaSyDcnW6WejpTOCffshGDDb4neIrXVUA1EAE"      // Google API KEY
             , eventSources : [
                     // 대한민국의 공휴일
@@ -22,65 +22,35 @@
                         , color : "red"
                         , textColor : "#FFFFFF" 
                     }
-              ]
-            , events: [
-                {
-                      title : "All Day Event"
-                    , start : "2017-07-01"
-                },
-                {
-                      title : "Long Event"
-                    , start : "2017-07-07"
-                    , end : "2017-07-10"
-                },
-                {
-                      id : 999
-                    , title : "Repeating Event"
-                    , start : "2017-07-09T16:00:00"
-                },
-                {
-                      id : 999
-                    , title : "Repeating Event"
-                    , start : "2017-07-16T16:00:00"
-                },
-                {
-                      title : "Conference"
-                    , start : "2017-07-11"
-                    , end : "2017-07-13"
-                },
-                {
-                      title : "Meeting"
-                    , start : "2017-07-12T10:30:00"
-                    , end : "2017-07-12T12:30:00"
-                },
-                {
-                      title : "Lunch"
-                    , start : "2017-07-12T12:00:00"
-                },
-                {
-                      title : "Meeting"
-                    , start : "2017-07-12T14:30:00"
-                },
-                {
-                      title : "Happy Hour"
-                    , start : "2017-07-12T17:30:00"
-                },
-                {
-                      title : "Dinner"
-                    , start : "2017-07-12T20:00:00"
-                },
-                {
-                      title : "Birthday Party"
-                    , start : "2017-07-13T07:00:00"
-                },
-                {
-                      title : "Click for Google"
-                    , url : "http://google.com/"
-                    , start : "2017-07-28"
-                }
-            ]
+              ],
+              events: function(start, end,timezone, callback) {
+        		$.ajax({
+        		    url: 'fullSchedule.do',
+        		    data: {
+                        // our hypothetical feed requires UNIX timestamps
+                        start: start.unix(),
+                        end: end.unix()
+                    },
+        		    dataType: 'json',
+        		    error:function(request,status,error){
+        		        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+       		        },
+       		        success:function(doc) {
+       	                var events = [];
+       	                $(doc).each(function() {
+       	                    events.push({
+       	                        title: $(this).attr('title'),
+       	                        start: $(this).attr('start') // will be parsed
+       	                    });
+       	                });
+       	                callback(events);
+       	            },
+       	         loading: function(bool) {
+       	            $('#loading').toggle(bool);
+       	        }
+        		});
+            }
         });
-        
 /*          $(".fc-day").click(function(){
     	     var date=$(this).attr("data-date");
 			 alert(date);
@@ -91,6 +61,9 @@
     	}); 
         
     });
+    
+
+   
 </script>
 
 <div class="container">

@@ -40,7 +40,7 @@
  		    	if("${checkPosition}"=="1"){
 		    		$(".scheduleTable_time_td").after("<td class='scheduleTable_date_td' id="+day+" style='cursor:pointer;' data-toggle='modal' data-target='#myModal'><input type='hidden' name='color' value='0'></td>");
  		    	}else{
- 		    		$(".scheduleTable_time_td").after("<td class='scheduleTable_date_td' id="+day+" data-toggle='modal' data-target='#myModal'><input type='hidden' name='color' value='0'></td>");
+ 		    		$(".scheduleTable_time_td").after("<td class='scheduleTable_date_td' id="+day+" style='cursor:pointer;' data-toggle='modal' data-target='#myModal'><input type='hidden' name='color' value='0'></td>");
  		    	}
 		    	$(".scheduleTable_totalTime_td").after("<td class='scheduleTable_totalDate_td' ><span id="+day+">0</span></td>"); 
 
@@ -73,7 +73,7 @@
               defaultDate : Date()
             , locale : "ko"
             , editable : false
-            , eventLimit : false
+            , eventLimit : true
             , googleCalendarApiKey : "AIzaSyDcnW6WejpTOCffshGDDb4neIrXVUA1EAE"      // Google API KEY
             , eventSources : [
                     // 대한민국의 공휴일
@@ -83,7 +83,34 @@
                         , color : "red"
                         , textColor : "#FFFFFF" 
                     }
-              ]
+              ],
+        events: function(start, end,timezone, callback) {
+    		$.ajax({
+    		    url: 'fullSchedule.do',
+    		    data: {
+                    // our hypothetical feed requires UNIX timestamps
+                    start: start.unix(),
+                    end: end.unix()
+                },
+    		    dataType: 'json',
+    		    error:function(request,status,error){
+    		        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+   		        },
+   		        success:function(doc) {
+   	                var events = [];
+   	                $(doc).each(function() {
+   	                    events.push({
+   	                        title: $(this).attr('title'),
+   	                        start: $(this).attr('start') // will be parsed
+   	                    });
+   	                });
+   	                callback(events);
+   	            },
+   	         loading: function(bool) {
+   	            $('#loading').toggle(bool);
+   	        }
+    		});
+        }
         });
         
 
