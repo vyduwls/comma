@@ -114,10 +114,10 @@
 /* editTimeSchedule.jsp 스케줄 테이블 css*/
 
 #detailTimeSchedule{
-	margin: 30px 50px 50px 50px;
-	width: 1500px;
 	height: auto;
+	display: block;
 }
+
 .timeTable_totalDate_td, .timeTable_date_th, .timeTable_date_td{
 	text-align: center;
 	width:60px;

@@ -189,17 +189,30 @@ public class StoreController {
 		
 //  	멤버 mid-날짜 스트링으로 만들어서 가져가기	
 		String allScheduleString="";
-
+		String allEndScheduleString="";
 		for (int i = 0; i < allSchedule.size(); i++) {
 			if(i==allSchedule.size()-1){
-				allScheduleString+=allSchedule.get(i).getRid()+"_"+allSchedule.get(i).getPreOnWork().substring(0, 10);
+				allScheduleString+=allSchedule.get(i).getRid()+"_"+allSchedule.get(i).getPreOnWork().substring(0, 16);
+				allEndScheduleString+=allSchedule.get(i).getRid()+"_"+allSchedule.get(i).getPreOffWork().substring(0, 16);
 			}else{
-				allScheduleString+=allSchedule.get(i).getRid()+"_"+allSchedule.get(i).getPreOnWork().substring(0, 10)+",";
+				allScheduleString+=allSchedule.get(i).getRid()+"_"+allSchedule.get(i).getPreOnWork().substring(0, 16)+",";
+				allEndScheduleString+=allSchedule.get(i).getRid()+"_"+allSchedule.get(i).getPreOffWork().substring(0, 16)+",";
 			}
 		}
-
+		
+//  	멤버 이름, rid 가져오기
+		String memberName="";
+		for (int i = 0; i < memberList.size(); i++) {
+			if(i==memberList.size()-1){
+				memberName+=memberList.get(i).getMid()+"_"+memberList.get(i).getName();
+			}else{
+				memberName+=memberList.get(i).getMid()+"_"+memberList.get(i).getName()+",";
+			}
+		}
+		model.addAttribute("memberName", memberName);
 		model.addAttribute("allEmployeeRids", allEmployeeRids);
 		model.addAttribute("allScheduleString", allScheduleString);
+		model.addAttribute("allEndScheduleString", allEndScheduleString);
 		model.addAttribute("storeList", storeList);
 		model.addAttribute("storeInfo", storeInfo);
 		model.addAttribute("storeRegYear", storeInfo.getRegDate().split("-")[0]);
@@ -213,11 +226,12 @@ public class StoreController {
 	//스케줄 저장 ajax
 	@RequestMapping(value={"saveSchedule.do"},method=RequestMethod.GET)
 	@ResponseBody
-	public String saveSchedule(String stringSchedule,String allEmployeeRids,String deleteDate){
+	public String saveSchedule(String stringSchedule,String stringEndSchedule,String allEmployeeRids,String deleteDate){
 		System.out.println("\nStoreController의 saveSchedule.do(GET)");	
 		ScheduleDAO scheduleDAO=sqlSession.getMapper(ScheduleDAO.class);
 		
 		String[] schedules=stringSchedule.split(",");
+		String[] endSchedules=stringEndSchedule.split(",");
 		String[] memberRids=allEmployeeRids.split(",");
 		//기존 스케줄 지우기
 		for (int i = 0; i < memberRids.length; i++) {
@@ -228,8 +242,9 @@ public class StoreController {
 		if(stringSchedule!=null && !stringSchedule.equals("")){
 			for (int i = 0; i < schedules.length; i++) {
 				String rid=schedules[i].split("_")[0];
-				String date=deleteDate+"-"+schedules[i].split("_")[1].split("-")[2];
-				scheduleDAO.insertSchedule(date,rid);
+				String preOnWork=deleteDate+"-"+schedules[i].split("_")[1].split("-")[2];
+				String preOffWork=deleteDate+"-"+endSchedules[i].split("_")[1].split("-")[2];
+				scheduleDAO.insertSchedule(preOnWork,preOffWork,rid);
 			}	
 		}else{
 			stringSchedule="0";

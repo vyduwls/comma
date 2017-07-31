@@ -19,8 +19,8 @@ public interface ScheduleDAO {
 	public List<Schedule> getSchedule(@Param("sid") String sid,@Param("prework") String prework);
 	
 	// 스케줄 저장
-	@Insert("INSERT INTO SCHEDULE (SSEQ,PREONWORK,PREOFFWORK,ONWORK,OFFWORK,RID) VALUES ((SELECT * FROM (SELECT IFNULL(MAX(CAST(S.SSEQ AS UNSIGNED)),0)+1 FROM SCHEDULE S) NEXT),#{date},#{date},null,null,#{rid})")
-	public int insertSchedule(@Param("date")String date,@Param("rid")String rid);
+	@Insert("INSERT INTO SCHEDULE (SSEQ,PREONWORK,PREOFFWORK,ONWORK,OFFWORK,RID) VALUES ((SELECT * FROM (SELECT IFNULL(MAX(CAST(S.SSEQ AS UNSIGNED)),0)+1 FROM SCHEDULE S) NEXT),#{preOnWork},#{preOffWork},null,null,#{rid})")
+	public int insertSchedule(@Param("preOnWork")String preOnWork,@Param("preOffWork")String preOffWork,@Param("rid")String rid);
 
 	// 스케줄 지우기
 	@Delete("DELETE FROM SCHEDULE WHERE SUBSTRING_INDEX(PREONWORK,'-','2')=#{deleteDate} AND RID=#{rid}")
