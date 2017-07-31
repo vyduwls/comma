@@ -47,7 +47,7 @@ public class StoreController {
 	public String calendar(HttpServletRequest request,Model model,String sid) {
 		System.out.println("\nStoreController의 calendar.do(GET)");
 		
-		String mid=(String) request.getSession().getAttribute("mid");
+		/*String mid=(String) request.getSession().getAttribute("mid");
 		String checkPosition=(String) request.getSession().getAttribute("checkPosition");
 	
 		RecruitDAO recruitDao=sqlSession.getMapper(RecruitDAO.class);
@@ -121,15 +121,15 @@ public class StoreController {
 		model.addAttribute("json", json);
 		model.addAttribute("storeList", storeList);
 		model.addAttribute("storeInfo", storeInfo);
-		model.addAttribute("memberList", memberList);
+		model.addAttribute("memberList", memberList);*/
 
 		return "store.calendar";
 	}
 	@RequestMapping(value={"fullSchedule.do"},method=RequestMethod.GET)
 	@ResponseBody
-	public String fullScheduel(HttpServletRequest request){
+	public String fullScheduel(HttpServletRequest request,String start,String end){
 	System.out.println("\nStoreController의 fullSchedule.do(GET)");
-		
+		System.out.println("start==="+start);
 		String mid=(String) request.getSession().getAttribute("mid");
 		String checkPosition=(String) request.getSession().getAttribute("checkPosition");
 	
@@ -178,23 +178,24 @@ public class StoreController {
 
 		for (int i = 0; i < allSchedule.size(); i++) {
 			if(i==allSchedule.size()-1){
-				data+="{'title':'"+allSchedule.get(i).getPreOnWork().split(" ")[1].substring(0, 5)+"~"+allSchedule.get(i).getPreOffWork().split(" ")[1].substring(0, 5)+" ";
+				data+="{\"title\":\""+allSchedule.get(i).getPreOnWork().split(" ")[1].substring(0, 5)+"~"+allSchedule.get(i).getPreOffWork().split(" ")[1].substring(0, 5)+" ";
 				for (int j = 0; j < memberList.size(); j++) {
 					if(memberList.get(j).getMid().equals(allSchedule.get(i).getRid())){
-						data+=memberList.get(j).getMid()+"',";
+						data+=memberList.get(j).getName()+"\",";
 					}
 				}
-				data+="'start':'"+allSchedule.get(i).getPreOnWork().split(" ")[0]+"'}";
+				data+="\"start\":\""+allSchedule.get(i).getPreOnWork().split(" ")[0]+"\"}";
 			}else{
-				data+="{'title':'"+allSchedule.get(i).getPreOnWork().split(" ")[1].substring(0, 5)+"~"+allSchedule.get(i).getPreOffWork().split(" ")[1].substring(0, 5)+" ";
+				data+="{\"title\":\""+allSchedule.get(i).getPreOnWork().split(" ")[1].substring(0, 5)+"~"+allSchedule.get(i).getPreOffWork().split(" ")[1].substring(0, 5)+"  ";
 				for (int j = 0; j < memberList.size(); j++) {
 					if(memberList.get(j).getMid().equals(allSchedule.get(i).getRid())){
-						data+=memberList.get(j).getMid()+"',";
+						data+=memberList.get(j).getName()+"\",";
 					}
 				}
-				data+="'start':'"+allSchedule.get(i).getPreOnWork().split(" ")[0]+"'},";
+				data+="\"start\":\""+allSchedule.get(i).getPreOnWork().split(" ")[0]+"\"},";
 			}
 		}
+
 		data+="]";
 
 		System.out.println("data===="+data);
