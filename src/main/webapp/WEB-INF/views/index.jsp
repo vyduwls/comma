@@ -8,6 +8,8 @@
 
 	$(document).ready(function() {
 		
+		alert("<%=request.getRemoteAddr()%>");
+		
 		/* 모달 */
 		$("#login").click(function() {
 			$("#modal-login").modal();

@@ -31,7 +31,7 @@ public interface ScheduleDAO {
 	public List<Schedule> getDaySchedule(@Param("sid") String sid,@Param("prework") String prework);
 	
 	// 현재 시간과 가장 가까운 출근예정시간을 갖는 컬럼 추출
-	@Select("SELECT SSEQ FROM SCHEDULE WHERE RID=#{rid} ORDER BY ABS(PREONWORK-NOW()) LIMIT 1")
+	@Select("SELECT SSEQ FROM SCHEDULE WHERE RID=#{rid} AND DATE(PREONWORK)=CURDATE() ORDER BY ABS(TIMESTAMPDIFF(SECOND,PREONWORK,NOW())) LIMIT 1")
 	public String getClosestPreOnWork(String rid);
 	
 	// 출근 시간 설정
@@ -39,12 +39,20 @@ public interface ScheduleDAO {
 	public int setOnWork(String sseq);
 	
 	// 현재 시간과 가장 가까운 퇴근예정시간을 갖는 컬럼 추출
-	@Select("SELECT SSEQ FROM SCHEDULE WHERE RID=#{rid} ORDER BY ABS(PREOFFWORK-NOW()) LIMIT 1")
+	@Select("SELECT SSEQ FROM SCHEDULE WHERE RID=#{rid} AND DATE(PREOFFWORK)=CURDATE() ORDER BY ABS(TIMESTAMPDIFF(SECOND,PREOFFWORK,NOW())) LIMIT 1")
 	public String getClosestPreOffWork(String rid);
 	
 	// 퇴근 시간 설정
-	@Update("UPDATE SCHEDULE SET OFFWORK = NOW() WHERE SSEQ = #{sseq} AND OFFWORK IS NULL")
+	@Update("UPDATE SCHEDULE SET OFFWORK = NOW() WHERE SSEQ = #{sseq} AND OFFWORK IS NULL AND ONWORK IS NOT NULL")
 	public int setOffWork(String sseq);
+	
+	// 출근 시간 15분 전부터 출근 가능
+	@Select("SELECT COUNT(*) FROM SCHEDULE WHERE RID=#{rid} AND DATE(PREONWORK)=CURDATE() AND TIMESTAMPDIFF(MINUTE,PREONWORK,NOW())<=15 AND ONWORK IS NULL")
+	public int possibleOnWork(String rid);
+	
+	// 퇴근 시간부터 퇴근 가능
+	@Select("SELECT COUNT(*) FROM SCHEDULE WHERE RID=#{rid} AND DATE(PREOFFWORK)=CURDATE() AND ONWORK IS NOT NULL AND OFFWORK IS NULL ORDER BY ABS(TIMESTAMPDIFF(SECOND,PREOFFWORK,NOW())) LIMIT 1")
+	public int possibleOffWork(String rid);
 }
 
 

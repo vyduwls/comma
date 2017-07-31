@@ -40,7 +40,6 @@
 			});
 		});
 	});
-
 </script>
 
 
@@ -111,10 +110,12 @@
 									<c:when test="${member.position == '점주'}">
 										<li><a href="">마이페이지</a></li>
 									</c:when>
-									<c:otherwise>
+									<c:when test="${onWork != 0}">
 										<li><a id="onWork" style="cursor: pointer;">출근하기</a></li>
+									</c:when>
+									<c:when test="${offWork != 0}">
 										<li><a id="offWork" style="cursor: pointer;">퇴근하기</a></li>
-									</c:otherwise>
+									</c:when>
 								</c:choose>
 								<li><a href="customer/logout.do">로그아웃</a></li>
 							</ul>
