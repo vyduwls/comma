@@ -62,7 +62,6 @@
 				ridColorList[i][1]=color[i%4];
 			}
 		} 
-		
 		var allScheduleString="${allScheduleString}";
 		var allEndScheduleString="${allEndScheduleString}";
 		if((allScheduleString!="" && allScheduleString!=null)&&(allEndScheduleString!="" && allEndScheduleString!=null)){
@@ -72,6 +71,7 @@
         jQuery("#miniCalendar").fullCalendar({
               defaultDate : Date()
             , locale : "ko"
+//             , height : 490
             , editable : false
             , eventLimit : true
             , googleCalendarApiKey : "AIzaSyDcnW6WejpTOCffshGDDb4neIrXVUA1EAE"      // Google API KEY
@@ -83,41 +83,40 @@
                         , color : "red"
                         , textColor : "#FFFFFF" 
                     }
-              ],
-        events: function(start, end,timezone, callback) {
-    		$.ajax({
-    		    url: 'fullSchedule.do',
-    		    data: {
-                    // our hypothetical feed requires UNIX timestamps
-                    start: start.unix(),
-                    end: end.unix()
-                },
-    		    dataType: 'json',
-    		    error:function(request,status,error){
-    		        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-   		        },
-   		        success:function(doc) {
-   	                var events = [];
-   	                $(doc).each(function() {
-   	                    events.push({
-   	                        title: $(this).attr('title'),
-   	                        start: $(this).attr('start') // will be parsed
-   	                    });
-   	                });
-   	                callback(events);
-   	            },
-   	         loading: function(bool) {
-   	            $('#loading').toggle(bool);
-   	        }
-    		});
-        }
+              ]
+        	, events: function(start, end,timezone, callback) {
+	    		$.ajax({
+	    		    url: 'fullSchedule.do',
+	    		    data: {
+	                    // our hypothetical feed requires UNIX timestamps
+	                    start: start.unix(),
+	                    end: end.unix(),
+	                    sid: "${storeInfo.sid}"
+	                },
+	    		    dataType: 'json',
+	    		    error:function(request,status,error){
+	    		        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+	   		        },
+	   		        success:function(doc) {
+	   	                var events = [];
+	   	                $(doc).each(function() {
+	   	                    events.push({
+	   	                        title: $(this).attr('title'),
+	   	                        start: $(this).attr('start') // will be parsed
+	   	                    });
+	   	                });
+	   	                callback(events);
+	   	            }
+	    		});
+      		  }   								     
+	        , eventClick:function(event) {
+	                alert(event.title);
+	                return false;     
+	        }
         });
         
+// 		$(".fc-content").css("cursor","pointer");
 
-//     	$('#miniCalendar').on('click','.fc-day-top',function(){
-//    	     var date=$(this).attr('data-date');		
-
-//     	}); 
     	
     	 $('.scheduleTable_date_td').click(function(){
     		
@@ -436,25 +435,19 @@
 	<button type="submit" class="btn btn-default changeStorebtn">변경</button>
 	</form>
 	
-	<form action="editTimeSchedule.do" method="get" id="miniCal">
-		<div id="miniCalendar" style="margin:40px 10px 40px 10px;"></div>
+		<div id="miniCalendar" style="margin:40px 10px 40px 10px;cursor: pointer;"></div>
 		<input type="hidden" name="selectMonth">
 		<input type="hidden" name="selectYear">
 		<input type="hidden" name="selectDay">
-	</form>
-	<c:if test="${checkPosition=='1'}">
-		<h2 class="body_menu_ptag" ><a href="editTimeSchedule.do">시간별 스케줄 관리</a></h2>
-	</c:if>
-	<c:if test="${checkPosition!='1'}">
-		<h2 class="body_menu_ptag"><a href="editTimeSchedule.do">시간별 스케줄 조회</a></h2>
-	</c:if>
+
+
 
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
     
       <!-- Modal content-->
-      <div class="modal-content" style="width: 80%;margin:30% 0% 0% 10%">
+      <div class="modal-content" style="width: 80%;margin:30% 0% 0% 10%;">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title"></h4>
@@ -475,7 +468,9 @@
 			</select>
 			<span style="float: left;font-size: 20px;">~</span>
 			<select name="endHour" id="endHour" class="form-control timeSelect" >
-				<option value="0">0시</option>
+				<c:forEach begin="0" end="23" var="n">
+					<option value="${n}">${n}시</option>
+				</c:forEach>
 			</select>
 			<select name="endMinute" id="endMinute" class="form-control timeSelect" >
 				<c:forEach begin="0" end="11" var="n">
@@ -483,10 +478,15 @@
 				</c:forEach>
 			</select>
         </div>
-        <div class="modal-footer">
+       <div class="modal-footer">
+        <c:if test="${checkPosition=='1'}">
           <button type="button" class="btn btn-default deleteTimebtn" >스케줄 삭제</button>
           <button type="button" class="btn btn-info saveTimebtn" >근무시간 저장</button>
-        </div>
+        </c:if>
+        <c:if test="${checkPosition!='1'}">
+		  <button type="button" class="btn btn-default"  data-dismiss="modal">닫기</button>
+        </c:if>
+       </div>
       </div>
       
     </div>
