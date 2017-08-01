@@ -68,13 +68,13 @@
 				</li>
 				<li class="col-lg-2"><a href="store/calendar.do">스케줄 관리</a>
 					<ul class="col-lg-12">
-						<li><a href="">스케줄 등록</a></li>
-						<li><a href="">스케줄 조회</a></li>
+						<li><a href="store/editSchedule.do">스케줄 등록</a></li>
+						<li><a href="store/calendar.do">스케줄 조회</a></li>
 					</ul>
 				</li>
-				<li class="col-lg-2"><a href="">급여 관리</a>
+				<li class="col-lg-2"><a href="customer/checkSalary.do">급여 관리</a>
 					<ul class="col-lg-12">
-						<li><a href="">급여 조회</a></li>
+						<li><a href="customer/checkSalary.do">급여 조회</a></li>
 					</ul>
 				</li>
 				<li class="col-lg-2"><a href="">공지사항 관리</a>

@@ -60,6 +60,9 @@ public interface ScheduleDAO {
 			+ "AND (SELECT STORE.IP FROM STORE INNER JOIN RECRUIT ON STORE.SID = RECRUIT.SID AND RECRUIT.RID = #{rid}) = #{ip} "
 			+ "ORDER BY ABS(TIMESTAMPDIFF(SECOND,PREOFFWORK,NOW())) LIMIT 1")
 	public int possibleOffWork(@Param("rid") String rid, @Param("ip") String ip);
+	
+	@Select("SELECT * FROM SCHEDULE WHERE RID=#{mid} AND SUBSTRING_INDEX(PREONWORK,'-','2')=#{prework} AND ONWORK IS NOT NULL AND OFFWORK IS NOT NULL")
+	public List<Schedule> getWorkTime(@Param("mid")String mid,@Param("prework") String prework);
 }
 
 
