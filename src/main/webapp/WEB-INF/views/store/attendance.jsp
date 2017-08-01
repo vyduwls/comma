@@ -37,7 +37,7 @@
 					var test = JSON.parse(result);
 					
 					/* 테이블 초기화 */
-					$("#table tbody .recruit_tr").remove();
+					$("#recruitList tbody .recruit_tr").remove();
 					
 					/* 테이블 갱신 */
 					$.each(test, function(index,item) {
@@ -49,8 +49,7 @@
 							}
 						});
 						
-						$("<td><button class='btn btn-xs btn-primary modifyBtn'>수정</button></td>").appendTo(tr);
-						tr.appendTo($("#table tbody"));
+						tr.appendTo($("#recruitList tbody"));
 					});
 				}
 			});
@@ -66,7 +65,7 @@
 				var test = JSON.parse(result);
 				
 				/* 테이블 초기화 */
-				$("#table tbody .recruit_tr").remove();
+				$("#recruitList tbody .recruit_tr").remove();
 				
 				/* 테이블 갱신 */
 				$.each(test, function(index,item) {
@@ -78,8 +77,7 @@
 						}
 					});
 					
-					$("<td><button class='btn btn-xs btn-primary modifyBtn'>수정</button></td>").appendTo(tr);
-					tr.appendTo($("#table tbody"));
+					tr.appendTo($("#recruitList tbody"));
 				});
 			},
 			error : function() {
@@ -89,17 +87,26 @@
 		
 		/* 엑셀로 다운로드하기 */
 		$("#toExcelButton").click(function(e) {
-			window.open('data:application/vnd.ms-excel,' + encodeURIComponent($('.sticky-table').html()));
+			window.open('data:application/vnd.ms-excel,' + encodeURIComponent($('#toExcel').html()));
 			e.preventDefault();
+		});
+		
+		/* 정보 수정 부분 */
+		$(".data").click(function() {
+			// input 태그가 없는 경우
+			if($(this).children().length == 0) {
+				var value = $(this).text();				
+				$(this).html("<input class='form-control input-sm' type='text' value='" + value + "' />");
+			}
 		});
 	});
 
 </script>
 <div id="content">
 	<div class="container">
-		<h2><b>직원 정보 조회</b></h2>
+		<h2><b>근태 정보 조회</b></h2>
 		<br><br>
-		<div style="float: right">
+		<div id="frm_div" style="float: right">
 			<form id="frm" class="form-inline" action="searchRecruit.do" method="post">
 								
 				<!-- 매장 선택 -->
@@ -147,49 +154,40 @@
 		  		&nbsp;
 		  		&nbsp;
 		  		
-		  		<!-- 직원 등록 버튼 / 엑셀 다운로드 버튼 -->
-				<button type="button" class="btn btn-success" onClick="javascript:self.location='addRecruit.do'">직원 등록</button>
+		  		<!-- 엑셀 다운로드 버튼 -->
 				<button id="toExcelButton" class="btn btn-warning">엑셀 다운로드</button>	
 			</form>
 		</div>
-		
+
 		<div class="col-lg-12 sticky-table sticky-headers sticky-ltr-cells">
 			<table id="table" class="table table-striped">
 				<thead>
 					<tr class="sticky-row">
-						<th>아이디</th>
-						<th>비밀번호</th>
-						<th>이름</th>
-						<th>전화번호</th>
-						<th>이메일</th>		
-						<th>직급</th>
-						<th>생년월일</th>
-						<th>주소</th>
-						<th>시급</th>
-						<th>입사일</th>
-						<th>퇴사일</th>
-						<th>수정</th>
+						<th class="col-lg-2">날짜</th>
+						<th class="col-lg-1">아이디</th>
+						<th class="col-lg-1">이름</th>					
+						<th class="col-lg-1">직급</th>
+						<th class="col-lg-1">출근 시간</th>
+						<th class="col-lg-1">퇴근 시간</th>
+						<th class="col-lg-1">근태 상태</th>
+						<th class="col-lg-3">비고</th>
+						<th class="col-lg-1">수정</th>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${employeeList}" var="employeeList">
-						<tr class="recruit_tr">
-							<td>${employeeList.mid}</td>
-							<td>${employeeList.pwd}</td>
-							<td>${employeeList.name}</td>
-							<td>${employeeList.phone}</td>
-							<td>${employeeList.email}</td>
-							<td>${employeeList.position}</td>
-							<td>${employeeList.birth}</td>
-							<td>${employeeList.address}</td>
-							<td>${employeeList.wage}</td>
-							<td>${employeeList.joinDate}</td>
-							<td>${employeeList.resignDate}</td>
-							<td><button class="btn btn-xs btn-primary modifyBtn">수정</button></td>
-						</tr>
-					</c:forEach>
+					<tr>
+						<td class="col-lg-2">2017-07-11</td>
+						<td class="col-lg-1">4-2</td>
+						<td class="col-lg-1">심규진</td>
+						<td class="col-lg-1">직원</td>
+						<td class="col-lg-1 data">17:07:15</td>
+						<td class="col-lg-1 data">17:17:00</td>
+						<td class="col-lg-1 data">출근</td>
+						<td class="col-lg-3 data"></td>
+						<td class="col-lg-1"><button class="btn btn-xs btn-primary modifyBtn">저장</button></td>
+					</tr>
 				</tbody>
-			</table>		
-		</div>	
+			</table>
+		</div>
 	</div>
 </div>

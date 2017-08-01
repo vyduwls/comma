@@ -17,6 +17,7 @@
 		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 		<script type='text/javascript' src='http://malsup.github.com/jquery.form.js'></script>
 		
+		
 		<!-- Bootstrap -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"/>
@@ -26,6 +27,10 @@
 		<link href="<tiles:getAsString name="css"/>" type="text/css" rel="stylesheet"/>
 		<link href="${pageContext.request.contextPath}/css/fullcalendar.css" rel="stylesheet"/>
 		<link href="${pageContext.request.contextPath}/css/fullcalendar.print.css" rel="stylesheet" media="print"/>
+		
+		<!-- jQuery Table PlugIn -->
+		<script src="${pageContext.request.contextPath}/js/jquery.stickytable.min.js"></script>
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/css/jquery.stickytable.min.css"/>
 	</head>
 	<body>
 	
