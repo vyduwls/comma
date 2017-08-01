@@ -428,5 +428,26 @@ public class StoreController {
 		
 		return result;
 	}
+	
+	// 직원 근태관리 페이지
+	@RequestMapping(value={"attendance.do"},method=RequestMethod.GET)
+	public String attendance(HttpServletRequest request, Model model) {
+		System.out.println("\nStoreController의 attendance.do(GET)");
+		
+		String mid = (String) request.getSession().getAttribute("mid");
+		
+		// 소유한 가게 가져오기
+		StoreDAO storeDAO = sqlSession.getMapper(StoreDAO.class);
+		List<Store> storeList = storeDAO.getAllStore(mid);
+		model.addAttribute("storeList", storeList);
+		
+		// 직원 전체 정보 가져오기
+		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
+		System.out.println("storeList.get(0).getSid() : " + storeList.get(0).getSid());
+		List<Employee> employeeList = memberDAO.getEmployee(storeList.get(0).getSid());
+		model.addAttribute("employeeList",employeeList);
+		
+		return "store.attendance";
+	}
 
 }

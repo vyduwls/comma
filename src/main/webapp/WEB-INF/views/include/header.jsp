@@ -77,13 +77,15 @@
 						<li><a href="customer/checkSalary.do">급여 조회</a></li>
 					</ul>
 				</li>
+				
+				<li class="col-lg-2"><a href="store/attendance.do">근태 관리</a></li>
+				
 				<li class="col-lg-2"><a href="">공지사항 관리</a>
 					<ul class="col-lg-12">
 						<li><a href="">공지사항 등록</a></li>
 						<li><a href="">공지사항 조회</a></li>
 					</ul>
 				</li>
-				<li class="col-lg-2"><a href="">문의 게시판</a></li>
 			</ul>
 		</div>
 		
