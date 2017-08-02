@@ -27,13 +27,13 @@
 				</li>
 				<li class="col-lg-2"><a href="calendar.do">스케줄 관리</a>
 					<ul class="col-lg-12">
-						<li><a href="">스케줄 등록</a></li>
-						<li><a href="">스케줄 조회</a></li>
+						<li><a href="editSchedule.do">스케줄 등록</a></li>
+						<li><a href="calendar.do">스케줄 조회</a></li>
 					</ul>
 				</li>
-				<li class="col-lg-2"><a href="">급여 관리</a>
+				<li class="col-lg-2"><a href="${pageContext.request.contextPath}/customer/checkSalary.do">급여 관리</a>
 					<ul class="col-lg-12">
-						<li><a href="">급여 조회</a></li>
+						<li><a href="${pageContext.request.contextPath}/customer/checkSalary.do">급여 조회</a></li>
 					</ul>
 				</li>
 				

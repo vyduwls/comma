@@ -2,6 +2,7 @@ package com.comma.albaman.controllers;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,10 +18,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.comma.albaman.dao.MemberDAO;
+import com.comma.albaman.dao.RecruitDAO;
 import com.comma.albaman.dao.ScheduleDAO;
+import com.comma.albaman.dao.StoreDAO;
 import com.comma.albaman.util.SendMail;
+import com.comma.albaman.vo.Employee;
 import com.comma.albaman.vo.Member;
+import com.comma.albaman.vo.Recruit;
 import com.comma.albaman.vo.Schedule;
+import com.comma.albaman.vo.Store;
 
 @Controller
 @RequestMapping("/customer/*")
@@ -218,5 +224,58 @@ public class CustomerController {
 			System.out.println("퇴근 실패");
 			return "0";
 		}
+	}
+	@RequestMapping(value={"checkSalary.do"}, method=RequestMethod.GET)
+	public String checkSalary(HttpServletRequest request,Model model,String selectMonth,String selectYear){
+		System.out.println("\nStoreController의 checkSalary.do(GET)");
+		
+		String mid = (String) request.getSession().getAttribute("mid");
+		
+		// 직원 전체 정보 가져오기
+		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
+		Member memberData=memberDAO.getMember(mid);
+		RecruitDAO recruitDAO=sqlSession.getMapper(RecruitDAO.class);
+		Recruit recruitData=recruitDAO.getRecruit(mid);
+		
+		//해당 직원 스케줄 가져오기
+//		날짜 변환
+		if(selectMonth==null || selectMonth.equals("")){
+			selectMonth=new SimpleDateFormat("MM").format(new Date());
+		}
+		if(selectYear==null ||selectYear.equals("")){
+			selectYear=new SimpleDateFormat("yyyy").format(new Date());
+		}
+
+		int year=Integer.parseInt(selectYear);
+		int month=Integer.parseInt(selectMonth);
+		String preMonth="";
+		if(month<=9){
+			preMonth="0"+month;
+		}
+		String prework=year+"-"+preMonth;
+		System.out.println("prework===="+prework);
+//      sid와 prework 날짜로 해당 달의 전체 스케줄 받기		
+		ScheduleDAO scheduleDAO=sqlSession.getMapper(ScheduleDAO.class);
+		List<Schedule> allSchedule=scheduleDAO.getWorkTime(mid, prework);
+		
+		String allScheduleString="";
+		for (int i = 0; i < allSchedule.size(); i++) {
+			if(i==allSchedule.size()-1){
+				allScheduleString+=allSchedule.get(i).getOnWork().substring(0, 16)+"_"+allSchedule.get(i).getOffWork().substring(0, 16)
+				+"_"+recruitData.getWage();
+			}else{
+				allScheduleString+=allSchedule.get(i).getOnWork().substring(0, 16)+"_"+allSchedule.get(i).getOffWork().substring(0, 16)
+			    +"_"+recruitData.getWage()+",";
+			}
+		}
+		model.addAttribute("joinYear", recruitData.getJoinDate().split("-")[0]);
+		System.out.println("allScheduleString-----"+allScheduleString);
+		model.addAttribute("year",selectYear);
+		model.addAttribute("month",selectMonth);
+		model.addAttribute("memberData",memberData);
+		model.addAttribute("recruitData",recruitData);
+		model.addAttribute("allSchedule",allSchedule);
+		model.addAttribute("allScheduleString",allScheduleString);
+		return "customer.checkSalary";
 	}
 }
