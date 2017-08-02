@@ -53,7 +53,7 @@
 		/* 	if(Number(onWork.split(":")[0])>Number(offWork.split(":")[0])){
 				if()
 			} */
-			salaryState+="<td class='salaryTd'>-</td><td class='salaryTd'>"+wage+"</td>";
+			salaryState+="<td class='salaryTd'>-</td><td class='salaryTd'>"+numberWithCommas(wage)+"</td>";
 			if(totalWorkMinute>=480){
 				daySalary=8*wage+Math.floor((totalWorkMinute-480)*((wage*1.5)/60));
 			}else{
