@@ -2,9 +2,12 @@
 .sticky-table {
   max-width: 100%;
   max-height: 80vh;
-  overflow-y: auto;
+  overflow-y: scroll;
   overflow-x: scroll;
   border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
   /* border-bottom: 1px solid #ddd; */
   padding: 0!important
 }
@@ -13,7 +16,8 @@
   margin-bottom: 0;
   width: 100%;
   max-width: 100%;
-  border-spacing: 0
+  border-spacing: 0;
+  background-color: white;
 }
 
 .sticky-table table tr.sticky-row td, .sticky-table table tr.sticky-row th {

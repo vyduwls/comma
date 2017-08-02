@@ -154,21 +154,21 @@
 		</div>
 		
 		<div class="col-lg-12 sticky-table sticky-headers sticky-ltr-cells">
-			<table id="table" class="table table-striped">
+			<table id="table" class="table">
 				<thead>
 					<tr class="sticky-row">
-						<th>아이디</th>
-						<th>비밀번호</th>
-						<th>이름</th>
-						<th>전화번호</th>
-						<th>이메일</th>		
-						<th>직급</th>
-						<th>생년월일</th>
-						<th>주소</th>
-						<th>시급</th>
-						<th>입사일</th>
-						<th>퇴사일</th>
-						<th>수정</th>
+						<th style="width: 5%">아이디</th>
+						<th style="width: 10%">비밀번호</th>
+						<th style="width: 5%">이름</th>
+						<th style="width: 10%">전화번호</th>
+						<th style="width: 10%">이메일</th>		
+						<th style="width: 5%">직급</th>
+						<th style="width: 10%">생년월일</th>
+						<th style="width: 15%">주소</th>
+						<th style="width: 5%">시급</th>
+						<th style="width: 10%">입사일</th>
+						<th style="width: 10%">퇴사일</th>
+						<th style="width: 5%">수정</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -181,7 +181,8 @@
 							<td>${employeeList.email}</td>
 							<td>${employeeList.position}</td>
 							<td>${employeeList.birth}</td>
-							<td>${employeeList.address}</td>
+							<%-- <td>${employeeList.address}</td> --%>
+							<td>인천광역시 계양구 용종동 동아아파트 321동 703호</td>
 							<td>${employeeList.wage}</td>
 							<td>${employeeList.joinDate}</td>
 							<td>${employeeList.resignDate}</td>

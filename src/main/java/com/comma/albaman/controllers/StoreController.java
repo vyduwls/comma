@@ -450,4 +450,58 @@ public class StoreController {
 		return "store.attendance";
 	}
 
+	
+	@RequestMapping(value={"checkSalary.do"}, method=RequestMethod.GET)
+	public String checkSalary(HttpServletRequest request,Model model,String selectMonth,String selectYear){
+		System.out.println("\nStoreController의 checkSalary.do(GET)");
+		
+		String mid = (String) request.getSession().getAttribute("mid");
+		
+		// 직원 전체 정보 가져오기
+		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
+		Member memberData=memberDAO.getMember(mid);
+		RecruitDAO recruitDAO=sqlSession.getMapper(RecruitDAO.class);
+		Recruit recruitData=recruitDAO.getRecruit(mid);
+		
+		//해당 직원 스케줄 가져오기
+//		날짜 변환
+		if(selectMonth==null || selectMonth.equals("")){
+			selectMonth=new SimpleDateFormat("MM").format(new Date());
+		}
+		if(selectYear==null ||selectYear.equals("")){
+			selectYear=new SimpleDateFormat("yyyy").format(new Date());
+		}
+
+		int year=Integer.parseInt(selectYear);
+		int month=Integer.parseInt(selectMonth);
+		String preMonth="";
+		if(month<=9){
+			preMonth="0"+month;
+		}
+		String prework=year+"-"+preMonth;
+		System.out.println("prework===="+prework);
+//      sid와 prework 날짜로 해당 달의 전체 스케줄 받기		
+		ScheduleDAO scheduleDAO=sqlSession.getMapper(ScheduleDAO.class);
+		List<Schedule> allSchedule=scheduleDAO.getWorkTime(mid, prework);
+		
+		String allScheduleString="";
+		for (int i = 0; i < allSchedule.size(); i++) {
+			if(i==allSchedule.size()-1){
+				allScheduleString+=allSchedule.get(i).getOnWork().substring(0, 16)+"_"+allSchedule.get(i).getOffWork().substring(0, 16)
+				+"_"+recruitData.getWage();
+			}else{
+				allScheduleString+=allSchedule.get(i).getOnWork().substring(0, 16)+"_"+allSchedule.get(i).getOffWork().substring(0, 16)
+			    +"_"+recruitData.getWage()+",";
+			}
+		}
+		model.addAttribute("joinYear", recruitData.getJoinDate().split("-")[0]);
+		System.out.println("allScheduleString-----"+allScheduleString);
+		model.addAttribute("year",selectYear);
+		model.addAttribute("month",selectMonth);
+		model.addAttribute("memberData",memberData);
+		model.addAttribute("recruitData",recruitData);
+		model.addAttribute("allSchedule",allSchedule);
+		model.addAttribute("allScheduleString",allScheduleString);
+		return "store.checkSalary";
+	}
 }
