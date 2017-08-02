@@ -154,7 +154,7 @@
 		</div>
 		
 		<div class="col-lg-12 sticky-table sticky-headers sticky-ltr-cells">
-			<table id="table" class="table table-striped">
+			<table id="table" class="table">
 				<thead>
 					<tr class="sticky-row">
 						<th>아이디</th>

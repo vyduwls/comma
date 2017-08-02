@@ -160,7 +160,7 @@
 		</div>
 
 		<div class="col-lg-12 sticky-table sticky-headers sticky-ltr-cells">
-			<table id="table" class="table table-striped">
+			<table id="table" class="table">
 				<thead>
 					<tr class="sticky-row">
 						<th class="col-lg-2">날짜</th>
