@@ -25,6 +25,38 @@
             } 
 		});
 		
+		/* 회원 정보 수정 (날짜) */
+		/* $(".joinDatePicker").datepicker({ */
+		$(document).on("focus", ".joinDatePicker", function() {
+			$(this).datepicker({
+				dateFormat: "yy-mm-dd",
+				changeMonth : true,
+				changeYear : true,
+				maxDate : 0,
+				onClose: function( selectedDate ) {    
+	                $(".resignDatePicker").datepicker("option", "minDate", selectedDate);
+	            } 
+			});
+		});
+		$(document).on("focus", ".resignDatePicker", function() {
+			$(this).datepicker({
+				dateFormat: "yy-mm-dd",
+				changeMonth : true,
+				changeYear : true,
+				onClose: function( selectedDate ) { 
+	                $(".joinDatePicker").datepicker("option", "maxDate", selectedDate);
+	            } 
+			});
+		});
+		$(document).on("focus", ".birthDatePicker", function() {
+			$(this).datepicker({
+				dateFormat: "yy-mm-dd",
+				changeMonth : true,
+				changeYear : true,
+				maxDate : 0
+			});
+		});
+		
 		/* 셀렉트 박스 변경 시 테이블 변경 */
 		$("#store").change(function() {
 			$.ajax({
@@ -45,7 +77,58 @@
 						
 						$.each(item, function(key,value) {
 							if(key!="rid" && key!="sid") {
-								$("<td></td>").text(value).appendTo(tr);								
+								switch(key) {
+									case "mid" :
+										var input = $("<input type='hidden' name='mid'>").val(value);
+										var td = $("<td class='data'></td>").text(value);
+										tr.append(td.append(input));
+										break;
+									case "pwd" :
+										var input = $("<input style='width: 50px' type='text' name='pwd'>").val(value);
+										var td = $("<td class='data'></td>");
+										tr.append(td.append(input));
+										break;
+									case "name" :
+										var input = $("<input style='width: 50px' type='text' name='name'>").val(value);
+										var td = $("<td class='data'></td>");
+										tr.append(td.append(input));
+										break;
+									case "position" :
+										var input = $("<input style='width: 50px' type='text' name='position'>").val(value);
+										var td = $("<td class='data'></td>");
+										tr.append(td.append(input));
+										break;
+									case "phone" :
+										var input = $("<input style='width: 110px' type='text' name='phone'>").val(value);
+										var td = $("<td class='data'></td>");
+										tr.append(td.append(input));
+										break;
+									case "birth" :
+										var input = $("<input class='birthDatePicker' style='width: 80px' type='text' name='birth'>").val(value);
+										var td = $("<td class='data'></td>");
+										tr.append(td.append(input));
+										break;
+									case "address" :
+										var input = $("<input style='width: 300px' type='text' name='address'>").val(value);
+										var td = $("<td class='data'></td>");
+										tr.append(td.append(input));
+										break;
+									case "wage" :
+										var input = $("<input style='width: 45px' type='text' name='wage'>").val(value);
+										var td = $("<td class='data'></td>");
+										tr.append(td.append(input));
+										break;
+									case "joinDate" :
+										var input = $("<input class='joinDatePicker' style='width: 80px' type='text' name='joinDate'>").val(value);
+										var td = $("<td class='data'></td>");
+										tr.append(td.append(input));
+										break;
+									case "resignDate" :
+										var input = $("<input class='resignDatePicker' style='width: 80px' type='text' name='resignDate'>").val(value);
+										var td = $("<td class='data'></td>");
+										tr.append(td.append(input));
+										break;
+								}						
 							}
 						});
 						
@@ -74,7 +157,58 @@
 					
 					$.each(item, function(key,value) {
 						if(key!="rid" && key!="sid") {
-							$("<td></td>").text(value).appendTo(tr);								
+							switch(key) {
+								case "mid" :
+									var input = $("<input type='hidden' name='mid'>").val(value);
+									var td = $("<td class='data'></td>").text(value);
+									tr.append(td.append(input));
+									break;
+								case "pwd" :
+									var input = $("<input style='width: 50px' type='text' name='pwd'>").val(value);
+									var td = $("<td class='data'></td>");
+									tr.append(td.append(input));
+									break;
+								case "name" :
+									var input = $("<input style='width: 50px' type='text' name='name'>").val(value);
+									var td = $("<td class='data'></td>");
+									tr.append(td.append(input));
+									break;
+								case "position" :
+									var input = $("<input style='width: 50px' type='text' name='position'>").val(value);
+									var td = $("<td class='data'></td>");
+									tr.append(td.append(input));
+									break;
+								case "phone" :
+									var input = $("<input style='width: 110px' type='text' name='phone'>").val(value);
+									var td = $("<td class='data'></td>");
+									tr.append(td.append(input));
+									break;
+								case "birth" :
+									var input = $("<input class='birthDatePicker' style='width: 80px' type='text' name='birth'>").val(value);
+									var td = $("<td class='data'></td>");
+									tr.append(td.append(input));
+									break;
+								case "address" :
+									var input = $("<input style='width: 300px' type='text' name='address'>").val(value);
+									var td = $("<td class='data'></td>");
+									tr.append(td.append(input));
+									break;
+								case "wage" :
+									var input = $("<input style='width: 45px' type='text' name='wage'>").val(value);
+									var td = $("<td class='data'></td>");
+									tr.append(td.append(input));
+									break;
+								case "joinDate" :
+									var input = $("<input class='joinDatePicker' style='width: 80px' type='text' name='joinDate'>").val(value);
+									var td = $("<td class='data'></td>");
+									tr.append(td.append(input));
+									break;
+								case "resignDate" :
+									var input = $("<input class='resignDatePicker' style='width: 80px' type='text' name='resignDate'>").val(value);
+									var td = $("<td class='data'></td>");
+									tr.append(td.append(input));
+									break;
+							}						
 						}
 					});
 					
@@ -92,11 +226,42 @@
 			window.open('data:application/vnd.ms-excel,' + encodeURIComponent($('.sticky-table').html()));
 			e.preventDefault();
 		});
+		
+		
+		$(document).on("click", ".modifyBtn", function() {
+			var td = $(this).parent().siblings();
+			
+			$.ajax({
+				url : 'modifyRecruit.do',
+				type : 'post',
+				datatype : 'text',
+				data : {'mid' : td.eq(0).children("input").val(),
+						'pwd' : td.eq(1).children("input").val(),
+						'name' : td.eq(2).children("input").val(),
+						'position' : td.eq(3).children("input").val(),
+						'phone' : td.eq(4).children("input").val(),
+						'birth' : td.eq(5).children("input").val(),
+						'address' : td.eq(6).children("input").val(),
+						'wage' : td.eq(7).children("input").val(),
+						'joinDate' : td.eq(8).children("input").val(),
+						'resignDate' : td.eq(9).children("input").val()
+				},
+				success : function(data) {
+					if($.trim(data) != "0") {
+						alert("정보 수정 완료");
+					} else {
+						alert("정보 수정 실패");
+					}
+				},
+				error:function(request,status,error){
+			        alert("code:"+request.status+"\n\n"+"message:"+request.responseText+"\n\n"+"error:"+error);
+		       }			
+			});
+		});
 	});
-
 </script>
 <div id="content">
-	<div class="container">
+	<div id="inner_content" class="container">
 		<h2><b>직원 정보 조회</b></h2>
 		<br><br>
 		<div style="float: right">
@@ -157,36 +322,33 @@
 			<table id="table" class="table">
 				<thead>
 					<tr class="sticky-row">
-						<th style="width: 5%">아이디</th>
-						<th style="width: 10%">비밀번호</th>
-						<th style="width: 5%">이름</th>
-						<th style="width: 10%">전화번호</th>
-						<th style="width: 10%">이메일</th>		
-						<th style="width: 5%">직급</th>
-						<th style="width: 10%">생년월일</th>
-						<th style="width: 15%">주소</th>
-						<th style="width: 5%">시급</th>
-						<th style="width: 10%">입사일</th>
-						<th style="width: 10%">퇴사일</th>
-						<th style="width: 5%">수정</th>
+						<th>아이디</th>
+						<th>비밀번호</th>
+						<th>이름</th>
+						<th>직급</th>
+						<th>전화번호</th>
+						<th>생년월일</th>
+						<th>주소</th>
+						<th>시급</th>
+						<th>입사일</th>
+						<th>퇴사일</th>
+						<th>수정</th>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach items="${employeeList}" var="employeeList">
 						<tr class="recruit_tr">
-							<td>${employeeList.mid}</td>
-							<td>${employeeList.pwd}</td>
-							<td>${employeeList.name}</td>
-							<td>${employeeList.phone}</td>
-							<td>${employeeList.email}</td>
-							<td>${employeeList.position}</td>
-							<td>${employeeList.birth}</td>
-							<%-- <td>${employeeList.address}</td> --%>
-							<td>인천광역시 계양구 용종동 동아아파트 321동 703호</td>
-							<td>${employeeList.wage}</td>
-							<td>${employeeList.joinDate}</td>
-							<td>${employeeList.resignDate}</td>
-							<td><button class="btn btn-xs btn-primary modifyBtn">수정</button></td>
+							<td class="data">${employeeList.mid}<input type="hidden" name="mid" value="${employeeList.mid}"></td>
+							<td class="data"><input style="width: 50px" type="text" name="pwd" value="${employeeList.pwd}"></td>
+							<td class="data"><input style="width: 50px" type="text" name="name" value="${employeeList.name}"></td>
+							<td class="data"><input style="width: 50px" type="text" name="position" value="${employeeList.position}"></td>
+							<td class="data"><input style="width: 110px" type="text" name="phone" value="${employeeList.phone}"></td>
+							<td class="data"><input class="birthDatePicker" style="width: 80px" type="text" name="birth" value="${employeeList.birth}"></td>
+							<td class="data"><input style="width: 300px" type="text" name="address" value="${employeeList.address}"></td>
+							<td class="data"><input style="width: 45px" type="text" name="wage" value="${employeeList.wage}"></td>
+							<td class="data"><input class="joinDatePicker" style="width: 80px" type="text" name="joinDate" value="${employeeList.joinDate}"></td>
+							<td class="data"><input class="resignDatePicker" style="width: 80px" type="text" name="resignDate" value="${employeeList.resignDate}"></td>
+							<td><button class="btn btn-xs btn-primary modifyBtn">저장</button></td>
 						</tr>
 					</c:forEach>
 				</tbody>

@@ -3,7 +3,9 @@ package com.comma.albaman.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Component;
 
 import com.comma.albaman.vo.Recruit;
@@ -30,6 +32,9 @@ public interface RecruitDAO {
 	// 사원 추가
 	@Insert("INSERT INTO RECRUIT VALUES(#{rid},#{birth},#{address},${wage},#{joinDate},#{resignDate, jdbcType=VARCHAR},#{sid})")
 	public int addRecruit(Recruit recruit);
+	
+	@Update("UPDATE RECRUIT SET BIRTH=#{birth}, ADDRESS=#{address}, WAGE=${wage}, JOINDATE=#{joinDate}, RESIGNDATE=#{resignDate, jdbcType=VARCHAR} WHERE RID=#{rid}")
+	public int modifyRecruit(@Param("rid")String rid, @Param("birth")String birth, @Param("address")String address, @Param("wage")int wage, @Param("joinDate")String joinDate, @Param("resignDate")String resignDate);
 }
 
 

@@ -87,17 +87,8 @@
 		
 		/* 엑셀로 다운로드하기 */
 		$("#toExcelButton").click(function(e) {
-			window.open('data:application/vnd.ms-excel,' + encodeURIComponent($('#toExcel').html()));
+			window.open('data:application/vnd.ms-excel,' + encodeURIComponent($('.sticky-table').html()));
 			e.preventDefault();
-		});
-		
-		/* 정보 수정 부분 */
-		$(".data").click(function() {
-			// input 태그가 없는 경우
-			if($(this).children().length == 0) {
-				var value = $(this).text();				
-				$(this).html("<input class='form-control input-sm' type='text' value='" + value + "' />");
-			}
 		});
 	});
 
@@ -163,28 +154,32 @@
 			<table id="table" class="table">
 				<thead>
 					<tr class="sticky-row">
-						<th class="col-lg-2">날짜</th>
-						<th class="col-lg-1">아이디</th>
-						<th class="col-lg-1">이름</th>					
-						<th class="col-lg-1">직급</th>
-						<th class="col-lg-1">출근 시간</th>
-						<th class="col-lg-1">퇴근 시간</th>
-						<th class="col-lg-1">근태 상태</th>
-						<th class="col-lg-3">비고</th>
-						<th class="col-lg-1">수정</th>
+						<th>날짜</th>
+						<th>아이디</th>
+						<th>이름</th>					
+						<th>직급</th>
+						<th>예상 출근 시간</th>
+						<th>예상 퇴근 시간</th>
+						<th>실제 출근 시간</th>
+						<th>실제 퇴근 시간</th>
+						<th>근태 상태</th>
+						<th>비고</th>
+						<th>수정</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td class="col-lg-2">2017-07-11</td>
-						<td class="col-lg-1">4-2</td>
-						<td class="col-lg-1">심규진</td>
-						<td class="col-lg-1">직원</td>
-						<td class="col-lg-1 data">17:07:15</td>
-						<td class="col-lg-1 data">17:17:00</td>
-						<td class="col-lg-1 data">출근</td>
-						<td class="col-lg-3 data"></td>
-						<td class="col-lg-1"><button class="btn btn-xs btn-primary modifyBtn">저장</button></td>
+						<td>2017-07-11</td>
+						<td>4-2</td>
+						<td>심규진</td>
+						<td>직원</td>
+						<td class="data"><input type="text" value="17:07:00"></td>
+						<td class="data"><input type="text" value="17:17:00"></td>
+						<td class="data"><input type="text" value="17:07:15"></td>
+						<td class="data"><input type="text" value="17:17:00"></td>
+						<td class="data"><input type="text" value="출근"></td>
+						<td class="data"><input type="text" value=""></td>
+						<td><button class="btn btn-xs btn-primary modifyBtn">저장</button></td>
 					</tr>
 				</tbody>
 			</table>

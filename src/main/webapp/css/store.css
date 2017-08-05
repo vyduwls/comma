@@ -19,9 +19,16 @@
 	border-bottom: 1px solid #ddd;
 }
 .data input {
+	border: none;
 	text-align: center;
 	vertical-align: middle;
 	height: 20px;
+}
+#startDatePicker {
+	z-index: 20;
+}
+#endDatePicker {
+	z-index: 20;
 }
 
 /* recruit.jsp css */
