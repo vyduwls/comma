@@ -30,6 +30,9 @@
 #endDatePicker {
 	z-index: 20;
 }
+.resignBtn {
+	margin: 0px 23px 0px 23px;
+}
 
 /* recruit.jsp css */
 #content {

@@ -429,10 +429,34 @@ public class StoreController {
 		return result;
 	}
 	
+	// 퇴사하기
+	@RequestMapping(value={"resignRecruit.do"},method=RequestMethod.POST)
+	@ResponseBody
+	public String resignRecruit(String mid) {
+		System.out.println("\nStoreController의 resignRecruit.do(AJAX)");
+		
+		System.out.println("mid : " + mid);
+		
+		RecruitDAO recruitDAO = sqlSession.getMapper(RecruitDAO.class);
+		int result = recruitDAO.resignRecruit(mid);
+		
+		String resignDate = null;
+		
+		if(result==0) {
+			System.out.println("퇴사하기 실패");
+		} else {
+			System.out.println("퇴사하기 성공");
+			Recruit recruit = recruitDAO.getRecruit(mid);
+			resignDate = recruit.getResignDate();
+		}
+		
+		return resignDate;
+	}
+	
 	// 직원 정보 수정
 	@RequestMapping(value={"modifyRecruit.do"},method=RequestMethod.POST)
 	@ResponseBody
-	public String modifyRecruit(String mid, String pwd, String name, String position, String phone, String birth, String address, int wage, String joinDate, String resignDate) {
+	public String modifyRecruit(String mid, String pwd, String name, String position, String phone, String birth, String address, int wage, String joinDate) {
 		System.out.println("\nStoreController의 modifyRecruit.do(AJAX)");
 		
 		System.out.println("mid : " + mid);
@@ -444,7 +468,6 @@ public class StoreController {
 		System.out.println("address : " + address);
 		System.out.println("wage : " + wage);
 		System.out.println("joinDate : " + joinDate);
-		System.out.println("resignDate : " + resignDate);
 		
 		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
 		RecruitDAO recruitDAO = sqlSession.getMapper(RecruitDAO.class);
@@ -453,11 +476,8 @@ public class StoreController {
 		TransactionDefinition td = new DefaultTransactionDefinition();
 		TransactionStatus ts = ptm.getTransaction(td);
 		try {
-			System.out.println("modifyMember 전");
 			result = memberDAO.modifyMember(mid, pwd, name, position, phone);
-			System.out.println("modifyMember 후");
-			result += recruitDAO.modifyRecruit(mid, birth, address, wage, joinDate, resignDate);
-			System.out.println("modifyRecruit 후");
+			result += recruitDAO.modifyRecruit(mid, birth, address, wage, joinDate);
 			ptm.commit(ts);
 			System.out.println("트랜잭션 완료");
 		} catch (Exception e) {

@@ -34,6 +34,7 @@ public interface MemberDAO {
 	@Select("SELECT * FROM MEMBER INNER JOIN RECRUIT ON MID = RID AND SID = #{sid} AND ${category} LIKE '%${query}%' AND JOINDATE BETWEEN #{startDate} AND #{endDate} ORDER BY JOINDATE DESC")
 	public List<Employee> searchEmployee(@Param("sid")String store, @Param("category")String category, @Param("query")String query, @Param("startDate")String startDate, @Param("endDate")String endDate);
 	
+	// 회원 정보 수정
 	@Update("UPDATE MEMBER SET PWD=#{pwd}, NAME=#{name}, POSITION=#{position}, PHONE=#{phone} WHERE MID=#{mid}")
 	public int modifyMember(@Param("mid")String mid, @Param("pwd")String pwd, @Param("name")String name, @Param("position")String position, @Param("phone")String phone);
 }

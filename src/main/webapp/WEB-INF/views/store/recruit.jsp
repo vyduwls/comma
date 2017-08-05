@@ -124,9 +124,15 @@
 										tr.append(td.append(input));
 										break;
 									case "resignDate" :
-										var input = $("<input class='resignDatePicker' style='width: 80px' type='text' name='resignDate'>").val(value);
-										var td = $("<td class='data'></td>");
-										tr.append(td.append(input));
+										if(value==null || value=="") {
+											var button = $("<button class='btn btn-xs btn-default resignBtn'>퇴사</button>");
+											var td = $("<td class='data'></td>");
+											tr.append(td.append(button));
+										} else {
+											var input = $("<input class='resignDatePicker' style='width: 80px' type='text' name='resignDate'>").val(value);
+											var td = $("<td class='data'></td>");
+											tr.append(td.append(input));
+										}
 										break;
 								}						
 							}
@@ -204,9 +210,15 @@
 									tr.append(td.append(input));
 									break;
 								case "resignDate" :
-									var input = $("<input class='resignDatePicker' style='width: 80px' type='text' name='resignDate'>").val(value);
-									var td = $("<td class='data'></td>");
-									tr.append(td.append(input));
+									if(value==null || value=="") {
+										var button = $("<button class='btn btn-xs btn-default resignBtn'>퇴사</button>");
+										var td = $("<td class='data'></td>");
+										tr.append(td.append(button));
+									} else {
+										var input = $("<input class='resignDatePicker' style='width: 80px' type='text' name='resignDate'>").val(value);
+										var td = $("<td class='data'></td>");
+										tr.append(td.append(input));
+									}
 									break;
 							}						
 						}
@@ -227,7 +239,7 @@
 			e.preventDefault();
 		});
 		
-		
+		// 회원 정보 수정
 		$(document).on("click", ".modifyBtn", function() {
 			var td = $(this).parent().siblings();
 			
@@ -243,14 +255,44 @@
 						'birth' : td.eq(5).children("input").val(),
 						'address' : td.eq(6).children("input").val(),
 						'wage' : td.eq(7).children("input").val(),
-						'joinDate' : td.eq(8).children("input").val(),
-						'resignDate' : td.eq(9).children("input").val()
+						'joinDate' : td.eq(8).children("input").val()
 				},
 				success : function(data) {
 					if($.trim(data) != "0") {
 						alert("정보 수정 완료");
 					} else {
 						alert("정보 수정 실패");
+					}
+				},
+				error:function(request,status,error){
+			        alert("code:"+request.status+"\n\n"+"message:"+request.responseText+"\n\n"+"error:"+error);
+		       }			
+			});
+		});
+		
+		// 퇴사하기
+		$(document).on("click", ".resignBtn", function() {
+			var td = $(this).parent().siblings();
+			
+			$.ajax({
+				url : 'resignRecruit.do',
+				type : 'post',
+				datatype : 'text',
+				data : {'mid' : td.eq(0).children("input").val()
+				},
+				success : function(data) {
+					var resignDate = $.trim(data); 
+					if(resignDate == "" || resignDate == null) {
+						alert("퇴사 실패");
+					} else {
+						alert("퇴사 완료");	
+						
+						// 버튼 비우기 (eq, this 접근이 이상해서 이렇게 함)
+						td.last().prev().empty();
+						
+						// 퇴사일 삽입
+						var input = $("<input class='resignDatePicker' style='width: 80px' type='text' name='resignDate'>").val(resignDate);
+						td.last().prev().append(input);
 					}
 				},
 				error:function(request,status,error){
@@ -347,7 +389,14 @@
 							<td class="data"><input style="width: 300px" type="text" name="address" value="${employeeList.address}"></td>
 							<td class="data"><input style="width: 45px" type="text" name="wage" value="${employeeList.wage}"></td>
 							<td class="data"><input class="joinDatePicker" style="width: 80px" type="text" name="joinDate" value="${employeeList.joinDate}"></td>
-							<td class="data"><input class="resignDatePicker" style="width: 80px" type="text" name="resignDate" value="${employeeList.resignDate}"></td>
+							<td class="data">
+								<c:if test="${!empty employeeList.resignDate}">
+									<input class="resignDatePicker" style="width: 80px" type="text" name="resignDate" value="${employeeList.resignDate}">
+								</c:if>
+								<c:if test="${empty employeeList.resignDate}">
+									<button class="btn btn-xs btn-default resignBtn">퇴사</button>
+								</c:if>
+							</td>
 							<td><button class="btn btn-xs btn-primary modifyBtn">저장</button></td>
 						</tr>
 					</c:forEach>
