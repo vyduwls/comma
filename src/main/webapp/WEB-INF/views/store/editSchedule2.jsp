@@ -147,15 +147,11 @@
 					appendEndHour($("#startHour").val());
 					$("#endHour").val(parseInt(endScheduleArray[i].split(" ")[1].split(":")[0])).attr("selected", "selected");
 					$("#endMinute").val(parseInt(endScheduleArray[i].split(" ")[1].split(":")[1])).attr("selected", "selected");
-					if(scheduleArray[i].split("_")[1].split("-")[2].split(" ")[0]!=endScheduleArray[i].split("_")[1].split("-")[2].split(" ")[0]){
-						$("input[name=checkAfterDay]").prop("checked",true);
-					}
 					checkOption="1";
 				}else if(checkOption=="0"){
 					$("#startHour").val("0").attr("selected", "selected");
 					$("#startMinute").val("0").attr("selected", "selected");
 					appendEndHour(0);
-					$("input[name=checkAfterDay]").prop("checked",false);
 					$("#endHour").val("0").attr("selected", "selected");
 					$("#endMinute").val("0").attr("selected", "selected");
 					
@@ -167,7 +163,7 @@
     	/*일을 클릭 시, 모달에 보여줄 내용!*/
     	$(".scheduleTable_date_th").click(function(){
     		var selectDay=$(this).attr("id").split("th")[1];
-
+    		
 			$(".modal-title1").text(year+"년"+month+"월"+selectDay+"일 근무시간표");
     		
     		/*일별 스케줄 배열에 넣기*/
@@ -225,28 +221,16 @@
     		
     	}) ;
     	$(".saveTimebtn").click(function(){
-    		var checkTime=checkSelectTime();
-    		if(checkTime==0){
-	    		saveOrDeleteSchedule("0");
-	    		$("input[name=checkAfterDay]").prop("checked",false);
-	    		$(".close").click();
-    		}else{
-    			alert("시간을 다시 선택해주세요.");
-    		}
+    		
+    		saveOrDeleteSchedule("0");
+    		$(".close").click();
+    		subStract();
     	});
     	$(".deleteTimebtn").click(function(){
-    		if($("input[name=modal_color]").val()=="0"){
-    			alert("저장된 스케줄이 없습니다.");
-    		}else{
-    			var checkTime=checkSelectTime();
-    			if(checkTime==0){
-		    		saveOrDeleteSchedule("1");
-		    		$("input[name=checkAfterDay]").prop("checked",false);
-		    		$(".close").click();    				
-    			}else{
-    				alert("시간을 다시 선택해주세요.");
-    			}
-    		}
+    	
+    		saveOrDeleteSchedule("1");
+    		$(".close").click();
+    		subStract();
     	});
     	$(".saveBtn").click(function(){
 	   	     /*ajax로 스케줄 저장시 스케줄배열 String 변환*/
@@ -284,50 +268,68 @@
 	   	     
 	   	     
     	});
-    	/*근무 시작시간 변겅 시, 퇴근 시간 제어*/
+    	
     	$("#startHour").change(function(){
     		var startTime=Number($("#startHour option:selected").val());
-     		if(!$("input[name=checkAfterDay]").is(":checked")){
     		$("#endHour option").remove();
     		appendEndHour(startTime);
-     		}
     	});
-    	
-
-    	/*다음날 체크박스 선택 시, 시간 바꾸기*/
-    	$("input[name=checkAfterDay]").click(function(){
-    		if($(this).is(":checked")){
-    			$("#endHour option").remove();
-    			appendEndHour("0");
+    	$("#endHour").change(function(){    		
+    		var endTime=Number($("#endHour option:selected").val());
+    		if(endTime=="24"){
+    			$("#endMinute").val("0").attr("selected", "selected");
+    			$("#endMinute").attr('disabled',true);
     		}else{
-    			var startTime=Number($("#startHour option:selected").val());
-        		$("#endHour option").remove();
-        		appendEndHour(startTime);
+    			$("#endMinute").attr('disabled',false);
     		}
     	});
     	
+    	$(".addTimebtn").click(function(){
+    		$("input[name=addTimeInput]").val("1");
+    		var addTimeSelect="";
+
+    		addTimeSelect+="<select name='startHour1' id='startHour1' class='form-control timeSelect' style='margin-left: 1.5%'>";
+    		for (var i = 0; i < 24; i++) {
+    			addTimeSelect+="<option value="+i+">"+i+"시</option>";
+			}
+    		addTimeSelect+="</select><select name='startMinute1' id='startMinute1' class='form-control timeSelect' >";
+    		for (var i = 0; i < 12; i++) {
+    			addTimeSelect+="<option value="+i*5+">"+i*5+"분</option>";
+			}
+    		addTimeSelect+="</select><span style='float: left;font-size: 20px;'>~</span>"
+    		+"<select name='endHour1' id='endHour1' class='form-control timeSelect' style='margin-left: 1.5%'>";
+    		for (var i = 0; i <=24; i++) {
+    			addTimeSelect+="<option value="+i+">"+i+"시</option>";
+			}
+    		addTimeSelect+="</select><select name='endMinute1' id='endMinute1' class='form-control timeSelect' >";
+    		for (var i = 0; i < 12; i++) {
+    			addTimeSelect+="<option value="+i*5+">"+i*5+"분</option>";
+			}
+    		addTimeSelect+="</select><button onclick='subStract()' type='button' class='btn btn-default'>-</button>";
+
+    		$(".addTimeP").after(addTimeSelect);
+    		
+    		$('.addTimebtn').attr('disabled',true); 
+
+    		
+    	});
  
     }); 
     
-
+    	function subStract() {
+    		$("input[name=addTimeInput]").val("0");
+			$(".addTimeP").nextAll().remove();
+			$('.addTimebtn').attr('disabled',false); 
+    	}
+    	
     	function appendEndHour(data){
 
-    		for (var i = data; i <24; i++) {
+    		for (var i = data; i <=24; i++) {
         		$("#endHour").append("<option value='"+i+"'>"+i+"시</option>");				
     			}
     	}
     	
-		function checkSelectTime(){
-    		var startHour=$("select[name=startHour]").val();
-    		var startMinute=$("select[name=startMinute]").val();
-    		var endHour=$("select[name=endHour]").val();
-    		var endMinute=$("select[name=endMinute]").val();
-    		var checkPoint=0;
-    		if(startHour==endHour && startMinute==endMinute){
-    			checkPoint=1;
-    		}
-    		return checkPoint;
-		}
+
     	/*스케줄 저장 혹은 삭제했을 때!*/
     	function saveOrDeleteSchedule(data){
 
@@ -335,23 +337,18 @@
     		var startMinute=$("select[name=startMinute]").val();
     		var endHour=$("select[name=endHour]").val();
     		var endMinute=$("select[name=endMinute]").val();
-    		var checkAfterDay=$("input[name=checkAfterDay]").is(":checked");
-    		var endDay;
     		
 			var employRid=$("input[name=modal_rid]").val();
 			var selectDay=$("input[name=modal_day]").val();
 			var color=$("input[name=modal_color]").val();
 			
-
-			if(checkAfterDay==true){
-				endDay=parseInt(selectDay)+1;
-			}else{
-				endDay=selectDay;
+			if(endHour=="24"){
+				endHour="23";
+				endMinute="59";
 			}
-			
 			var editDay=selectDay;
 	   	     /*데이터 넣기위한 날짜 변환*/
- 	   	     if(Number(startHour)<=9){
+/* 	   	     if(Number(startHour)<=9){
 	   	    	startHour="0"+startHour;
 		     }
 	   	     if(Number(startMinute)<=9){
@@ -362,20 +359,46 @@
 			     }
 	   	     if(Number(endMinute)<=9){
 	   	    	endMinute="0"+endMinute;
+			     } */
+	   	     
+	   	     
+	    	if($("#addTimeInput").val()=="1"){
+		    	var startHour1=$("select[name=startHour1]").val();
+		    	var startMinute1=$("select[name=startMinute1]").val();
+		    	var endHour1=$("select[name=endHour1]").val();
+		    	var endMinute1=$("select[name=endMinute1]").val();
+		    	if(endHour1=="24"){
+					endHour1="23";
+					endMinute1="59";
+				}
+		    	
+		   	     if(Number(startHour1)<=9){
+			   	    startHour1="0"+startHour1;
+				 }
+			   	 if(Number(startMinute1)<=9){
+			   	    startMinute1="0"+startMinute1;
+		     	 }
+		   	     if(Number(endHour1)<=9){
+		   	    	endHour1="0"+endHour1;
+			     }
+		   	     if(Number(endMinute1)<=9){
+		   	    	endMinute1="0"+endMinute1;
 			     } 
-	   	     
-	   	     
+		    	 var startTime1=startHour1+":"+startMinute1;
+		   	     var endTime1=endHour1+":"+endMinute1;
+		   	     var startSchedule1=employRid+"_"+year+"-"+month+"-"+editDay+" "+startTime1;
+	      		 var endSchedule1=employRid+"_"+year+"-"+month+"-"+editDay+" "+endTime1;
+	    	}
 	   	     if(Number(editDay)<=9){
 		   	    	editDay="0"+editDay;
 			     }
-	   	     if(Number(endDay)<=9){
-	   	    	endDay="0"+endDay;
-			     }
+	   	     
 		 	
 	    	 var startTime=startHour+":"+startMinute;
 	   	     var endTime=endHour+":"+endMinute;
 	   	     var startSchedule=employRid+"_"+year+"-"+month+"-"+editDay+" "+startTime;
-      		 var endSchedule=employRid+"_"+year+"-"+month+"-"+endDay+" "+endTime;
+      		 var endSchedule=employRid+"_"+year+"-"+month+"-"+editDay+" "+endTime;
+      		 
 
       		if( (month>(nowDate.getMonth()+1)) ||( month==(nowDate.getMonth()+1) && selectDay>=nowDate.getDate())){
     			/*근무 지정할 때, 데이터 변화시켜주기*/
@@ -386,40 +409,37 @@
 	    	 			for (var j = 0; j < ridColorList.length; j++) {
 	    					if(employRid==ridColorList[j][0]){
 	    						$("#"+employRid).siblings("#"+selectDay).css("background-color",ridColorList[j][1]);
-	    						$("#"+employRid).siblings("#"+endDay).css("background-color",ridColorList[j][1]);
 	    					}
 	    				}
 	    	 			$("#"+employRid).siblings("#"+selectDay).children("input[name=color]").val("1");
-	    	 			$("#"+employRid).siblings("#"+endDay).children("input[name=color]").val("1");
-
-	               		totalScheduleCalcu(data,selectDay,endDay,employRid,startTime,endTime);
+	    	 			
+	//     	 			alert("스케줄 저장 완료!");
+	               		totalScheduleCalcu(color,selectDay,employRid,startTime,endTime,"0");
+		               		if($("#addTimeInput").val()=="1"){
+			    	   	    	scheduleArray.push(startSchedule1);
+			    	   	    	endScheduleArray.push(endSchedule1);
+			               		totalScheduleCalcu(color,selectDay,employRid,startTime,endTime,"1");
+		               		}
 		          		}else{
-
-		          			var checkArray=0;
-		          			for (var i = 0; i < endScheduleArray.length; i++) {
-								if(scheduleArray[i].split("_")[1].split("-")[2].split(" ")[0]==endDay && scheduleArray[i].split("_")[0]==employRid){
-									checkArray=1;
-								}
-									
-							}
-		          			
 		          			/*배열에 스케줄 저장한 것 삭제*/
 		          			scheduleArray.splice($.inArray(startSchedule, scheduleArray),1);
 		          			endScheduleArray.splice($.inArray(endSchedule, endScheduleArray),1);
-		          	
-		          			if(checkArray==0){
-			          			$("#"+employRid).siblings("#"+endDay).css("background-color","");    
-			          			$("#"+employRid).siblings("#"+endDay).children("input[name=color]").val("0");
-		          			}
-		          			$("#"+employRid).siblings("#"+selectDay).text("");
-		          			$("#"+employRid).siblings("#"+endDay).text("");
-		               		totalScheduleCalcu(data,selectDay,endDay,employRid,startTime,endTime);
+		          			$("#"+employRid).siblings("#"+selectDay).css("background-color","");    
+		          			$("#"+employRid).siblings("#"+selectDay).children("input[name=color]").val("0");
+		          			
+		//           			alert("스케줄 삭제 완료!");
+		          			
+		               		totalScheduleCalcu(color,selectDay,employRid,startTime,endTime,"0");
+			               		if($("#addTimeInput").val()=="1"){
+				          			scheduleArray.splice($.inArray(startSchedule1, scheduleArray),1);
+				          			endScheduleArray.splice($.inArray(endSchedule1, endScheduleArray),1);
+				               		totalScheduleCalcu(color,selectDay,employRid,startTime,endTime,"1");
+			               		}
 		          		}
 
           		}else{
           			alert("지난 날짜는 변경이 불가합니다.");
           		}
-      		hardWork();
     	}
     	
     	/*시간 분으로 변환*/
@@ -432,7 +452,7 @@
     	}
     	
     	/*근무일, 근무 시간 총 계산*/
-    	function totalScheduleCalcu(data,selectDay,endDay,mid,startTime,endTime){
+    	function totalScheduleCalcu(data,selectDay,mid,startTime,endTime,addTime){
     		
 			var sumWork=Number($("#"+mid+"SumWork").text());
 			var sumTime=$("#"+mid+"SumTime").text();
@@ -441,10 +461,6 @@
       		var totalWork=Number($("#totalWork").text());
       		var totalTime=$("#totalTime").text();
       		var totalDate=Number($("span[id="+selectDay+"]").text());
-      		var totalAfterDate=-1;
-      		if(selectDay!=endDay){
-      			totalAfterDate=Number($("span[id="+endDay+"]").text());
-      		} 
       		totalTime=calcuTime(totalTime);
 
 
@@ -452,75 +468,56 @@
 
       		var startMinute=calcuTime(startTime);
       		var endMinute=calcuTime(endTime);
-      		var workTime;
-      		if(selectDay==endDay){
-      			workTime=endMinute-startMinute;
-      		}else{
-      			workTime=1440-startMinute+endMinute;
-      		}
+			
+      		var workTime=endMinute-startMinute;
+      		if(addTime=="0"){
 	      		if(data=="0"){
 	       			$("#totalWork").text(totalWork+1); 
 	       			$("#totalTime").text(Math.floor((totalTime+workTime)/60)+":"+(totalTime+workTime)%60);
 	       			$("span[id="+selectDay+"]").text(totalDate+1);
 					$("#"+mid+"SumWork").text(sumWork+1);
-					if(totalAfterDate!=-1){
-						$("span[id="+endDay+"]").text(totalAfterDate+1);
-					}
 					$("#"+mid+"SumTime").text(Math.floor((sumTime+workTime)/60)+":"+(sumTime+workTime)%60);
+					
 	      		}else if(data=="1"){
 	      			$("#totalWork").text(totalWork-1);
 	      			$("#totalTime").text(Math.floor((totalTime-workTime)/60)+":"+(totalTime-workTime)%60);
 	      			$("span[id="+selectDay+"]").text(totalDate-1);
-					if(totalAfterDate!=-1){
-						$("span[id="+endDay+"]").text(totalAfterDate-1);
-					}
 					$("#"+mid+"SumWork").text(sumWork-1);
 					$("#"+mid+"SumTime").text(Math.floor((sumTime-workTime)/60)+":"+(sumTime-workTime)%60);
 	      		}
+      		}else{
+      			if(data=="0"){
+	       			$("#totalTime").text(Math.floor((totalTime+workTime)/60)+":"+(totalTime+workTime)%60);
+					$("#"+mid+"SumTime").text(Math.floor((sumTime+workTime)/60)+":"+(sumTime+workTime)%60);
+					
+	      		}else if(data=="1"){
+	      			$("#totalTime").text(Math.floor((totalTime-workTime)/60)+":"+(totalTime-workTime)%60);
+					$("#"+mid+"SumTime").text(Math.floor((sumTime-workTime)/60)+":"+(sumTime-workTime)%60);
+	      		}
+      		}
     	}
 		
     	function inputSchedule(allScheduleString,allEndScheduleString){
     		
 			var allSchedules=allScheduleString.split(",");
 			var allEndSchedules=allEndScheduleString.split(",");
-			
 			for (var i = 0; i < allSchedules.length; i++) {
 				var mid=allSchedules[i].split("_")[0];
 	 			var scheduledate=Number(allSchedules[i].split("_")[1].split("-")[2].split(" ")[0]);	
-	 			var endDay=Number(allEndSchedules[i].split("_")[1].split("-")[2].split(" ")[0]);	
 	 			var startTime=allSchedules[i].split(" ")[1];
 	 			var endTime=allEndSchedules[i].split(" ")[1];
 	 			scheduleArray.push(allSchedules[i]);
 	 			endScheduleArray.push(allEndSchedules[i]);
-
 	 			for (var j = 0; j < ridColorList.length; j++) {
 					if(mid==ridColorList[j][0]){
-					   	$("#"+mid).siblings("#"+scheduledate).css("background-color",ridColorList[j][1]);
-					   	$("#"+mid).siblings("#"+endDay).css("background-color",ridColorList[j][1]);
+					   	$("#"+mid).siblings("#"+scheduledate).css("background-color",ridColorList[j][1]);						
 					}
 				}
 				$("#"+mid).siblings("#"+scheduledate).children("input[name=color]").val("1");
-				$("#"+mid).siblings("#"+endDay).children("input[name=color]").val("1");
-
- 				totalScheduleCalcu("0",scheduledate,endDay,mid,startTime,endTime);
+				totalScheduleCalcu("0",scheduledate,mid,startTime,endTime,"0");
 			}
-			hardWork();
     	}
     	
-    	function hardWork(){
- 			for (var i = 0; i < scheduleArray.length; i++) {
-				var mid=scheduleArray[i].split("_")[0];
-	 			var scheduledate=Number(scheduleArray[i].split("_")[1].split("-")[2].split(" ")[0]);	
-	 			var endDay=Number(endScheduleArray[i].split("_")[1].split("-")[2].split(" ")[0]);	
-
-	 			for (var j = 0; j < scheduleArray.length; j++) {
-					if(endDay==Number(scheduleArray[j].split("_")[1].split("-")[2].split(" ")[0]) && mid==scheduleArray[j].split("_")[0] && scheduledate!=endDay){
-						$("#"+mid).siblings("#"+endDay).text("2");
-					}
-				}
-	 			
- 			}
-    	}
 </script>
 
 <div id="body_menu" >
@@ -549,6 +546,7 @@
 		<input type="hidden" name="selectDay">
 
 
+		<input type="hidden" name="addTimeInput" id="addTimeInput" value="0">
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
@@ -575,7 +573,7 @@
 			</select>
 			<span style="float: left;font-size: 20px;">~</span>
 			<select name="endHour" id="endHour" class="form-control timeSelect" >
-				<c:forEach begin="0" end="23" var="n">
+				<c:forEach begin="0" end="24" var="n">
 					<option value="${n}">${n}시</option>
 				</c:forEach>
 			</select>
@@ -584,14 +582,14 @@
 					<option value="${n*5}">${n*5}분</option>
 				</c:forEach>
 			</select>
-
-			<div style="vertical-align: middle;margin: 5px 0px 0px 2px;">
-				<input type="checkbox" name="checkAfterDay"  style="vertical-align: middle;">다음날
-			</div>
+			<button type="button" class="btn btn-default addTimebtn" >+</button>
+			<p class="addTimeP" style="margin-bottom: 4%;"></p>
+			
         </div>
         
        <div class="modal-footer">
         <c:if test="${checkPosition=='1'}">
+          <span style="font-size: 12px;float: left;">스케줄 변경 시,<br> '삭제'버튼 먼저 눌러주세요!</span>
           <button type="button" class="btn btn-default deleteTimebtn" >스케줄 삭제</button>
           <button type="button" class="btn btn-info saveTimebtn" >근무시간 저장</button>
         </c:if>

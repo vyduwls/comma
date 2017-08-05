@@ -72,9 +72,9 @@
 						<li><a href="store/calendar.do">스케줄 조회</a></li>
 					</ul>
 				</li>
-				<li class="col-lg-2"><a href="customer/checkSalary.do">급여 관리</a>
+				<li class="col-lg-2"><a href="store/checkSalary.do">급여 관리</a>
 					<ul class="col-lg-12">
-						<li><a href="customer/checkSalary.do">급여 조회</a></li>
+						<li><a href="store/checkSalary.do">급여 조회</a></li>
 					</ul>
 				</li>
 				

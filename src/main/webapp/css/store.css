@@ -168,6 +168,27 @@
 	text-align: center;
 	height: 40px;
 }
+
+/*salaryManage.jsp css*/
+.salaryTh{
+	width: 8%;	
+	text-align: center;
+}
+ .salaryTh1{
+ 	width: 9%;
+ 	text-align: center;
+ }
+.salaryTd, .salaryTd1,.salaryTd2{
+	text-align: center;
+}
+.salaryTd1{
+	background-color: #fbecc4;
+	font-weight: bold;
+}
+.salaryTd2{
+	background-color: #fefaef;
+	font-weight: bold;
+}
 /* 폰트 */
 @font-face{
    font-family: 'sense'; 
