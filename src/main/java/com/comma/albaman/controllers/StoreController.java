@@ -216,6 +216,8 @@ public class StoreController {
 		String preMonth="";
 		if(month<=9){
 			preMonth="0"+month;
+		}else{
+			preMonth=selectMonth;
 		}
 		String prework=year+"-"+preMonth;
 
@@ -271,17 +273,25 @@ public class StoreController {
 		String[] endSchedules=stringEndSchedule.split(",");
 		String[] memberRids=allEmployeeRids.split(",");
 		//기존 스케줄 지우기
+		System.out.println("deleteDate[---"+deleteDate);
 		for (int i = 0; i < memberRids.length; i++) {
 			String rid=memberRids[i];
-			scheduleDAO.deleteSchedule(rid, deleteDate);
+			System.out.println("rid[---"+rid);
+			 int a=scheduleDAO.deleteSchedule(rid, deleteDate);
+			 System.out.println("a[---"+a);
 		}
 		// 스케줄 추가
 		if(stringSchedule!=null && !stringSchedule.equals("")){
+			System.out.println("stringSchedule---"+stringSchedule);
 			for (int i = 0; i < schedules.length; i++) {
 				String rid=schedules[i].split("_")[0];
 				String preOnWork=deleteDate+"-"+schedules[i].split("_")[1].split("-")[2];
 				String preOffWork=deleteDate+"-"+endSchedules[i].split("_")[1].split("-")[2];
-				scheduleDAO.insertSchedule(preOnWork,preOffWork,rid);
+				System.out.println("preOnWork---"+preOnWork);
+				System.out.println("preOffWork---"+preOffWork);
+				System.out.println("rid---"+rid);
+				int a=scheduleDAO.insertSchedule(preOnWork,preOffWork,rid);
+				System.out.println("A-------"+a);
 			}	
 		}else{
 			stringSchedule="0";

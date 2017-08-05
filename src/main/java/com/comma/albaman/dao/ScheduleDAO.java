@@ -24,7 +24,7 @@ public interface ScheduleDAO {
 
 	// 스케줄 지우기
 	@Delete("DELETE FROM SCHEDULE WHERE SUBSTRING_INDEX(PREONWORK,'-','2')=#{deleteDate} AND RID=#{rid}")
-	public void deleteSchedule(@Param("rid") String rid,@Param("deleteDate") String deleteDate);
+	public int deleteSchedule(@Param("rid") String rid,@Param("deleteDate") String deleteDate);
 	
 	//시간별 직원 스케줄 추출
 	@Select("SELECT * FROM SCHEDULE S JOIN RECRUIT R ON S.RID=R.RID WHERE SID =#{sid} AND SUBSTRING_INDEX(PREONWORK,' ','1')=#{prework}")
