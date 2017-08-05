@@ -138,7 +138,7 @@
 			<artifactId>spring-jdbc</artifactId>
 			<version>4.3.8.RELEASE</version>
 		</dependency>
-
+		
 		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 		<dependency>
 		    <groupId>mysql</groupId>

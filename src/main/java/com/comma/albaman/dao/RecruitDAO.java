@@ -33,8 +33,13 @@ public interface RecruitDAO {
 	@Insert("INSERT INTO RECRUIT VALUES(#{rid},#{birth},#{address},${wage},#{joinDate},#{resignDate, jdbcType=VARCHAR},#{sid})")
 	public int addRecruit(Recruit recruit);
 	
-	@Update("UPDATE RECRUIT SET BIRTH=#{birth}, ADDRESS=#{address}, WAGE=${wage}, JOINDATE=#{joinDate}, RESIGNDATE=#{resignDate, jdbcType=VARCHAR} WHERE RID=#{rid}")
-	public int modifyRecruit(@Param("rid")String rid, @Param("birth")String birth, @Param("address")String address, @Param("wage")int wage, @Param("joinDate")String joinDate, @Param("resignDate")String resignDate);
+	// 회원 정보 수정
+	@Update("UPDATE RECRUIT SET BIRTH=#{birth}, ADDRESS=#{address}, WAGE=${wage}, JOINDATE=#{joinDate} WHERE RID=#{rid}")
+	public int modifyRecruit(@Param("rid")String rid, @Param("birth")String birth, @Param("address")String address, @Param("wage")int wage, @Param("joinDate")String joinDate);
+	
+	// 퇴사하기
+	@Update("UPDATE RECRUIT SET RESIGNDATE=CURDATE() WHERE RID=#{rid}")
+	public int resignRecruit(@Param("rid")String rid);
 }
 
 
