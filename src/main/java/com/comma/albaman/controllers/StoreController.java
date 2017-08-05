@@ -429,6 +429,46 @@ public class StoreController {
 		return result;
 	}
 	
+	// 직원 정보 수정
+	@RequestMapping(value={"modifyRecruit.do"},method=RequestMethod.POST)
+	@ResponseBody
+	public String modifyRecruit(String mid, String pwd, String name, String position, String phone, String birth, String address, int wage, String joinDate, String resignDate) {
+		System.out.println("\nStoreController의 modifyRecruit.do(AJAX)");
+		
+		System.out.println("mid : " + mid);
+		System.out.println("pwd : " + pwd);
+		System.out.println("name : " + name);
+		System.out.println("position : " + position);
+		System.out.println("phone : " + phone);
+		System.out.println("birth : " + birth);
+		System.out.println("address : " + address);
+		System.out.println("wage : " + wage);
+		System.out.println("joinDate : " + joinDate);
+		System.out.println("resignDate : " + resignDate);
+		
+		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
+		RecruitDAO recruitDAO = sqlSession.getMapper(RecruitDAO.class);
+		
+		int result = 0;
+		TransactionDefinition td = new DefaultTransactionDefinition();
+		TransactionStatus ts = ptm.getTransaction(td);
+		try {
+			System.out.println("modifyMember 전");
+			result = memberDAO.modifyMember(mid, pwd, name, position, phone);
+			System.out.println("modifyMember 후");
+			result += recruitDAO.modifyRecruit(mid, birth, address, wage, joinDate, resignDate);
+			System.out.println("modifyRecruit 후");
+			ptm.commit(ts);
+			System.out.println("트랜잭션 완료");
+		} catch (Exception e) {
+			ptm.rollback(ts);
+			System.out.println("트랜잭션 실패");
+		}
+		
+		// 0 : 실패, 2 : 성공
+		return Integer.toString(result);
+	}
+	
 	// 직원 근태관리 페이지
 	@RequestMapping(value={"attendance.do"},method=RequestMethod.GET)
 	public String attendance(HttpServletRequest request, Model model) {
@@ -449,7 +489,6 @@ public class StoreController {
 		
 		return "store.attendance";
 	}
-
 	
 	@RequestMapping(value={"checkSalary.do"}, method=RequestMethod.GET)
 	public String checkSalary(HttpServletRequest request,Model model,String selectMonth,String selectYear){

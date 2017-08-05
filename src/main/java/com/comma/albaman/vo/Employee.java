@@ -5,9 +5,9 @@ public class Employee {
 	private String mid;
 	private String pwd;
 	private String name;
+	private String position;
 	private String phone;
 	private String email;
-	private String position;
 	private String rid;
 	private String birth;
 	private String address;
