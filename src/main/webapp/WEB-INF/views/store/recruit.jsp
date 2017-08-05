@@ -26,7 +26,6 @@
 		});
 		
 		/* 회원 정보 수정 (날짜) */
-		/* $(".joinDatePicker").datepicker({ */
 		$(document).on("focus", ".joinDatePicker", function() {
 			$(this).datepicker({
 				dateFormat: "yy-mm-dd",
@@ -233,12 +232,6 @@
 			}
 		});
 		
-		/* 엑셀로 다운로드하기 */
-		$("#toExcelButton").click(function(e) {
-			window.open('data:application/vnd.ms-excel,' + encodeURIComponent($('.sticky-table').html()));
-			e.preventDefault();
-		});
-		
 		// 회원 정보 수정
 		$(document).on("click", ".modifyBtn", function() {
 			var td = $(this).parent().siblings();
@@ -356,7 +349,6 @@
 		  		
 		  		<!-- 직원 등록 버튼 / 엑셀 다운로드 버튼 -->
 				<button type="button" class="btn btn-success" onClick="javascript:self.location='addRecruit.do'">직원 등록</button>
-				<button id="toExcelButton" class="btn btn-warning">엑셀 다운로드</button>	
 			</form>
 		</div>
 		

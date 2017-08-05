@@ -142,11 +142,6 @@
 	   					</div>
 		  			</div>
 		  		</div>
-		  		&nbsp;
-		  		&nbsp;
-		  		
-		  		<!-- 엑셀 다운로드 버튼 -->
-				<button id="toExcelButton" class="btn btn-warning">엑셀 다운로드</button>	
 			</form>
 		</div>
 
@@ -158,27 +153,27 @@
 						<th>아이디</th>
 						<th>이름</th>					
 						<th>직급</th>
-						<th>예상 출근 시간</th>
-						<th>예상 퇴근 시간</th>
-						<th>실제 출근 시간</th>
-						<th>실제 퇴근 시간</th>
+						<th>출근 시간</th>
+						<th>퇴근 시간</th>
+						<th>출근 시간(실제)</th>
+						<th>퇴근 시간(실제)</th>
 						<th>근태 상태</th>
 						<th>비고</th>
 						<th>수정</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>2017-07-11</td>
-						<td>4-2</td>
-						<td>심규진</td>
-						<td>직원</td>
-						<td class="data"><input type="text" value="17:07:00"></td>
-						<td class="data"><input type="text" value="17:17:00"></td>
-						<td class="data"><input type="text" value="17:07:15"></td>
-						<td class="data"><input type="text" value="17:17:00"></td>
-						<td class="data"><input type="text" value="출근"></td>
-						<td class="data"><input type="text" value=""></td>
+					<tr class="attendance_tr">
+						<td style="width: 100px">2017-07-11</td>
+						<td style="width: 60px">4-2</td>
+						<td style="width: 70px">심규진</td>
+						<td style="width: 50px">직원</td>
+						<td class="data"><input style="width: 100px" type="text" value="17:07:00"></td>
+						<td class="data"><input style="width: 100px" type="text" value="17:17:00"></td>
+						<td class="data"><input style="width: 100px" type="text" value="17:07:15"></td>
+						<td class="data"><input style="width: 100px" type="text" value="17:17:00"></td>
+						<td class="data"><input style="width: 50px" type="text" value="출근"></td>
+						<td class="data"><input style="width: 200px" type="text" value=""></td>
 						<td><button class="btn btn-xs btn-primary modifyBtn">저장</button></td>
 					</tr>
 				</tbody>
