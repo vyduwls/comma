@@ -23,6 +23,7 @@ import com.comma.albaman.dao.MemberDAO;
 import com.comma.albaman.dao.RecruitDAO;
 import com.comma.albaman.dao.ScheduleDAO;
 import com.comma.albaman.dao.StoreDAO;
+import com.comma.albaman.vo.Attendance;
 import com.comma.albaman.vo.Employee;
 import com.comma.albaman.vo.Member;
 import com.comma.albaman.vo.Recruit;
@@ -512,12 +513,51 @@ public class StoreController {
 		model.addAttribute("storeList", storeList);
 		
 		// 직원 전체 정보 가져오기
-		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
+		ScheduleDAO scheduleDAO = sqlSession.getMapper(ScheduleDAO.class);
 		System.out.println("storeList.get(0).getSid() : " + storeList.get(0).getSid());
-		List<Employee> employeeList = memberDAO.getEmployee(storeList.get(0).getSid());
-		model.addAttribute("employeeList",employeeList);
+		List<Attendance> attendanceList = scheduleDAO.getAttendance(storeList.get(0).getSid());
+		model.addAttribute("attendanceList",attendanceList);
 		
 		return "store.attendance";
+	}
+	
+	// 다른 매장 근태 관리 검색
+	@RequestMapping(value={"changeAttendance.do"},method=RequestMethod.POST)
+	@ResponseBody
+	public String changeAttendance(String sid) {
+		System.out.println("\nStoreController의 changeAttendance.do(AJAX)");
+		
+		ScheduleDAO scheduleDAO = sqlSession.getMapper(ScheduleDAO.class);
+		List<Attendance> attendanceList = scheduleDAO.getAttendance(sid);
+		
+		// null값을 가진 컬럼이 json에 들어가지 않던 것을 해결
+		Gson gson = new GsonBuilder().serializeNulls().create();
+		String result = gson.toJson(attendanceList);
+		System.out.println(result);
+		
+		return result;
+	}
+	
+	// 직원 정보 검색
+	@RequestMapping(value={"searchAttendance.do"},method=RequestMethod.POST)
+	@ResponseBody
+	public String searchAttendance(String store, String startDate, String endDate, String category, String query) {
+		System.out.println("\nStoreController의 searchRecruit.do(AJAX)");
+		
+		System.out.println("sid : " + store);
+		System.out.println("category : " + category);
+		System.out.println("query : " + query);
+		System.out.println("startDate : " + startDate);
+		System.out.println("endDate : " + endDate);
+		
+		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
+		List<Employee> employeeList = memberDAO.searchEmployee(store, category, query, startDate, endDate);
+
+		Gson gson = new GsonBuilder().serializeNulls().create();
+		String result = gson.toJson(employeeList);
+		System.out.println(result);
+		
+		return result;
 	}
 	
 	@RequestMapping(value={"checkSalary.do"}, method=RequestMethod.GET)

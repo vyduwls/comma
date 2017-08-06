@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Component;
 
+import com.comma.albaman.vo.Attendance;
 import com.comma.albaman.vo.Schedule;
 
 @Component
@@ -63,6 +64,14 @@ public interface ScheduleDAO {
 	
 	@Select("SELECT * FROM SCHEDULE WHERE RID=#{mid} AND SUBSTRING_INDEX(PREONWORK,'-','2')=#{prework} AND ONWORK IS NOT NULL AND OFFWORK IS NOT NULL")
 	public List<Schedule> getWorkTime(@Param("mid")String mid,@Param("prework") String prework);
+	
+	// 해당 가게의 모든 근태 기록 불러오기
+	@Select("SELECT DATE(S.PREONWORK) AS DATE,R.RID AS MID,(SELECT NAME FROM MEMBER WHERE MID=R.RID) AS NAME, (SELECT POSITION FROM MEMBER WHERE MID=R.RID) AS POSITION, "
+			+ "TIME(S.PREONWORK) AS PREONWORK, TIME(S.PREOFFWORK) AS PREOFFWORK, TIME(S.ONWORK) AS ONWORK, TIME(S.OFFWORK) AS OFFWORK, IF(S.ONWORK - S.PREONWORK > 0,'지각','정상') AS ONWORKSTATE, "
+			+ "IF(S.PREOFFWORK - S.OFFWORK > 0,'조퇴','정상') AS OFFWORKSTATE FROM RECRUIT AS R INNER JOIN SCHEDULE AS S "
+			+ "ON R.RID = S.RID AND R.SID = #{sid} AND ONWORK IS NOT NULL")
+	public List<Attendance> getAttendance(String sid);
+	
 }
 
 

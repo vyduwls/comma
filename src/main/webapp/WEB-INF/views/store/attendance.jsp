@@ -28,7 +28,7 @@
 		/* 셀렉트 박스 변경 시 테이블 변경 */
 		$("#store").change(function() {
 			$.ajax({
-				url : 'changeRecruit.do',
+				url : 'changeAttendance.do',
 				type : 'post',
 				datatype : 'json',
 				data : {'sid' : $("#store option:selected").val()},
@@ -43,13 +43,77 @@
 					$.each(test, function(index,item) {
 						var tr = $("<tr class='recruit_tr'></tr>");
 						
+						// state를 완성하기 위한 플래그
+						var date;
+						var preOnWork;
+						var preOffWork;
+						var onWork;
+						var offWork;
+						
 						$.each(item, function(key,value) {
-							if(key!="rid" && key!="sid") {
-								$("<td></td>").text(value).appendTo(tr);								
+							switch(key) {
+								case "date" :
+									date = value;
+									var input = $("<input type='hidden' name='date'>").val(value);
+									var td = $("<td class='divide' style='width: 100px'></td>").text(value);
+									tr.append(td.append(input));
+									break;
+								case "mid" :
+									var input = $("<input type='hidden' name='mid'>").val(value);
+									var td = $("<td style='width: 60px'></td>").text(value);
+									tr.append(td.append(input));
+									break;
+								case "name" :
+									var input = $("<input type='hidden' name='name'>").val(value);
+									var td = $("<td style='width: 70px'></td>").text(value);
+									tr.append(td.append(input));
+									break;
+								case "position" :
+									var input = $("<input type='hidden' name='position'>").val(value);
+									var td = $("<td class='divide' style='width: 80px'></td>").text(value);
+									tr.append(td.append(input));
+									break;
+								case "preOnWork" :
+									var temp = date + ' ' + value;
+									preOnWork = new Date(temp);
+									var input = $("<input style='width: 60px' type='text' name='preOnWork'>").val(value);
+									var td = $("<td class='data'></td>");
+									tr.append(td.append(input));
+									break;
+								case "preOffWork" :
+									var temp = date + ' ' + value;
+									preOffWork = new Date(temp);
+									var input = $("<input style='width: 60px' type='text' name='preOffWork'>").val(value);
+									var td = $("<td class='data divide'></td>");
+									tr.append(td.append(input));
+									break;
+								case "onWork" :
+									var temp = date + ' ' + value;
+									onWork = new Date(temp);
+									var input = $("<input style='width: 60px' type='text' name='onWork'>").val(value);
+									var td = $("<td class='data'></td>");
+									tr.append(td.append(input));
+									
+									if(onWork.getTime() - preOnWork.getTime() > 0) {
+										td.append("(지각)");
+									}
+									break;
+								case "offWork" :
+									var temp = date + ' ' + value;
+									offWork = new Date(temp);
+									var input = $("<input style='width: 60px' type='text' name='offWork'>").val(value);
+									var td = $("<td class='data divide'></td>");
+									tr.append(td.append(input));
+									
+									if(preOffWork.getTime() - offWork.getTime() > 0) {
+										td.append("(조퇴)");
+									}
+									break;
 							}
 						});
 						
-						tr.appendTo($("#recruitList tbody"));
+						$("<td><button class='btn btn-xs btn-primary modifyBtn'>저장</button></td>").appendTo(tr);
+						tr.appendTo($("#table tbody"));
 					});
 				}
 			});
@@ -83,12 +147,6 @@
 			error : function() {
 				alert("submit 실패");
 			}
-		});
-		
-		/* 엑셀로 다운로드하기 */
-		$("#toExcelButton").click(function(e) {
-			window.open('data:application/vnd.ms-excel,' + encodeURIComponent($('.sticky-table').html()));
-			e.preventDefault();
 		});
 	});
 
@@ -149,33 +207,39 @@
 			<table id="table" class="table">
 				<thead>
 					<tr class="sticky-row">
-						<th>날짜</th>
+						<th class="divide">날짜</th>
 						<th>아이디</th>
 						<th>이름</th>					
-						<th>직급</th>
+						<th class="divide">직급</th>
 						<th>출근 시간</th>
-						<th>퇴근 시간</th>
+						<th class="divide">퇴근 시간</th>
 						<th>출근 시간(실제)</th>
-						<th>퇴근 시간(실제)</th>
-						<th>근태 상태</th>
-						<th>비고</th>
+						<th class="divide">퇴근 시간(실제)</th>
 						<th>수정</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr class="attendance_tr">
-						<td style="width: 100px">2017-07-11</td>
-						<td style="width: 60px">4-2</td>
-						<td style="width: 70px">심규진</td>
-						<td style="width: 50px">직원</td>
-						<td class="data"><input style="width: 100px" type="text" value="17:07:00"></td>
-						<td class="data"><input style="width: 100px" type="text" value="17:17:00"></td>
-						<td class="data"><input style="width: 100px" type="text" value="17:07:15"></td>
-						<td class="data"><input style="width: 100px" type="text" value="17:17:00"></td>
-						<td class="data"><input style="width: 50px" type="text" value="출근"></td>
-						<td class="data"><input style="width: 200px" type="text" value=""></td>
-						<td><button class="btn btn-xs btn-primary modifyBtn">저장</button></td>
-					</tr>
+					<c:forEach var="attendanceList" items="${attendanceList}">
+						<tr class="attendance_tr">
+							<td class="divide" style="width: 100px">${attendanceList.date}</td>
+							<td style="width: 60px">${attendanceList.mid}</td>
+							<td style="width: 70px">${attendanceList.name}</td>
+							<td class="divide" style="width: 80px">${attendanceList.position}</td>
+							<td class="data"><input style="width: 60px" type="text" value="${attendanceList.preOnWork}"></td>
+							<td class="data divide"><input style="width: 60px" type="text" value="${attendanceList.preOffWork}"></td>
+							<td class="data"><input style="width: 60px" type="text" value="${attendanceList.onWork}">
+								<c:if test="${attendanceList.onWorkState != '정상'}">
+									(${attendanceList.onWorkState})
+								</c:if>
+							</td>
+							<td class="data divide"><input style="width: 60px" type="text" value="${attendanceList.offWork}">
+								<c:if test="${!empty attendanceList.offWork}">
+									(${attendanceList.offWorkState})
+								</c:if>
+							</td>
+							<td><button class="btn btn-xs btn-primary modifyBtn">저장</button></td>
+						</tr>
+					</c:forEach>
 				</tbody>
 			</table>
 		</div>
