@@ -33,6 +33,9 @@
 .resignBtn {
 	margin: 0px 23px 0px 23px;
 }
+.divide {
+	border-right: 1px solid #ddd;
+}
 
 /* recruit.jsp css */
 #content {
