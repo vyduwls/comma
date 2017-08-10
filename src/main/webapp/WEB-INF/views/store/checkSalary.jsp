@@ -20,20 +20,25 @@
 		var dayWorkTime=0;
 		dayWorkTime=dayWorkTimeList.split(",");
 		var weeklyPay="${totalMoney}";
-		$("#weeklyPay").text(numberWithCommas(weeklyPay));
+		$("#weeklyPay").text(numberWithCommas(weeklyPay)+"원");
 		
 		var salaryState="";
 		var totalWorkTime=0;
 		var totalPlusTime=0;
 		var totalOverTime=0;
 		var totalSalary=0;
+		var totalExcessPay=0;
+		var totalOverTimePay=0;
+		
+		var check=0;
+		var sumtime=0;
+		var hourCheck=0;
 		for (var i = 0; i < workTimeArray.length; i++) {
 			var onWork=workTimeArray[i].split(" ")[1].split("_")[0];
 			var offWork=workTimeArray[i].split("_")[1].split(" ")[1];
 			var wage=workTimeArray[i].split("_")[2];
 			var startDay=workTimeArray[i].split("_")[0].split("-")[2].split(" ")[0];
 
-			alert(workTimeArray[i]);
 			var totalWorkMinute=dayWorkTime[i];
 			var totalWeekWorkTime=0;
 			var plusTime=0;
@@ -43,52 +48,141 @@
 			+onWork+"</td><td class='salaryTd'>"+offWork+"</td>";
 			
 			salaryState+="<td class='salaryTd'>"+Math.floor((totalWorkMinute)/60)+"시간 "+(totalWorkMinute)%60+"분</td>";
+			
+			/*한 주의 총 근무시간 구하기*/
 			for (var j = 0; j < totalWeekTime.length; j++) {
 				if(j==0 && (Number(startDay)<=totalWeekTime[j].split("_")[0].split("-")[2])){
 					totalWeekWorkTime=totalWeekTime[j].split("_")[1];
-					
-				}else if(j>=1 && ((Number(startDay)<=totalWeekTime[j].split("_")[0].split("-")[2]) && (Number(startDay)>=totalWeekTime[j-1].split("_")[0].split("-")[2]))){
+	
+				}else if(j>=1 && ((Number(startDay)<=totalWeekTime[j].split("_")[0].split("-")[2]) && (Number(startDay)>totalWeekTime[j-1].split("_")[0].split("-")[2]))){
 					totalWeekWorkTime=totalWeekTime[j].split("_")[1];
-				}
+				}					
 			}
 			
-			if(totalWorkMinute>=480 && (totalWorkMinute-480>=60)){
-				salaryState+="<td class='salaryTd'>"+Math.floor((totalWorkMinute-480)/60)+"시간 "+(totalWorkMinute-480)%60+"분</td>";	
-				plusTime=totalWorkMinute-480;
-			}else if(totalWorkMinute>=480 && (totalWorkMinute-480<60)){
-				salaryState+="<td class='salaryTd'>"+(totalWorkMinute-480)%60+"분</td>";	
-				plusTime=totalWorkMinute-480;
+			/* 한 주 총 근무시간이 40시간 이상/이하 비교*/
+			if(totalWeekWorkTime>=2400){
+				/*일 근무시간 더하기*/
+				sumtime+=Number(totalWorkMinute);
+				if(totalWorkMinute>=480){
+					hourCheck+=480;
+				}else{
+					hourCheck+=Number(totalWorkMinute);	
+				}
+				 /*주 40시간 이상 근무시 추가 시간만큼 1.5배 해주기*/
+				 if(hourCheck>=2400 && check!=1){
+					check=1;
+					if(totalWorkMinute>=480){
+						hourCheck-=480;
+						hourCheck+=Number(totalWorkMinute);	
+					}
+					
+					if(hourCheck-2400>=60){
+						salaryState+="<td class='salaryTd'>"+Math.floor((hourCheck-2400)/60)+"시간 "+(hourCheck-2400)%60+"분</td>";	
+					}else{
+						salaryState+="<td class='salaryTd'>"+(hourCheck-2400)%60+"분</td>";	
+					}
+					plusTime=hourCheck-2400;
+					/*주 40시간 초과 근무시 1.5배 해주기*/
+				 }else if(check==1){
+					if(totalWorkMinute>=60){
+						salaryState+="<td class='salaryTd'>"+Math.floor((totalWorkMinute)/60)+"시간 "+(totalWorkMinute)%60+"분</td>";	
+					}else{
+						salaryState+="<td class='salaryTd'>"+(totalWorkMinute)%60+"분</td>";	
+					}
+					plusTime=totalWorkMinute;
+					if(totalWeekWorkTime==sumtime){
+						sumtime=0;
+						check=0;
+						hourCheck=0;
+					 }
+					/*주의 총 근무시간은 40시간 이상 , 추가 근무시간 합이 40시간 미만일 경우*/
+				 }else{
+						if(totalWorkMinute>=480 && (totalWorkMinute-480>=60)){
+							salaryState+="<td class='salaryTd'>"+Math.floor((totalWorkMinute-480)/60)+"시간 "+(totalWorkMinute-480)%60+"분</td>";	
+							plusTime=totalWorkMinute-480;
+						}else if(totalWorkMinute>=480 && (totalWorkMinute-480<60)){
+							salaryState+="<td class='salaryTd'>"+(totalWorkMinute-480)%60+"분</td>";	
+							plusTime=totalWorkMinute-480;
+						}else{
+							salaryState+="<td class='salaryTd'>-</td>";	
+							plusTime=0;
+						}
+				 }
+				 /* 주의 총 근무시간이 40시간 미만일경우 */
 			}else{
-				salaryState+="<td class='salaryTd'>-</td>";	
-				plusTime=0;
+				if(totalWorkMinute>=480 && (totalWorkMinute-480>=60)){
+					salaryState+="<td class='salaryTd'>"+Math.floor((totalWorkMinute-480)/60)+"시간 "+(totalWorkMinute-480)%60+"분</td>";	
+					plusTime=totalWorkMinute-480;
+				}else if(totalWorkMinute>=480 && (totalWorkMinute-480<60)){
+					salaryState+="<td class='salaryTd'>"+(totalWorkMinute-480)%60+"분</td>";	
+					plusTime=totalWorkMinute-480;
+				}else{
+					salaryState+="<td class='salaryTd'>-</td>";	
+					plusTime=0;
+				}	
 			}
-			/*야근수당은 보류.....*/			
-		/* 	if(Number(onWork.split(":")[0])>Number(offWork.split(":")[0])){
-				if()
-			} */
-			salaryState+="<td class='salaryTd'>-</td><td class='salaryTd'>"+numberWithCommas(wage)+"</td>";
-			if(totalWorkMinute>=480){
-				daySalary=8*wage+Math.floor((totalWorkMinute-480)*((wage*1.5)/60));
+		
+
+			/*야근수당 구하기*/		
+		 	if(startDay!=workTimeArray[i].split("_")[1].split("-")[2].split(" ")[0]){
+				if(Number(onWork.split(":")[0])>=22 && Number(offWork.split(":")[0])<=6){
+					overTime=calcuTime(offWork)+(1440-calcuTime(onWork));
+				}else if(Number(onWork.split(":")[0])<22 && Number(offWork.split(":")[0])<=6){
+					overTime=calcuTime(offWork)+120;
+				}else if(Number(onWork.split(":")[0])>=22 && Number(offWork.split(":")[0])>6){
+					overTime=calcuTime(onWork)+360;
+				}else{
+					overTime=480;
+				}
+
 			}else{
-				daySalary=Math.floor(totalWorkMinute*(wage/60));
+				if(Number(onWork.split(":")[0])>=22 || Number(onWork.split(":")[0])<=6 && Number(offWork.split(":")[0])<=6){
+					overTime=calcuTime(offWork)-calcuTime(onWork);
+				}else if(Number(offWork.split(":")[0])>=22){
+					overTime=calcuTime(offWork)-1320;
+				}else if(Number(onWork.split(":")[0])<=6 && Number(offWork.split(":")[0])>6){
+					overTime=360-calcuTime(onWork);
+				}else{
+					overTime=0;
+				}
+			}
+			if(overTime>=60){
+				salaryState+="<td class='salaryTd'>"+Math.floor(overTime/60)+"시간 "+(overTime%60)+"분</td>";	
+			}else if(overTime<60){
+				salaryState+="<td class='salaryTd'>"+(overTime%60)+"분</td>";	
+			}else{
+				salaryState+="<td class='salaryTd'>111</td>";	
+			}	
+		
+			salaryState+="<td class='salaryTd'>"+numberWithCommas(wage)+"</td>";
+			if(totalWorkMinute>=480){
+				daySalary=8*wage+Math.floor(plusTime*((wage*1.5)/60))+Math.floor(overTime*((wage*1.5)/60));
+			}else{
+				daySalary=Math.floor(totalWorkMinute*(wage/60))+Math.floor(overTime*((wage*1.5)/60));
 			}
 				salaryState+="<td class='salaryTd2'>"+numberWithCommas(daySalary)+" 원</td></tr>";
-				
 				totalWorkTime+=Number(totalWorkMinute);
-				totalPlusTime+=plusTime;
+				totalPlusTime+=Number(plusTime);
 				totalOverTime+=overTime;
 				totalSalary+=daySalary;
+				totalExcessPay+=Math.floor(plusTime*((wage*1.5)/60));
+				totalOverTimePay+=Math.floor(overTime*((wage*1.5)/60));
 		}
 		
 		salaryState+="<tr class='recruit_tr'><td class='salaryTd' colspan='3'>합계 <span style='color:#808080'>&nbsp; ※주휴수당 미포함</span></td>"
 		+"<td class='salaryTd'>"+Math.floor((totalWorkTime)/60)+"시간 "+(totalWorkTime)%60+"분 </td><td class='salaryTd'>"
 		+Math.floor((totalPlusTime)/60)+"시간 "+(totalPlusTime)%60+"분 </td><td class='salaryTd'>"
-		+Math.floor((totalOverTime)/60)+"시간 "+(totalOverTime)%60+"분 </td><td class='salaryTd'>총 수당</td>"
+		+Math.floor((totalOverTime)/60)+"시간 "+(totalOverTime)%60+"분 </td><td class='salaryTd'>총 월급</td>"
 		+"<td class='salaryTd1'>"+numberWithCommas(totalSalary)+"원</td></tr>";
 
 		$("#salaryTbody").html(salaryState);
 
-
+		$("#totalWorkTime").text(Math.floor((totalWorkTime)/60)+"시간 "+(totalWorkTime)%60+"분");
+		$("#totalExcessPay").text(numberWithCommas(totalExcessPay)+"원");
+		$("#totalOverTimePay").text(numberWithCommas(totalOverTimePay)+"원");
+		$("#totalSalary").text(numberWithCommas(totalSalary)+"원");
+		
+		
 		/* 엑셀로 다운로드하기 */
 		$("#toExcelButton").click(function(e) {
 			window.open('data:application/vnd.ms-excel,' + encodeURIComponent($('#toExcel').html()));
@@ -162,34 +256,25 @@
 			<table id="salaryTable" class="table table-bordered">
 				<thead>
 					<tr>
-						<th class="salaryTh1">지급일자</th>
+						<th class="salaryTh1">일자</th>
 						<th class="salaryTh">성명</th>
 						<th class="salaryTh">총 근무시간</th>
 						<th class="salaryTh">주휴 수당</th>
 						<th class="salaryTh">추가 수당</th>					
-						<th class="salaryTh">총 수당</th>
-						<th class="salaryTh">갑근세</th>
-						<th class="salaryTh">주민세</th>
-						<th class="salaryTh">고용보험</th>
-						<th class="salaryTh">건강보험</th>
-						<th class="salaryTh">국민연금</th>
-						<th class="salaryTh">실지급액</th>
+						<th class="salaryTh">야간 수당</th>
+						<th class="salaryTh">총 월급</th>
 					</tr>
 				</thead>
 				<tbody>
 						<tr class="recruit_tr">
-							<td class="salaryTd">2017-08-11</td>
-							<td class="salaryTd">표여진</td>
-							<td class="salaryTd">109</td>
-							<td class="salaryTd" id="weeklyPay"></td>
-							<td class="salaryTd">76,200</td>
-							<td class="salaryTd">924,000</td>
-							<td class="salaryTd">60,000</td>
-							<td class="salaryTd">6,000</td>
-							<td class="salaryTd">43,032</td>
-							<td class="salaryTd">11,210</td>
-							<td class="salaryTd">11,253</td>
-							<td class="salaryTd1">881,200원</td>
+							<td class="salaryTd" id="payDate">${year}-${month}</td>
+							<td class="salaryTd" id="name">${memberData.name}</td>
+							<td class="salaryTd" id="totalWorkTime">0시간0분</td>
+							<td class="salaryTd" id="weeklyPay">0원</td>
+							<td class="salaryTd" id="totalExcessPay">0원</td>
+							<td class="salaryTd" id="totalOverTimePay">0원</td>
+							<td class="salaryTd1" id="totalSalary">0원</td>
+
 						</tr>
 				</tbody>
 			</table>
@@ -202,7 +287,7 @@
 						<th class="salaryTh">퇴근시간</th>
 						<th class="salaryTh">총 근무시간</th>
 						<th class="salaryTh">초과근무시간</th>					
-						<th class="salaryTh">야간수당</th>
+						<th class="salaryTh">야간근무시간</th>
 						<th class="salaryTh">시급</th>
 						<th class="salaryTh">총 지급액</th>
 

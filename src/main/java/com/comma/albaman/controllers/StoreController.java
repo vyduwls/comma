@@ -637,7 +637,6 @@ public class StoreController {
 	    				 totalweekMoney=8*recruitData.getWage();
 	    			 }
 	    			 totalMoney+=totalweekMoney;
-
 	    		  }
 	    		  
 	    		  int workTime=scheduleDAO.getWeekWorkTime(monDay,sunDay,mid);
@@ -675,7 +674,7 @@ public class StoreController {
 			    +"_"+recruitData.getWage()+",";
 			}
 		}
-		
+		System.out.println("allScheduleString------"+allScheduleString);
 		model.addAttribute("stringworkTime",stringworkTime);
 		model.addAttribute("joinYear", recruitData.getJoinDate().split("-")[0]);
 		model.addAttribute("totalMoney",totalMoney);
