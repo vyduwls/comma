@@ -13,8 +13,16 @@
 		
 		var workTimeList="${allScheduleString}";
 		var workTimeArray=workTimeList.split(",");
+		
+		var totalWeekTimeList="${totalWeekTime}";
+		var totalWeekTime=totalWeekTimeList.split(",");
+		var dayWorkTimeList="${stringworkTime}";
+		var dayWorkTime=0;
+		dayWorkTime=dayWorkTimeList.split(",");
+		var weeklyPay="${totalMoney}";
+		$("#weeklyPay").text(numberWithCommas(weeklyPay));
+		
 		var salaryState="";
-
 		var totalWorkTime=0;
 		var totalPlusTime=0;
 		var totalOverTime=0;
@@ -23,21 +31,26 @@
 			var onWork=workTimeArray[i].split(" ")[1].split("_")[0];
 			var offWork=workTimeArray[i].split("_")[1].split(" ")[1];
 			var wage=workTimeArray[i].split("_")[2];
-			
-			var totalWorkMinute=0;
+			var startDay=workTimeArray[i].split("_")[0].split("-")[2].split(" ")[0];
+
+			alert(workTimeArray[i]);
+			var totalWorkMinute=dayWorkTime[i];
+			var totalWeekWorkTime=0;
 			var plusTime=0;
 			var overTime=0;
 			var daySalary=0;
 			salaryState+="<tr class='recruit_tr'><td class='salaryTd'>"+workTimeArray[i].split(" ")[0]+"</td><td class='salaryTd'>"
 			+onWork+"</td><td class='salaryTd'>"+offWork+"</td>";
-	
-			 if(Number(onWork.split(":")[0])>Number(offWork.split(":")[0])){
-				totalWorkMinute=1440-calcuTime(onWork)+calcuTime(offWork);
-			}else{
-				totalWorkMinute=calcuTime(offWork)-calcuTime(onWork);
-			}
 			
 			salaryState+="<td class='salaryTd'>"+Math.floor((totalWorkMinute)/60)+"시간 "+(totalWorkMinute)%60+"분</td>";
+			for (var j = 0; j < totalWeekTime.length; j++) {
+				if(j==0 && (Number(startDay)<=totalWeekTime[j].split("_")[0].split("-")[2])){
+					totalWeekWorkTime=totalWeekTime[j].split("_")[1];
+					
+				}else if(j>=1 && ((Number(startDay)<=totalWeekTime[j].split("_")[0].split("-")[2]) && (Number(startDay)>=totalWeekTime[j-1].split("_")[0].split("-")[2]))){
+					totalWeekWorkTime=totalWeekTime[j].split("_")[1];
+				}
+			}
 			
 			if(totalWorkMinute>=480 && (totalWorkMinute-480>=60)){
 				salaryState+="<td class='salaryTd'>"+Math.floor((totalWorkMinute-480)/60)+"시간 "+(totalWorkMinute-480)%60+"분</td>";	
@@ -61,7 +74,7 @@
 			}
 				salaryState+="<td class='salaryTd2'>"+numberWithCommas(daySalary)+" 원</td></tr>";
 				
-				totalWorkTime+=totalWorkMinute;
+				totalWorkTime+=Number(totalWorkMinute);
 				totalPlusTime+=plusTime;
 				totalOverTime+=overTime;
 				totalSalary+=daySalary;
@@ -168,7 +181,7 @@
 							<td class="salaryTd">2017-08-11</td>
 							<td class="salaryTd">표여진</td>
 							<td class="salaryTd">109</td>
-							<td class="salaryTd">56,000</td>
+							<td class="salaryTd" id="weeklyPay"></td>
 							<td class="salaryTd">76,200</td>
 							<td class="salaryTd">924,000</td>
 							<td class="salaryTd">60,000</td>

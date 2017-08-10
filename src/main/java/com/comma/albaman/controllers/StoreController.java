@@ -1,9 +1,13 @@
 package com.comma.albaman.controllers;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -31,6 +35,7 @@ import com.comma.albaman.vo.Schedule;
 import com.comma.albaman.vo.Store;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.oreilly.servlet.ParameterParser;
 
 @Controller
 @RequestMapping("/store/*")
@@ -571,7 +576,7 @@ public class StoreController {
 		Member memberData=memberDAO.getMember(mid);
 		RecruitDAO recruitDAO=sqlSession.getMapper(RecruitDAO.class);
 		Recruit recruitData=recruitDAO.getRecruit(mid);
-		
+		ScheduleDAO scheduleDAO=sqlSession.getMapper(ScheduleDAO.class);
 		//해당 직원 스케줄 가져오기
 //		날짜 변환
 		if(selectMonth==null || selectMonth.equals("")){
@@ -586,13 +591,80 @@ public class StoreController {
 		String preMonth="";
 		if(month<=9){
 			preMonth="0"+month;
+		}else{
+			preMonth=selectMonth;
 		}
 		String prework=year+"-"+preMonth;
-		System.out.println("prework===="+prework);
-//      sid와 prework 날짜로 해당 달의 전체 스케줄 받기		
-		ScheduleDAO scheduleDAO=sqlSession.getMapper(ScheduleDAO.class);
-		List<Schedule> allSchedule=scheduleDAO.getWorkTime(mid, prework);
 		
+		String getWeek=prework+"-01";
+// 		주휴수당 계산하기		
+		
+		Calendar cal = Calendar.getInstance(Locale.KOREA);
+	      cal.setFirstDayOfWeek(Calendar.MONDAY);
+	      DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+	      Date date = null;
+	      try {
+	         date = df.parse(getWeek);
+	      } catch (ParseException e) {
+	         // TODO Auto-generated catch block
+	         e.printStackTrace();
+	      }
+	      cal.setTime(date);
+	      int lastDay= cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+	      cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+	      String monDay=df.format(cal.getTime());
+	      cal.add(cal.DATE, 6);
+	      String sunDay = df.format(cal.getTime()).toString();
+
+	      int sunDayInt=Integer.parseInt(sunDay.split("-")[2])+1;
+	      int monDayInt=Integer.parseInt(monDay.split("-")[2]);
+
+	      int totalMoney=0;
+	      String totalWeekTime="";
+	      for (int i = 0; i < 5; i++) {
+	    	  double totalweekMoney=0;
+	    	  if(sunDayInt-1<=lastDay){
+	    		  if(i>=1){
+	    			 monDay=prework+"-"+monDayInt;
+	    		  }
+	    		  sunDay=prework+"-"+sunDayInt;
+	    		  int count=scheduleDAO.checkAbsent(monDay,sunDay,mid);
+	    		  if(count==0){
+	    			 int weekWorkTime=scheduleDAO.getWeekWorkTime(monDay,sunDay,mid);
+	    			 if(weekWorkTime>=900 && weekWorkTime<2400){
+	    				 totalweekMoney=(weekWorkTime/2400.0)*8*recruitData.getWage();
+	    			 }else if(weekWorkTime>=2400){
+	    				 totalweekMoney=8*recruitData.getWage();
+	    			 }
+	    			 totalMoney+=totalweekMoney;
+
+	    		  }
+	    		  
+	    		  int workTime=scheduleDAO.getWeekWorkTime(monDay,sunDay,mid);
+	    		  totalWeekTime+=prework+"-"+(sunDayInt-1)+"_"+workTime+",";
+	    	  }
+	    	  
+	    	  monDayInt=sunDayInt;
+	    	  sunDayInt+=7;
+		}
+		System.out.println("totalWeekTime----"+totalWeekTime);
+	    //일별 근무시간 구하기
+	    int[] workMinuteTime=new int[]{};
+	    workMinuteTime=scheduleDAO.getWorkDayTime(prework,mid);
+	    String stringworkTime="";
+	    if(workMinuteTime.length!=0){
+		    for (int i = 0; i < workMinuteTime.length; i++) {
+				if(i==workMinuteTime.length-1){
+					stringworkTime+=workMinuteTime[i];
+				}else{
+					stringworkTime+=workMinuteTime[i]+",";
+				}
+			}
+	    }
+	    System.out.println("stringworkTime--"+stringworkTime);
+//      sid와 prework 날짜로 해당 달의 전체 스케줄 받기		
+
+	    List<Schedule> allSchedule=scheduleDAO.getWorkTime(mid, prework);
 		String allScheduleString="";
 		for (int i = 0; i < allSchedule.size(); i++) {
 			if(i==allSchedule.size()-1){
@@ -603,8 +675,11 @@ public class StoreController {
 			    +"_"+recruitData.getWage()+",";
 			}
 		}
+		
+		model.addAttribute("stringworkTime",stringworkTime);
 		model.addAttribute("joinYear", recruitData.getJoinDate().split("-")[0]);
-		System.out.println("allScheduleString-----"+allScheduleString);
+		model.addAttribute("totalMoney",totalMoney);
+		model.addAttribute("totalWeekTime",totalWeekTime);
 		model.addAttribute("year",selectYear);
 		model.addAttribute("month",selectMonth);
 		model.addAttribute("memberData",memberData);
