@@ -84,6 +84,9 @@ public interface ScheduleDAO {
 	//일별 총 근무시간 구하기
 	@Select("SELECT IFNULL(TIMESTAMPDIFF(MINUTE,ONWORK,OFFWORK),0) FROM  SCHEDULE WHERE SUBSTRING_INDEX(ONWORK,'-','2')=#{prework} AND RID=#{mid} AND ONWORK IS NOT NULL AND OFFWORK IS NOT NULL ORDER BY ONWORK")
 	public int[] getWorkDayTime(@Param("prework")String prework, @Param("mid")String mid);
+	//월 총 근무시간 구하기
+	@Select("SELECT IFNULL(SUM(TIMESTAMPDIFF(MINUTE,ONWORK,OFFWORK)),0) FROM  SCHEDULE WHERE SUBSTRING_INDEX(ONWORK,'-','2')=#{prework} AND RID=#{mid} AND ONWORK IS NOT NULL AND OFFWORK IS NOT NULL ORDER BY ONWORK")
+	public int getWorkTotalTime(@Param("prework")String prework, @Param("mid")String mid);
 }
 
 

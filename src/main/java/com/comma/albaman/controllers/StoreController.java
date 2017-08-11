@@ -31,6 +31,7 @@ import com.comma.albaman.vo.Attendance;
 import com.comma.albaman.vo.Employee;
 import com.comma.albaman.vo.Member;
 import com.comma.albaman.vo.Recruit;
+import com.comma.albaman.vo.SalaryManage;
 import com.comma.albaman.vo.Schedule;
 import com.comma.albaman.vo.Store;
 import com.google.gson.Gson;
@@ -566,11 +567,12 @@ public class StoreController {
 	}
 	
 	@RequestMapping(value={"checkSalary.do"}, method=RequestMethod.GET)
-	public String checkSalary(HttpServletRequest request,Model model,String selectMonth,String selectYear){
+	public String checkSalary(HttpServletRequest request,Model model,String selectMonth,String selectYear,String mid){
 		System.out.println("\nStoreController의 checkSalary.do(GET)");
 		
-		String mid = (String) request.getSession().getAttribute("mid");
-		
+		if(mid==null || mid.equals("")){
+			mid = (String) request.getSession().getAttribute("mid");
+		}
 		// 직원 전체 정보 가져오기
 		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
 		Member memberData=memberDAO.getMember(mid);
@@ -646,7 +648,7 @@ public class StoreController {
 	    	  monDayInt=sunDayInt;
 	    	  sunDayInt+=7;
 		}
-		System.out.println("totalWeekTime----"+totalWeekTime);
+
 	    //일별 근무시간 구하기
 	    int[] workMinuteTime=new int[]{};
 	    workMinuteTime=scheduleDAO.getWorkDayTime(prework,mid);
@@ -660,7 +662,7 @@ public class StoreController {
 				}
 			}
 	    }
-	    System.out.println("stringworkTime--"+stringworkTime);
+
 //      sid와 prework 날짜로 해당 달의 전체 스케줄 받기		
 
 	    List<Schedule> allSchedule=scheduleDAO.getWorkTime(mid, prework);
@@ -674,7 +676,7 @@ public class StoreController {
 			    +"_"+recruitData.getWage()+",";
 			}
 		}
-		System.out.println("allScheduleString------"+allScheduleString);
+
 		model.addAttribute("stringworkTime",stringworkTime);
 		model.addAttribute("joinYear", recruitData.getJoinDate().split("-")[0]);
 		model.addAttribute("totalMoney",totalMoney);
@@ -686,5 +688,139 @@ public class StoreController {
 		model.addAttribute("allSchedule",allSchedule);
 		model.addAttribute("allScheduleString",allScheduleString);
 		return "store.checkSalary";
+	}
+	
+	@RequestMapping(value={"salaryManage.do"}, method=RequestMethod.GET)
+	public String salaryManage(HttpServletRequest request,Model model,String selectMonth,String selectYear,String sid){
+		System.out.println("\nStoreController의 salaryManage.do(GET)");
+		
+		String mid = (String) request.getSession().getAttribute("mid");
+		
+		// 소유한 가게 가져오기
+		StoreDAO storeDAO = sqlSession.getMapper(StoreDAO.class);
+		List<Store> storeList = storeDAO.getAllStore(mid);
+		Store storeInfo=new Store();
+			if(sid==null || sid.equals("")){
+				storeInfo=storeList.get(0);
+			}else{
+				storeInfo=storeDAO.getStore(sid);
+			}
+		model.addAttribute("storeList", storeList);
+		model.addAttribute("storeInfo", storeInfo);
+		
+		// 직원 전체 정보 가져오기
+		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
+		List<Employee> employeeList=new ArrayList<Employee>();
+		if(sid==null||sid.equals("")){
+			employeeList = memberDAO.getEmployee(storeList.get(0).getSid());
+		}else{
+			employeeList = memberDAO.getEmployee(sid);
+		}
+		model.addAttribute("employeeList",employeeList);
+		
+		ScheduleDAO scheduleDAO=sqlSession.getMapper(ScheduleDAO.class);
+		RecruitDAO recruitDAO=sqlSession.getMapper(RecruitDAO.class);
+//		전체 직원 스케줄 가져오기	
+//		날짜 변환
+		if(selectMonth==null || selectMonth.equals("")){
+			selectMonth=new SimpleDateFormat("MM").format(new Date());
+		}
+		if(selectYear==null ||selectYear.equals("")){
+			selectYear=new SimpleDateFormat("yyyy").format(new Date());
+		}
+
+		int year=Integer.parseInt(selectYear);
+		int month=Integer.parseInt(selectMonth);
+		String preMonth="";
+		if(month<=9){
+			preMonth="0"+month;
+		}else{
+			preMonth=selectMonth;
+		}
+		String prework=year+"-"+preMonth;
+		
+		String getWeek=prework+"-01";
+// 		주휴수당 계산하기		
+		  Calendar cal = Calendar.getInstance(Locale.KOREA);
+	      cal.setFirstDayOfWeek(Calendar.MONDAY);
+	      DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+	      Date date = null;
+	      try {
+	         date = df.parse(getWeek);
+	      } catch (ParseException e) {
+	         // TODO Auto-generated catch block
+	         e.printStackTrace();
+	      }
+	      cal.setTime(date);
+	      int lastDay= cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+	      cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+	      String monDay=df.format(cal.getTime());
+	      cal.add(cal.DATE, 6);
+	      String sunDay = df.format(cal.getTime()).toString();
+	      int mmonday=Integer.parseInt(monDay.split("-")[2]);  
+	      int ssunday=Integer.parseInt(sunDay.split("-")[2])+1;
+
+
+	      List<SalaryManage> salaryManageList=new ArrayList<SalaryManage>();
+
+	      for (int j = 0; j < employeeList.size(); j++) {
+	    	  int sunDayInt=ssunday;
+	    	  int monDayInt=mmonday;
+	    	  SalaryManage salaryManage=new SalaryManage();
+	    	  Recruit recruitData=recruitDAO.getRecruit(employeeList.get(j).getMid());
+
+	    	  salaryManage.setMid(employeeList.get(j).getMid());
+	    	  salaryManage.setName(employeeList.get(j).getName());
+	    	  salaryManage.setWage(recruitData.getWage());
+	    	  
+		      int weeklyPay=0;
+
+		   	  String totalWeekTime="";
+		   	  for (int i = 0; i < 5; i++) {
+		   		  double totalweekMoney=0;
+	    		  if(sunDayInt-1<=lastDay){
+	    			  if(i>=1){
+	    				  monDay=prework+"-"+monDayInt;
+	    			  }
+		    		  sunDay=prework+"-"+sunDayInt;
+		    		  int count=scheduleDAO.checkAbsent(monDay,sunDay,salaryManage.getMid());
+		    		  if(count==0){
+		   				  int weekWorkTime=scheduleDAO.getWeekWorkTime(monDay,sunDay,salaryManage.getMid());
+		   				  if(weekWorkTime>=900 && weekWorkTime<2400){
+		    				  totalweekMoney=(weekWorkTime/2400.0)*8*recruitData.getWage();
+		    			  }else if(weekWorkTime>=2400){
+		    				  totalweekMoney=8*recruitData.getWage();
+		    			  }
+		    			  weeklyPay+=totalweekMoney;
+		    		  }
+		    		  
+		   			  int workTime=scheduleDAO.getWeekWorkTime(monDay,sunDay,salaryManage.getMid());
+		   			  totalWeekTime+=prework+"-"+(sunDayInt-1)+"_"+workTime+",";
+		   		  }
+		    		  
+	    		  monDayInt=sunDayInt;
+	    		  sunDayInt+=7;
+		      }
+		      salaryManage.setWeeklyPay(weeklyPay);
+		      //월 총 근무시간 구하기
+		      int totalTime=scheduleDAO.getWorkTotalTime(prework,salaryManage.getMid());
+		      salaryManage.setTotalTime(totalTime);
+		      salaryManageList.add(salaryManage);
+		      //일별 근무시간 구하기
+//		    	  int[] workMinuteTime=scheduleDAO.getWorkDayTime(prework,mid);
+//		    	  List<Schedule> allSchedule=scheduleDAO.getWorkTime(mid, prework);
+//		    	  if(workMinuteTime.length!=0){
+//		    		  
+//		    	  }
+		}
+
+
+
+		model.addAttribute("year",selectYear);
+		model.addAttribute("month",selectMonth);
+		model.addAttribute("startYear",storeInfo.getRegDate().split("-")[0]);
+		model.addAttribute("salaryManageList",salaryManageList);
+
+		return "store.salaryManage";
 	}
 }

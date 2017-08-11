@@ -156,7 +156,8 @@
 		
 			salaryState+="<td class='salaryTd'>"+numberWithCommas(wage)+"</td>";
 			if(totalWorkMinute>=480){
-				daySalary=8*wage+Math.floor(plusTime*((wage*1.5)/60))+Math.floor(overTime*((wage*1.5)/60));
+				daySalary=8*wage+Math.floor(plusTime*((wage*1.5)/60));
+				daySalary+=Math.floor(overTime*((wage*1.5)/60));
 			}else{
 				daySalary=Math.floor(totalWorkMinute*(wage/60))+Math.floor(overTime*((wage*1.5)/60));
 			}
