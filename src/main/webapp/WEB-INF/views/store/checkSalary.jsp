@@ -51,7 +51,7 @@
 			
 			/*한 주의 총 근무시간 구하기*/
 			for (var j = 0; j < totalWeekTime.length; j++) {
-				if(j==0 && (Number(startDay)<=totalWeekTime[j].split("_")[0].split("-")[2])){
+				if(j==0 && (Number(startDay)<=totalWeekTime[j].split("_")[0].split("-")[2] ||workTimeArray[i].split("-")[1] !=workTimeArray[i].split("_")[1].split("-")[1])){
 					totalWeekWorkTime=totalWeekTime[j].split("_")[1];
 	
 				}else if(j>=1 && ((Number(startDay)<=totalWeekTime[j].split("_")[0].split("-")[2]) && (Number(startDay)>totalWeekTime[j-1].split("_")[0].split("-")[2]))){
@@ -156,18 +156,19 @@
 		
 			salaryState+="<td class='salaryTd'>"+numberWithCommas(wage)+"</td>";
 			if(totalWorkMinute>=480){
-				daySalary=8*wage+Math.floor(plusTime*((wage*1.5)/60));
-				daySalary+=Math.floor(overTime*((wage*1.5)/60));
+				daySalary=8*wage+Math.round(plusTime*((wage*1.5)/60));
+				daySalary+=Math.round(overTime*((wage*1.5)/60));
 			}else{
-				daySalary=Math.floor(totalWorkMinute*(wage/60))+Math.floor(overTime*((wage*1.5)/60));
+				daySalary=Math.round(totalWorkMinute*(wage/60))+Math.round(plusTime*((wage*1.5)/60));
+				daySalary+=Math.round(overTime*((wage*1.5)/60));
 			}
 				salaryState+="<td class='salaryTd2'>"+numberWithCommas(daySalary)+" 원</td></tr>";
 				totalWorkTime+=Number(totalWorkMinute);
 				totalPlusTime+=Number(plusTime);
 				totalOverTime+=overTime;
 				totalSalary+=daySalary;
-				totalExcessPay+=Math.floor(plusTime*((wage*1.5)/60));
-				totalOverTimePay+=Math.floor(overTime*((wage*1.5)/60));
+				totalExcessPay+=Math.round(plusTime*((wage*1.5)/60));
+				totalOverTimePay+=Math.round(overTime*((wage*1.5)/60));
 		}
 		
 		salaryState+="<tr class='recruit_tr'><td class='salaryTd' colspan='3'>합계 <span style='color:#808080'>&nbsp; ※주휴수당 미포함</span></td>"
