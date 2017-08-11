@@ -62,25 +62,37 @@ public interface ScheduleDAO {
 			+ "ORDER BY ABS(TIMESTAMPDIFF(SECOND,PREOFFWORK,NOW())) LIMIT 1")
 	public int possibleOffWork(@Param("rid") String rid, @Param("ip") String ip);
 	
+	//
 	@Select("SELECT * FROM SCHEDULE WHERE RID=#{mid} AND SUBSTRING_INDEX(PREONWORK,'-','2')=#{prework} AND ONWORK IS NOT NULL AND OFFWORK IS NOT NULL ORDER BY ONWORK")
 	public List<Schedule> getWorkTime(@Param("mid")String mid,@Param("prework") String prework);
 	
 	// 해당 가게의 모든 근태 기록 불러오기
-	@Select("SELECT DATE(S.PREONWORK) AS DATE,R.RID AS MID,(SELECT NAME FROM MEMBER WHERE MID=R.RID) AS NAME, (SELECT POSITION FROM MEMBER WHERE MID=R.RID) AS POSITION, "
+	@Select("SELECT DATE(S.PREONWORK) AS DATE, R.RID AS MID, (SELECT NAME FROM MEMBER WHERE MID=R.RID) AS NAME, (SELECT POSITION FROM MEMBER WHERE MID=R.RID) AS POSITION, "
 			+ "TIME(S.PREONWORK) AS PREONWORK, TIME(S.PREOFFWORK) AS PREOFFWORK, TIME(S.ONWORK) AS ONWORK, TIME(S.OFFWORK) AS OFFWORK, IF(S.ONWORK - S.PREONWORK > 0,'지각','정상') AS ONWORKSTATE, "
 			+ "IF(S.PREOFFWORK - S.OFFWORK > 0,'조퇴','정상') AS OFFWORKSTATE FROM RECRUIT AS R INNER JOIN SCHEDULE AS S "
-			+ "ON R.RID = S.RID AND R.SID = #{sid} AND ONWORK IS NOT NULL")
+			+ "ON R.RID = S.RID AND R.SID = #{sid} AND DATE(S.PREONWORK) <= CURDATE() ORDER BY DATE(S.PREONWORK) DESC")
 	public List<Attendance> getAttendance(String sid);
+	
+	// 근태 기록 검색 기능
+	@Select("SELECT * FROM (SELECT DATE(S.PREONWORK) AS DATE, R.RID AS MID, (SELECT NAME FROM MEMBER WHERE MID=R.RID) AS NAME, (SELECT POSITION FROM MEMBER WHERE MID=R.RID) AS POSITION, "
+			+ "TIME(S.PREONWORK) AS PREONWORK, TIME(S.PREOFFWORK) AS PREOFFWORK, TIME(S.ONWORK) AS ONWORK, TIME(S.OFFWORK) AS OFFWORK, IF(S.ONWORK - S.PREONWORK > 0,'지각','정상') AS ONWORKSTATE, "
+			+ "IF(S.PREOFFWORK - S.OFFWORK > 0,'조퇴','정상') AS OFFWORKSTATE FROM RECRUIT AS R INNER JOIN SCHEDULE AS S "
+			+ "ON R.RID = S.RID AND R.SID = #{sid} AND DATE(S.PREONWORK) BETWEEN #{startDate} AND #{endDate} AND DATE(S.PREONWORK) <= CURDATE()) ORIGIN "
+			+ "WHERE ${category} LIKE '%${query}%' ORDER BY DATE DESC")
+	public List<Attendance> searchAttendance(@Param("sid")String sid, @Param("startDate")String startDate, @Param("endDate")String endDate, @Param("category")String category, @Param("query")String query);
 	
 	//직원의 결근 횟수 가져오기
 	@Select("SELECT COUNT(*) FROM SCHEDULE WHERE PREONWORK BETWEEN #{monDay} AND #{sunDay} AND RID=#{mid} AND ONWORK IS NULL")
 	public int checkAbsent(@Param("monDay")String monDay,@Param("sunDay")String sunDay,@Param("mid")String mid);
+	
 	//직원의 주 근태정보 가져오기
 	@Select("SELECT * FROM SCHEDULE WHERE ONWORK BETWEEN #{monDay} AND #{sunDay} AND RID=#{mid} AND ONWORK IS NOT NULL AND OFFWORK IS NOT NULL ORDER BY ONWORK")
 	public List<Schedule> getWeekSchedule(@Param("monDay")String monDay,@Param("sunDay")String sunDay,@Param("mid")String mid);
+	
 	//직원의 주 총 근무시간 가져오기
 	@Select("SELECT IFNULL(SUM(TIMESTAMPDIFF(MINUTE,ONWORK,OFFWORK)),0) FROM  SCHEDULE WHERE ONWORK BETWEEN #{monDay} AND #{sunDay} AND RID=#{mid} AND ONWORK IS NOT NULL AND OFFWORK IS NOT NULL")
 	public Integer getWeekWorkTime(@Param("monDay")String monDay,@Param("sunDay")String sunDay,@Param("mid")String mid);
+	
 	//일별 총 근무시간 구하기
 	@Select("SELECT IFNULL(TIMESTAMPDIFF(MINUTE,ONWORK,OFFWORK),0) FROM  SCHEDULE WHERE SUBSTRING_INDEX(ONWORK,'-','2')=#{prework} AND RID=#{mid} AND ONWORK IS NOT NULL AND OFFWORK IS NOT NULL ORDER BY ONWORK")
 	public int[] getWorkDayTime(@Param("prework")String prework, @Param("mid")String mid);

@@ -544,28 +544,53 @@ public class StoreController {
 
 		return result;
 	}
-
-	// 직원 정보 검색
+	
+	// 조건에 맞는 근태 관리 검색
 	@RequestMapping(value={"searchAttendance.do"},method=RequestMethod.POST)
 	@ResponseBody
 	public String searchAttendance(String store, String startDate, String endDate, String category, String query) {
-		System.out.println("\nStoreController의 searchRecruit.do(AJAX)");
-
+		System.out.println("\nStoreController의 searchAttendance.do(AJAX)");
+		
 		System.out.println("sid : " + store);
 		System.out.println("category : " + category);
 		System.out.println("query : " + query);
 		System.out.println("startDate : " + startDate);
 		System.out.println("endDate : " + endDate);
-
-		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
-		List<Employee> employeeList = memberDAO.searchEmployee(store, category, query, startDate, endDate);
+		
+		ScheduleDAO scheduleDAO = sqlSession.getMapper(ScheduleDAO.class);
+		List<Attendance> attendanceList = scheduleDAO.searchAttendance(store, startDate, endDate, category, query);
 
 		Gson gson = new GsonBuilder().serializeNulls().create();
-		String result = gson.toJson(employeeList);
+		String result = gson.toJson(attendanceList);
 		System.out.println(result);
 
 		return result;
 	}
+	
+	// 근태 관리 수정
+	@RequestMapping(value={"modifyAttendance.do"},method=RequestMethod.POST)
+	@ResponseBody
+	public String modifyAttendance(String date, String mid, String name, String position, String preOnWork, String preOffWork, String onWork, String offWork) {
+		System.out.println("\nStoreController의 modifyAttendance.do(AJAX)");
+		
+		System.out.println("date : " + date);
+		System.out.println("mid : " + mid);
+		System.out.println("name : " + name);
+		System.out.println("position : " + position);
+		System.out.println("preOnWork : " + preOnWork);
+		System.out.println("preOffWork : " + preOffWork);
+		System.out.println("onWork : " + onWork);
+		System.out.println("offWork : " + offWork);
+		
+		ScheduleDAO scheduleDAO = sqlSession.getMapper(ScheduleDAO.class);
+		
+		//
+		// 함수 구현
+		//
+		
+		return "";
+	}
+	
 
 	@RequestMapping(value={"checkSalary.do"}, method=RequestMethod.GET)
 	public String checkSalary(HttpServletRequest request,Model model,String selectMonth,String selectYear,String mid){
