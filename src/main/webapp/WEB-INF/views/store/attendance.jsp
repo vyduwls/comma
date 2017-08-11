@@ -52,6 +52,9 @@
 						
 						$.each(item, function(key,value) {
 							switch(key) {
+								case "sseq" :
+									tr.attr("id",value);
+									break;
 								case "date" :
 									date = value;
 									var input = $("<input type='hidden' name='date'>").val(value);
@@ -138,63 +141,66 @@
 					$.each(item, function(key,value) {
 						if(key!="rid" && key!="sid") {
 							switch(key) {
-							case "date" :
-								date = value;
-								var input = $("<input type='hidden' name='date'>").val(value);
-								var td = $("<td class='divide' style='width: 100px'></td>").text(value);
-								tr.append(td.append(input));
-								break;
-							case "mid" :
-								var input = $("<input type='hidden' name='mid'>").val(value);
-								var td = $("<td style='width: 60px'></td>").text(value);
-								tr.append(td.append(input));
-								break;
-							case "name" :
-								var input = $("<input type='hidden' name='name'>").val(value);
-								var td = $("<td style='width: 70px'></td>").text(value);
-								tr.append(td.append(input));
-								break;
-							case "position" :
-								var input = $("<input type='hidden' name='position'>").val(value);
-								var td = $("<td class='divide' style='width: 80px'></td>").text(value);
-								tr.append(td.append(input));
-								break;
-							case "preOnWork" :
-								var temp = date + ' ' + value;
-								preOnWork = new Date(temp);
-								var input = $("<input style='width: 60px' type='text' name='preOnWork'>").val(value);
-								var td = $("<td class='data'></td>");
-								tr.append(td.append(input));
-								break;
-							case "preOffWork" :
-								var temp = date + ' ' + value;
-								preOffWork = new Date(temp);
-								var input = $("<input style='width: 60px' type='text' name='preOffWork'>").val(value);
-								var td = $("<td class='data divide'></td>");
-								tr.append(td.append(input));
-								break;
-							case "onWork" :
-								var temp = date + ' ' + value;
-								onWork = new Date(temp);
-								var input = $("<input style='width: 60px' type='text' name='onWork'>").val(value);
-								var td = $("<td class='data'></td>");
-								tr.append(td.append(input));
-								
-								if(onWork.getTime() - preOnWork.getTime() > 0) {
-									td.append("(지각)");
-								}
-								break;
-							case "offWork" :
-								var temp = date + ' ' + value;
-								offWork = new Date(temp);
-								var input = $("<input style='width: 60px' type='text' name='offWork'>").val(value);
-								var td = $("<td class='data divide'></td>");
-								tr.append(td.append(input));
-								
-								if(preOffWork.getTime() - offWork.getTime() > 0) {
-									td.append("(조퇴)");
-								}
-								break;
+								case "sseq" :
+									tr.attr("id",value);
+									break;
+								case "date" :
+									date = value;
+									var input = $("<input type='hidden' name='date'>").val(value);
+									var td = $("<td class='divide' style='width: 100px'></td>").text(value);
+									tr.append(td.append(input));
+									break;
+								case "mid" :
+									var input = $("<input type='hidden' name='mid'>").val(value);
+									var td = $("<td style='width: 60px'></td>").text(value);
+									tr.append(td.append(input));
+									break;
+								case "name" :
+									var input = $("<input type='hidden' name='name'>").val(value);
+									var td = $("<td style='width: 70px'></td>").text(value);
+									tr.append(td.append(input));
+									break;
+								case "position" :
+									var input = $("<input type='hidden' name='position'>").val(value);
+									var td = $("<td class='divide' style='width: 80px'></td>").text(value);
+									tr.append(td.append(input));
+									break;
+								case "preOnWork" :
+									var temp = date + ' ' + value;
+									preOnWork = new Date(temp);
+									var input = $("<input style='width: 60px' type='text' name='preOnWork'>").val(value);
+									var td = $("<td class='data'></td>");
+									tr.append(td.append(input));
+									break;
+								case "preOffWork" :
+									var temp = date + ' ' + value;
+									preOffWork = new Date(temp);
+									var input = $("<input style='width: 60px' type='text' name='preOffWork'>").val(value);
+									var td = $("<td class='data divide'></td>");
+									tr.append(td.append(input));
+									break;
+								case "onWork" :
+									var temp = date + ' ' + value;
+									onWork = new Date(temp);
+									var input = $("<input style='width: 60px' type='text' name='onWork'>").val(value);
+									var td = $("<td class='data'></td>");
+									tr.append(td.append(input));
+									
+									if(onWork.getTime() - preOnWork.getTime() > 0) {
+										td.append("(지각)");
+									}
+									break;
+								case "offWork" :
+									var temp = date + ' ' + value;
+									offWork = new Date(temp);
+									var input = $("<input style='width: 60px' type='text' name='offWork'>").val(value);
+									var td = $("<td class='data divide'></td>");
+									tr.append(td.append(input));
+									
+									if(preOffWork.getTime() - offWork.getTime() > 0) {
+										td.append("(조퇴)");
+									}
+									break;
 							}
 						}
 					});
@@ -216,7 +222,8 @@
 				url : 'modifyAttendance.do',
 				type : 'post',
 				datatype : 'text',
-				data : {'date' : td.eq(0).children("input").val(),
+				data : {'sseq' : td.parent().attr("id"),
+						'date' : td.eq(0).children("input").val(),
 						'mid' : td.eq(1).children("input").val(),
 						'name' : td.eq(2).children("input").val(),
 						'position' : td.eq(3).children("input").val(),
@@ -309,7 +316,7 @@
 				</thead>
 				<tbody>
 					<c:forEach var="attendanceList" items="${attendanceList}">
-						<tr class="attendance_tr">
+						<tr class="attendance_tr" id="${attendanceList.sseq}">
 							<td class="divide" style="width: 100px">${attendanceList.date}<input type="hidden" name="date" value="${attendanceList.date}"></td>
 							<td style="width: 60px">${attendanceList.mid}<input type="hidden" name="date" value="${attendanceList.mid}"></td>
 							<td style="width: 70px">${attendanceList.name}<input type="hidden" name="date" value="${attendanceList.name}"></td>

@@ -1,6 +1,7 @@
 package com.comma.albaman.vo;
 
 public class Attendance {
+	String sseq;
 	String date;
 	String mid;
 	String name;
@@ -12,6 +13,12 @@ public class Attendance {
 	String onWorkState;
 	String offWorkState;
 	
+	public String getSseq() {
+		return sseq;
+	}
+	public void setSseq(String sseq) {
+		this.sseq = sseq;
+	}
 	public String getDate() {
 		return date;
 	}

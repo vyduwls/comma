@@ -568,9 +568,10 @@ public class StoreController {
 	// 근태 관리 수정
 	@RequestMapping(value={"modifyAttendance.do"},method=RequestMethod.POST)
 	@ResponseBody
-	public String modifyAttendance(String date, String mid, String name, String position, String preOnWork, String preOffWork, String onWork, String offWork) {
+	public String modifyAttendance(String sseq, String date, String mid, String name, String position, String preOnWork, String preOffWork, String onWork, String offWork) {
 		System.out.println("\nStoreController의 modifyAttendance.do(AJAX)");
 		
+		System.out.println("sseq : " + sseq);
 		System.out.println("date : " + date);
 		System.out.println("mid : " + mid);
 		System.out.println("name : " + name);
@@ -580,13 +581,15 @@ public class StoreController {
 		System.out.println("onWork : " + onWork);
 		System.out.println("offWork : " + offWork);
 		
+		preOnWork = date + " " + preOnWork;
+		preOffWork = date + " " + preOffWork;
+		onWork = date + " " + onWork;
+		offWork = date + " " + offWork;
+		
 		ScheduleDAO scheduleDAO = sqlSession.getMapper(ScheduleDAO.class);
+		int result = scheduleDAO.modifyAttendance(sseq, preOnWork, preOffWork, onWork, offWork);
 		
-		//
-		// 함수 구현
-		//
-		
-		return "";
+		return Integer.toString(result);
 	}
 	
 	@RequestMapping(value={"checkSalary.do"}, method=RequestMethod.GET)
