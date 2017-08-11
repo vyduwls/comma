@@ -165,16 +165,90 @@
 			
      	}); 
     	/*일을 클릭 시, 모달에 보여줄 내용!*/
-    	$(".scheduleTable_date_th").click(function(){
+//      	$(".scheduleTable_date_th").click(function(){
+//     		var selectDay=$(this).attr("id").split("th")[1];
+
+// 			$(".modal-title1").text(year+"년"+month+"월"+selectDay+"일 근무시간표");
+    		
+//     		/*일별 스케줄 배열에 넣기*/
+//     		var dayScheduleArray=new Array();
+//     		for (var i = 0; i < scheduleArray.length; i++) {
+// 				if((Number(scheduleArray[i].split("_")[1].split("-")[2].split(" ")[0])==selectDay) &&(Number(endScheduleArray[i].split("_")[1].split("-")[2].split(" ")[0])==selectDay)){ 
+// 					var schedule=scheduleArray[i].split("_")[0]+"_"+scheduleArray[i].split(" ")[1]+"_"+endScheduleArray[i].split(" ")[1]+"_1";
+// 					dayScheduleArray.push(schedule);
+// 					alert(schedule);
+// 				}else if((Number(scheduleArray[i].split("_")[1].split("-")[2].split(" ")[0])!=selectDay) &&(Number(endScheduleArray[i].split("_")[1].split("-")[2].split(" ")[0])==selectDay)){
+// 					var schedule=scheduleArray[i].split("_")[0]+"_00:00_"+endScheduleArray[i].split(" ")[1]+"_2";
+// 					dayScheduleArray.push(schedule);
+// 				}else if((Number(scheduleArray[i].split("_")[1].split("-")[2].split(" ")[0])==selectDay) &&(Number(endScheduleArray[i].split("_")[1].split("-")[2].split(" ")[0])!=selectDay)){
+// 					var schedule=scheduleArray[i].split("_")[0]+"_"+scheduleArray[i].split(" ")[1]+"_23:00_3";
+// 					dayScheduleArray.push(schedule);
+// 				}
+// 			}
+
+    		
+//     	    var totalMinute=0;
+//     		var stringHtml="";
+//     		var timeTotalWorker=new Array();
+//     		for (var i = 0; i < 24; i++) {
+//     			timeTotalWorker[i]=0;
+// 			}
+//     		var memberNames="${memberName}";
+//     		var memberName=memberNames.split(",");
+//     		for (var i = 0; i < dayScheduleArray.length; i++) {
+//     			var sumMinute=calcuTime(dayScheduleArray[i].split("_")[2])-calcuTime(dayScheduleArray[i].split("_")[1]);
+//     			totalMinute+=sumMinute;
+//     			for (var j = 0; j < memberName.length; j++) {
+// 					if(memberName[j].split("_")[0]==dayScheduleArray[i].split("_")[0]){
+// 		    			stringHtml+="<tr class='timeTable_tr'><td class='timeTable_td'>"+memberName[j].split("_")[1]+"</td>"
+// 		    			+"<td class='timeTable_time_td'>"+Math.floor(sumMinute/60)+":"+(sumMinute%60)+"</td>";
+						
+// 					}
+// 				}
+//     			for (var j = 0; j < 24; j++) {
+// 					if(j>=Number(dayScheduleArray[i].split("_")[1].split(":")[0]) && j<=Number(dayScheduleArray[i].split("_")[2].split(":")[0])){
+// 						timeTotalWorker[j]+=1;
+// 						if(j==Number(dayScheduleArray[i].split("_")[1].split(":")[0])){
+// 							stringHtml+="<td class='timeTable_date_td' style='background-color:"+ridColorList[i][1]+";'>"+dayScheduleArray[i].split("_")[1].split(":")[1]+" 분</td>";			
+// 						}else if(j==Number(dayScheduleArray[i].split("_")[2].split(":")[0])){
+// 							stringHtml+="<td class='timeTable_date_td' style='background-color:"+ridColorList[i][1]+";'>"+dayScheduleArray[i].split("_")[2].split(":")[1]+" 분</td>";	
+// 						}else{
+// 							stringHtml+="<td class='timeTable_date_td' style='background-color:"+ridColorList[i][1]+";'></td>";	
+// 						}
+// 					}else{
+// 						stringHtml+="<td class='timeTable_date_td'></td>";
+// 					}
+// 				}
+//     			stringHtml+="</tr>";
+// 			}
+    		
+//     		stringHtml+="<tr class='timeTable_tr'><td class='timeTable_td' >합계</td><td class='timeTable_totalTime_td'>"+Math.floor(totalMinute/60)+":"+(totalMinute%60)+"</td>";
+//     		for (var i = 0; i < timeTotalWorker.length; i++) {
+//     			stringHtml+="<td class='timeTable_totalDate_td'>"+timeTotalWorker[i]+" 명</td>";
+// 			}
+//     		stringHtml+="</tr>";
+//     		$("#modal_html").html(stringHtml);
+			
+    		
+//     	}) ; 
+    	
+    	
+    		$(".scheduleTable_date_th").click(function(){
     		var selectDay=$(this).attr("id").split("th")[1];
 
 			$(".modal-title1").text(year+"년"+month+"월"+selectDay+"일 근무시간표");
     		
-    		/*일별 스케줄 배열에 넣기*/
+    		/*시간별 스케줄 일배열에 넣기*/
     		var dayScheduleArray=new Array();
     		for (var i = 0; i < scheduleArray.length; i++) {
-				if(Number(scheduleArray[i].split("_")[1].split("-")[2].split(" ")[0])==selectDay){
+				if((Number(scheduleArray[i].split("_")[1].split("-")[2].split(" ")[0])==selectDay) &&(Number(endScheduleArray[i].split("_")[1].split("-")[2].split(" ")[0])==selectDay)){ 
 					var schedule=scheduleArray[i].split("_")[0]+"_"+scheduleArray[i].split(" ")[1]+"_"+endScheduleArray[i].split(" ")[1];
+					dayScheduleArray.push(schedule);
+				}else if((Number(scheduleArray[i].split("_")[1].split("-")[2].split(" ")[0])!=selectDay) &&(Number(endScheduleArray[i].split("_")[1].split("-")[2].split(" ")[0])==selectDay)){
+					var schedule=scheduleArray[i].split("_")[0]+"_00:00_"+endScheduleArray[i].split(" ")[1];
+					dayScheduleArray.push(schedule);
+				}else if((Number(scheduleArray[i].split("_")[1].split("-")[2].split(" ")[0])==selectDay) &&(Number(endScheduleArray[i].split("_")[1].split("-")[2].split(" ")[0])!=selectDay)){
+					var schedule=scheduleArray[i].split("_")[0]+"_"+scheduleArray[i].split(" ")[1]+"_24:00";
 					dayScheduleArray.push(schedule);
 				}
 			}
@@ -186,32 +260,74 @@
     		for (var i = 0; i < 24; i++) {
     			timeTotalWorker[i]=0;
 			}
-    		var memberNames="${memberName}";
-    		var memberName=memberNames.split(",");
+    		
     		for (var i = 0; i < dayScheduleArray.length; i++) {
-    			var sumMinute=calcuTime(dayScheduleArray[i].split("_")[2])-calcuTime(dayScheduleArray[i].split("_")[1]);
+    			var sumMinute=0;
+    			for (var j = 0; j < dayScheduleArray.length; j++) {
+    				if(dayScheduleArray[j].split("_")[0]==dayScheduleArray[i].split("_")[0]){
+	    				sumMinute+=calcuTime(dayScheduleArray[j].split("_")[2])-calcuTime(dayScheduleArray[j].split("_")[1]);
+
+	    			}
+    				if(dayScheduleArray[j].split("_")[0]==dayScheduleArray[i].split("_")[0] && dayScheduleArray[j].split("_")[1]!=dayScheduleArray[i].split("_")[1]){
+    					dayScheduleArray[i]=dayScheduleArray[i]+"_"+dayScheduleArray[j].split("_")[1]+"_"+dayScheduleArray[j].split("_")[2];
+    					dayScheduleArray.splice($.inArray(dayScheduleArray[j], dayScheduleArray),1);
+    				}
+					
+				}
     			totalMinute+=sumMinute;
-    			for (var j = 0; j < memberName.length; j++) {
-					if(memberName[j].split("_")[0]==dayScheduleArray[i].split("_")[0]){
-		    			stringHtml+="<tr class='timeTable_tr'><td class='timeTable_td'>"+memberName[j].split("_")[1]+"</td>"
-		    			+"<td class='timeTable_time_td'>"+Math.floor(sumMinute/60)+":"+(sumMinute%60)+"</td>";
-						
-					}
-				}
-    			for (var j = 0; j < 24; j++) {
-					if(j>=Number(dayScheduleArray[i].split("_")[1].split(":")[0]) && j<=Number(dayScheduleArray[i].split("_")[2].split(":")[0])){
-						timeTotalWorker[j]+=1;
-						if(j==Number(dayScheduleArray[i].split("_")[1].split(":")[0])){
-							stringHtml+="<td class='timeTable_date_td' style='background-color:"+ridColorList[i][1]+";'>"+dayScheduleArray[i].split("_")[1].split(":")[1]+" 분</td>";			
-						}else if(j==Number(dayScheduleArray[i].split("_")[2].split(":")[0])){
-							stringHtml+="<td class='timeTable_date_td' style='background-color:"+ridColorList[i][1]+";'>"+dayScheduleArray[i].split("_")[2].split(":")[1]+" 분</td>";	
+        		var memberNames="${memberName}";
+        		var memberName=memberNames.split(",");
+        		for (var j = 0; j < memberName.length; j++) {
+    				if(memberName[j].split("_")[0]==dayScheduleArray[i].split("_")[0]){
+    		    		stringHtml+="<tr class='timeTable_tr'><td class='timeTable_td'>"+memberName[j].split("_")[1]+"</td>"
+    		    		+"<td class='timeTable_time_td'>"+Math.floor(sumMinute/60)+":"+(sumMinute%60)+"</td>";
+    						
+    				}
+    			}
+    			 for (var j = 0; j < 24; j++) {
+    				if(dayScheduleArray[i].split("_")[3]==null ||dayScheduleArray[i].split("_")[3]==""){
+						if(j>=Number(dayScheduleArray[i].split("_")[1].split(":")[0]) && j<=Number(dayScheduleArray[i].split("_")[2].split(":")[0])){
+							timeTotalWorker[j]+=1;
+							if(j==Number(dayScheduleArray[i].split("_")[1].split(":")[0]) ){
+								stringHtml+="<td class='timeTable_date_td' style='background-color:"+ridColorList[i][1]+";'>"+dayScheduleArray[i].split("_")[1].split(":")[1]+" 분</td>";			
+							}else if(dayScheduleArray[i].split("_")[1]==dayScheduleArray[i].split("_")[2] && j==0){
+								timeTotalWorker[j]-=1;
+								alert("11111");
+								stringHtml+="<td class='timeTable_date_td'></td>";	
+							}else if(j==Number(dayScheduleArray[i].split("_")[2].split(":")[0])){
+								stringHtml+="<td class='timeTable_date_td' style='background-color:"+ridColorList[i][1]+";'>"+dayScheduleArray[i].split("_")[2].split(":")[1]+" 분</td>";	
+							}else{
+								stringHtml+="<td class='timeTable_date_td' style='background-color:"+ridColorList[i][1]+";'></td>";	
+							}
 						}else{
-							stringHtml+="<td class='timeTable_date_td' style='background-color:"+ridColorList[i][1]+";'></td>";	
+							stringHtml+="<td class='timeTable_date_td'></td>";
 						}
-					}else{
-						stringHtml+="<td class='timeTable_date_td'></td>";
-					}
-				}
+    				}else{
+    					if((j>=Number(dayScheduleArray[i].split("_")[1].split(":")[0]) && j<=Number(dayScheduleArray[i].split("_")[2].split(":")[0])) ||
+    					   (j>=Number(dayScheduleArray[i].split("_")[3].split(":")[0]) && j<=Number(dayScheduleArray[i].split("_")[4].split(":")[0]))){
+    						timeTotalWorker[j]+=1;
+							if(j==Number(dayScheduleArray[i].split("_")[1].split(":")[0])){
+								stringHtml+="<td class='timeTable_date_td' style='background-color:"+ridColorList[i][1]+";'>"+dayScheduleArray[i].split("_")[1].split(":")[1]+" 분</td>";			
+							}else if(((dayScheduleArray[i].split("_")[1]==dayScheduleArray[i].split("_")[2]) ||
+									(dayScheduleArray[i].split("_")[3]==dayScheduleArray[i].split("_")[4])) && j==0){
+								timeTotalWorker[j]-=1;
+								alert("11111");
+								stringHtml+="<td class='timeTable_date_td'></td>";	
+							}else if(j==Number(dayScheduleArray[i].split("_")[2].split(":")[0])){
+								stringHtml+="<td class='timeTable_date_td' style='background-color:"+ridColorList[i][1]+";'>"+dayScheduleArray[i].split("_")[2].split(":")[1]+" 분</td>";	
+							}else if(j==Number(dayScheduleArray[i].split("_")[3].split(":")[0])){
+								stringHtml+="<td class='timeTable_date_td' style='background-color:"+ridColorList[i][1]+";'>"+dayScheduleArray[i].split("_")[3].split(":")[1]+" 분</td>";	
+							}else if(j==Number(dayScheduleArray[i].split("_")[4].split(":")[0])){
+								stringHtml+="<td class='timeTable_date_td' style='background-color:"+ridColorList[i][1]+";'>"+dayScheduleArray[i].split("_")[4].split(":")[1]+" 분</td>";	
+							}else{
+								stringHtml+="<td class='timeTable_date_td' style='background-color:"+ridColorList[i][1]+";'></td>";	
+							}
+    					}else{
+    						stringHtml+="<td class='timeTable_date_td'></td>";
+    					}
+    				}
+				} 
+
     			stringHtml+="</tr>";
 			}
     		
@@ -224,6 +340,8 @@
 			
     		
     	}) ;
+    	
+    	
     	$(".saveTimebtn").click(function(){
     		var checkTime=checkSelectTime();
     		if(checkTime==0){
@@ -386,40 +504,27 @@
 	    	 			for (var j = 0; j < ridColorList.length; j++) {
 	    					if(employRid==ridColorList[j][0]){
 	    						$("#"+employRid).siblings("#"+selectDay).css("background-color",ridColorList[j][1]);
-	    						$("#"+employRid).siblings("#"+endDay).css("background-color",ridColorList[j][1]);
 	    					}
 	    				}
 	    	 			$("#"+employRid).siblings("#"+selectDay).children("input[name=color]").val("1");
-	    	 			$("#"+employRid).siblings("#"+endDay).children("input[name=color]").val("1");
 
 	               		totalScheduleCalcu(data,selectDay,endDay,employRid,startTime,endTime);
 		          		}else{
-
-		          			var checkArray=0;
-		          			for (var i = 0; i < endScheduleArray.length; i++) {
-								if(scheduleArray[i].split("_")[1].split("-")[2].split(" ")[0]==endDay && scheduleArray[i].split("_")[0]==employRid){
-									checkArray=1;
-								}
-									
-							}
 		          			
 		          			/*배열에 스케줄 저장한 것 삭제*/
 		          			scheduleArray.splice($.inArray(startSchedule, scheduleArray),1);
 		          			endScheduleArray.splice($.inArray(endSchedule, endScheduleArray),1);
 		          	
-		          			if(checkArray==0){
-			          			$("#"+employRid).siblings("#"+endDay).css("background-color","");    
-			          			$("#"+employRid).siblings("#"+endDay).children("input[name=color]").val("0");
-		          			}
-		          			$("#"+employRid).siblings("#"+selectDay).text("");
-		          			$("#"+employRid).siblings("#"+endDay).text("");
+			          		$("#"+employRid).siblings("#"+selectDay).css("background-color","");    
+			          		$("#"+employRid).siblings("#"+selectDay).children("input[name=color]").val("0");
+		          			
+
 		               		totalScheduleCalcu(data,selectDay,endDay,employRid,startTime,endTime);
 		          		}
 
           		}else{
           			alert("지난 날짜는 변경이 불가합니다.");
           		}
-      		hardWork();
     	}
     	
     	/*시간 분으로 변환*/
@@ -441,10 +546,7 @@
       		var totalWork=Number($("#totalWork").text());
       		var totalTime=$("#totalTime").text();
       		var totalDate=Number($("span[id="+selectDay+"]").text());
-      		var totalAfterDate=-1;
-      		if(selectDay!=endDay){
-      			totalAfterDate=Number($("span[id="+endDay+"]").text());
-      		} 
+
       		totalTime=calcuTime(totalTime);
 
 
@@ -463,17 +565,11 @@
 	       			$("#totalTime").text(Math.floor((totalTime+workTime)/60)+":"+(totalTime+workTime)%60);
 	       			$("span[id="+selectDay+"]").text(totalDate+1);
 					$("#"+mid+"SumWork").text(sumWork+1);
-					if(totalAfterDate!=-1){
-						$("span[id="+endDay+"]").text(totalAfterDate+1);
-					}
 					$("#"+mid+"SumTime").text(Math.floor((sumTime+workTime)/60)+":"+(sumTime+workTime)%60);
 	      		}else if(data=="1"){
 	      			$("#totalWork").text(totalWork-1);
 	      			$("#totalTime").text(Math.floor((totalTime-workTime)/60)+":"+(totalTime-workTime)%60);
 	      			$("span[id="+selectDay+"]").text(totalDate-1);
-					if(totalAfterDate!=-1){
-						$("span[id="+endDay+"]").text(totalAfterDate-1);
-					}
 					$("#"+mid+"SumWork").text(sumWork-1);
 					$("#"+mid+"SumTime").text(Math.floor((sumTime-workTime)/60)+":"+(sumTime-workTime)%60);
 	      		}
@@ -496,31 +592,14 @@
 	 			for (var j = 0; j < ridColorList.length; j++) {
 					if(mid==ridColorList[j][0]){
 					   	$("#"+mid).siblings("#"+scheduledate).css("background-color",ridColorList[j][1]);
-					   	$("#"+mid).siblings("#"+endDay).css("background-color",ridColorList[j][1]);
 					}
 				}
 				$("#"+mid).siblings("#"+scheduledate).children("input[name=color]").val("1");
-				$("#"+mid).siblings("#"+endDay).children("input[name=color]").val("1");
 
  				totalScheduleCalcu("0",scheduledate,endDay,mid,startTime,endTime);
 			}
-			hardWork();
     	}
     	
-    	function hardWork(){
- 			for (var i = 0; i < scheduleArray.length; i++) {
-				var mid=scheduleArray[i].split("_")[0];
-	 			var scheduledate=Number(scheduleArray[i].split("_")[1].split("-")[2].split(" ")[0]);	
-	 			var endDay=Number(endScheduleArray[i].split("_")[1].split("-")[2].split(" ")[0]);	
-
-	 			for (var j = 0; j < scheduleArray.length; j++) {
-					if(endDay==Number(scheduleArray[j].split("_")[1].split("-")[2].split(" ")[0]) && mid==scheduleArray[j].split("_")[0] && scheduledate!=endDay){
-						$("#"+mid).siblings("#"+endDay).text("2");
-					}
-				}
-	 			
- 			}
-    	}
 </script>
 
 <div id="body_menu" >
