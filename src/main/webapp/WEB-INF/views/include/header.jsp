@@ -72,12 +72,20 @@
 						<li><a href="store/calendar.do">스케줄 조회</a></li>
 					</ul>
 				</li>
-				<li class="col-lg-2"><a href="store/checkSalary.do">급여 관리</a>
-					<ul class="col-lg-12">
-						<li><a href="store/checkSalary.do">급여 조회</a></li>
-					</ul>
-				</li>
-				
+				<c:if test="${checkPosition==1}">
+					<li class="col-lg-2"><a href="store/salaryManage.do">급여 관리</a>
+						<ul class="col-lg-12">
+							<li><a href="store/salaryManage.do">급여 조회</a></li>
+						</ul>
+					</li>
+				</c:if>
+				<c:if test="${checkPosition==2}">
+					<li class="col-lg-2"><a href="store/checkSalary.do">급여 관리</a>
+						<ul class="col-lg-12">
+							<li><a href="store/checkSalary.do">급여 조회</a></li>
+						</ul>
+					</li>
+				</c:if>
 				<li class="col-lg-2"><a href="store/attendance.do">근태 관리</a></li>
 				
 				<li class="col-lg-2"><a href="">공지사항 관리</a>
