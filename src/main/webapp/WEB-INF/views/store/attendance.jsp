@@ -251,7 +251,7 @@
 	<div class="container">
 		<h2><b>근태 정보 조회</b></h2>
 		<br><br>
-		<div id="frm_div" style="float: right">
+		<div id="frm_div">
 			<form id="frm" class="form-inline" action="searchAttendance.do" method="post">
 								
 				<!-- 매장 선택 -->
