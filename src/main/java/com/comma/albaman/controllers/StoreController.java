@@ -1,5 +1,10 @@
 package com.comma.albaman.controllers;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,7 +14,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +29,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.comma.albaman.dao.MemberDAO;
+import com.comma.albaman.dao.NoticeDAO;
 import com.comma.albaman.dao.RecruitDAO;
 import com.comma.albaman.dao.ScheduleDAO;
 import com.comma.albaman.dao.StoreDAO;
@@ -31,13 +40,16 @@ import com.comma.albaman.util.CalcuTime;
 import com.comma.albaman.vo.Attendance;
 import com.comma.albaman.vo.Employee;
 import com.comma.albaman.vo.Member;
+import com.comma.albaman.vo.Notice;
 import com.comma.albaman.vo.Recruit;
 import com.comma.albaman.vo.SalaryManage;
 import com.comma.albaman.vo.Schedule;
 import com.comma.albaman.vo.Store;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.ParameterParser;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 @Controller
 @RequestMapping("/store/*")
@@ -570,9 +582,10 @@ public class StoreController {
 	// 근태 관리 수정
 	@RequestMapping(value={"modifyAttendance.do"},method=RequestMethod.POST)
 	@ResponseBody
-	public String modifyAttendance(String date, String mid, String name, String position, String preOnWork, String preOffWork, String onWork, String offWork) {
+	public String modifyAttendance(String sseq, String date, String mid, String name, String position, String preOnWork, String preOffWork, String onWork, String offWork) {
 		System.out.println("\nStoreController의 modifyAttendance.do(AJAX)");
 		
+		System.out.println("sseq : " + sseq);
 		System.out.println("date : " + date);
 		System.out.println("mid : " + mid);
 		System.out.println("name : " + name);
@@ -582,15 +595,326 @@ public class StoreController {
 		System.out.println("onWork : " + onWork);
 		System.out.println("offWork : " + offWork);
 		
+		preOnWork = date + " " + preOnWork;
+		preOffWork = date + " " + preOffWork;
+		onWork = date + " " + onWork;
+		offWork = date + " " + offWork;
+		
 		ScheduleDAO scheduleDAO = sqlSession.getMapper(ScheduleDAO.class);
+		int result = scheduleDAO.modifyAttendance(sseq, preOnWork, preOffWork, onWork, offWork);
 		
-		//
-		// 함수 구현
-		//
-		
-		return "";
+		return Integer.toString(result);
 	}
 	
+	// 공지사항 페이지
+	@RequestMapping(value={"notice.do"}, method=RequestMethod.GET)
+	public String notice(String sid, String category, String query, String pg, HttpServletRequest request, Model model) {
+		System.out.println("\nStoreController의 notice.do(GET)");
+
+		String mid = (String) request.getSession().getAttribute("mid");
+		String checkPosition = (String) request.getSession().getAttribute("checkPosition");
+
+		// 점주인 경우
+		if(checkPosition.equals("1")) {
+			System.out.println("점주로 접근");
+			
+			// 소유한 가게 가져오기
+			StoreDAO storeDAO = sqlSession.getMapper(StoreDAO.class);
+			List<Store> storeList = storeDAO.getAllStore(mid);
+			model.addAttribute("storeList", storeList);
+			
+			if(sid==null || sid.equals("")) {
+				sid = storeList.get(0).getSid();
+			}
+		}
+		
+		// 직원일 경우
+		else if(checkPosition.equals("2")) {
+			System.out.println("직원으로 접근");
+			
+			RecruitDAO recruitDAO = sqlSession.getMapper(RecruitDAO.class);
+			Recruit recruit = recruitDAO.getRecruit(mid);
+			sid = recruit.getSid();
+		}
+		
+		if(category==null || category.equals("")) {
+			category = "title";
+		}
+		if(query==null) {
+			query = "";
+		}
+		int ipg = 0;
+		if(pg!=null && !pg.equals("")) {
+			ipg = Integer.parseInt(pg);
+		} else {
+			ipg = 1;
+		}
+		
+		NoticeDAO noticeDAO = sqlSession.getMapper(NoticeDAO.class);
+		int total = noticeDAO.getMax(category, query, sid);
+		int lastPage = total/10 + (total%10==0? 0 : 1);
+		int startPage = ipg - (ipg-1)%5;
+		int start = (ipg-1)*10;
+		int end = ipg*10;
+		
+		System.out.println("sid : " + sid);
+		System.out.println("category : " + category);
+		System.out.println("query : " + query);
+		System.out.println("ipg : " + ipg);
+		System.out.println("start : " + start);
+		System.out.println("end : " + end);
+		
+		List<Notice> noticeList = noticeDAO.getNotices(sid, category, query, start, end);
+		System.out.println("noticeList 크기 : " + noticeList.size());
+		
+		model.addAttribute("pg", ipg);
+		model.addAttribute("category", category);
+		model.addAttribute("query", query);
+		model.addAttribute("sid", sid);
+		model.addAttribute("lastPage", lastPage);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("noticeList", noticeList);
+		
+		return "store.notice";
+	}
+	
+	// 공지사항 세부 페이지
+	@RequestMapping(value={"noticeDetail.do"}, method=RequestMethod.GET)
+	public String noticeDetail(String nseq, String sid, String category, String query, String pg, Model model, String delete){
+		System.out.println("\nStoreController의 noticeDetail.do(GET)");
+		
+		NoticeDAO noticeDAO = sqlSession.getMapper(NoticeDAO.class);
+		Notice notice = noticeDAO.getNotice(nseq);
+		
+		// 파일명 encoding(한글깨짐 방지)
+		if(notice.getFile()!=null) {
+			String fileName = null;
+			try {
+				fileName =  URLEncoder.encode(notice.getFile(), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				System.out.println("파일명 인코딩 실패");
+				e.printStackTrace();
+			}
+			model.addAttribute("fileName", fileName);
+		}
+		model.addAttribute("notice", notice);
+		model.addAttribute("sid", sid);
+		model.addAttribute("category", category);
+		model.addAttribute("query", query);
+		model.addAttribute("pg", pg);
+		model.addAttribute("delete", delete);
+		
+		System.out.println("nseq : " + nseq);
+		System.out.println("delete : " + delete);
+		
+		return "store.noticeDetail";
+	}
+	
+	// 첨부파일 다운로드
+	@RequestMapping(value={"download.do"}, method={RequestMethod.GET})
+	public String download(String path, String fileName, HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("\nStoreController의 download.do(GET)");
+		
+		// 받아온 fileName을 decoding(한글깨짐 방지)
+		String fileNameDecoded = null;
+		try {
+			fileNameDecoded = URLDecoder.decode(fileName, "UTF-8");
+			System.out.println("decode된 fileName : " + fileNameDecoded);
+		} catch (UnsupportedEncodingException e) {
+			System.out.println("파일명 디코딩 실패");
+			e.printStackTrace();
+		}
+		
+		String fullPath = path + "/" + fileNameDecoded;
+		System.out.println("전체 경로 : " + fullPath);
+		String realPath = request.getServletContext().getRealPath(fullPath);
+		System.out.println("실제 경로 : " + realPath);
+		
+		
+		// 파일 다운로드
+		try {
+			String newFileName = new String(fileNameDecoded.getBytes(), "ISO-8859-1");
+			System.out.println("NewFileName : " + newFileName);
+			response.setHeader("content-Disposition", "attachment;filename="+newFileName);
+			FileInputStream fis = new FileInputStream(realPath);
+			ServletOutputStream sout = response.getOutputStream();
+			byte[] buf = new byte[1024];
+			int readData = 0;
+			while((readData=fis.read(buf))!= -1) {
+				sout.write(buf);
+			}
+			fis.close();
+			sout.close();
+		} catch (IOException e) {
+			System.out.println("파일 다운로드 실패");
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	// 공지사항 등록 페이지
+	@RequestMapping(value={"addNotice.do"}, method=RequestMethod.GET)
+	public String addNotice(String sid, Model model, String add){
+		System.out.println("\nStoreController의 addNotice.do(GET)");
+		
+		StoreDAO storeDAO = sqlSession.getMapper(StoreDAO.class);
+		Store store = storeDAO.getStore(sid);
+		
+		model.addAttribute("store", store);
+		model.addAttribute("add",add);
+		
+		return "store.addNotice";
+	}
+	
+	// 공지사항 이미지 업로드(위지윅)
+	@RequestMapping(value={"noticeImageUpload.do"}, method=RequestMethod.POST)
+	@ResponseBody
+	public String noticeImageUpload(HttpServletRequest request){
+		System.out.println("\nStoreController의 noticeImageUpload.do(AJAX)");
+		
+		// store/upload 위치로 지정하면 summernote가 인식을 못해서 일단 WEB-INF 바깥으로 설정함
+		// (WEB-INF 내부에는 접근을 하지 못하는 듯)
+		String path = "/images";
+		String realPath = request.getServletContext().getRealPath(path);
+		System.out.println("실제 경로 : " + realPath);
+		
+		MultipartRequest multiReq = null;
+		try {
+			multiReq = new MultipartRequest(request, realPath, 1024*1024*10, "UTF-8", new DefaultFileRenamePolicy());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		String image = multiReq.getFilesystemName("uploadFile");
+		System.out.println("image : " + image);
+		
+		// /images + 파일명
+		String fullPath = path + "/" + image;
+		
+		return fullPath;
+	}
+	
+	// 공지사항 등록
+	@RequestMapping(value={"addNotice.do"}, method=RequestMethod.POST)
+	public String addNoticeProc(HttpServletRequest request){
+		System.out.println("\nStoreController의 addNotice.do(POST)");
+		
+		String path = "/WEB-INF/views/store/upload";
+		String realPath = request.getServletContext().getRealPath(path);
+		System.out.println("실제 경로 : " + realPath);
+		
+		MultipartRequest multiReq = null;
+		try {
+			multiReq = new MultipartRequest(request, realPath, 1024*1024*10, "UTF-8", new DefaultFileRenamePolicy());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		String title = multiReq.getParameter("title");
+		String content = multiReq.getParameter("content");
+		String file = multiReq.getFilesystemName("file");
+		String sid = multiReq.getParameter("sid");
+		
+		System.out.println("title : " + title);
+		System.out.println("content : " + content);
+		System.out.println("file : " + file);
+		System.out.println("sid : " + sid);
+		
+		NoticeDAO noticeDAO = sqlSession.getMapper(NoticeDAO.class);
+		int result = noticeDAO.addNotice(title, content, file, sid);
+		if(result==0) {
+			System.out.println("공지사항 등록 실패");
+			return "redirect:addNotice.do?sid=" + sid + "&add=fail";
+		} else {
+			System.out.println("공지사항 등록 성공");
+			return "redirect:notice.do?sid=" + sid;
+		}
+	}
+	
+	// 공지사항 수정 페이지
+	@RequestMapping(value={"modifyNotice.do"}, method=RequestMethod.GET)
+	public String modifyNotice(String nseq, String sid, String category, String query, String pg, Model model, String modify){
+		System.out.println("\nStoreController의 modifyNotice.do(GET)");
+		
+		StoreDAO storeDAO = sqlSession.getMapper(StoreDAO.class);
+		Store store = storeDAO.getStore(sid);
+		
+		model.addAttribute("store", store);
+		
+		NoticeDAO noticeDAO = sqlSession.getMapper(NoticeDAO.class);
+		Notice notice = noticeDAO.getNotice(nseq);
+		
+		model.addAttribute("notice", notice);
+		model.addAttribute("sid", sid);
+		model.addAttribute("category", category);
+		model.addAttribute("query", query);
+		model.addAttribute("pg", pg);
+		model.addAttribute("modify",modify);
+		
+		return "store.modifyNotice";
+	}
+	
+	// 공지사항 수정
+	@RequestMapping(value={"modifyNotice.do"}, method=RequestMethod.POST)
+	public String modifyNoticeProc(HttpServletRequest request){
+		System.out.println("\nStoreController의 modifyNotice.do(POST)");
+		
+		String path = "/WEB-INF/views/store/upload";
+		String realPath = request.getServletContext().getRealPath(path);
+		System.out.println("실제 경로 : " + realPath);
+		
+		MultipartRequest multiReq = null;
+		try {
+			multiReq = new MultipartRequest(request, realPath, 1024*1024*10, "UTF-8", new DefaultFileRenamePolicy());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		String title = multiReq.getParameter("title");
+		String content = multiReq.getParameter("content");
+		String file = multiReq.getFilesystemName("file");
+		String sid = multiReq.getParameter("sid");
+		String category = multiReq.getParameter("category");
+		String query = multiReq.getParameter("query");
+		String pg = multiReq.getParameter("pg");
+		
+		System.out.println("title : " + title);
+		System.out.println("content : " + content);
+		System.out.println("file : " + file);
+		System.out.println("sid : " + sid);
+		System.out.println("category : " + category);
+		System.out.println("query : " + query);
+		System.out.println("pg : " + pg);
+		
+		NoticeDAO noticeDAO = sqlSession.getMapper(NoticeDAO.class);
+		int result = noticeDAO.addNotice(title, content, file, sid);
+		if(result==0) {
+			System.out.println("공지사항 수정 실패");
+			return "redirect:modifyNotice.do?sid=" + sid + "&category=" + category + "&query=" + query + "&pg=" + pg + "&modify=fail";
+		} else {
+			System.out.println("공지사항 수정 성공");
+			return "redirect:notice.do?sid=" + sid + "&category=" + category + "&query=" + query + "&pg=" + pg;
+		}
+	}
+	
+	// 공지사항 삭제
+	@RequestMapping(value={"deleteNotice.do"}, method=RequestMethod.GET)
+	public String deleteNotice(String nseq, String sid, String category, String query, String pg, Model model){
+		System.out.println("\nStoreController의 deleteNotice.do(GET)");
+		
+		System.out.println("nseq : " + nseq);
+		
+		NoticeDAO noticeDAO = sqlSession.getMapper(NoticeDAO.class);
+		int result = noticeDAO.deleteNotice(nseq);
+		if(result == 0) {
+			System.out.println("삭제 실패");
+			return "redirect:noticeDetail.do?nseq=" + nseq + "&sid=" + sid + "&category=" + category + "&query=" + query + "&pg=" + pg + "&delete=fail";
+		} else {
+			System.out.println("삭제 성공");
+			return "redirect:notice.do?sid=" + sid + "&category=" + category + "&query=" + query + "&pg=" + pg;			
+		}
+	}
 
 	@RequestMapping(value={"checkSalary.do"}, method=RequestMethod.GET)
 	public String checkSalary(HttpServletRequest request,Model model,String selectMonth,String selectYear,String mid){

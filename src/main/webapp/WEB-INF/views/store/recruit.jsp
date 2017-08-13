@@ -299,7 +299,7 @@
 	<div id="inner_content" class="container">
 		<h2><b>직원 정보 조회</b></h2>
 		<br><br>
-		<div style="float: right">
+		<div id="frm_div">
 			<form id="frm" class="form-inline" action="searchRecruit.do" method="post">
 								
 				<!-- 매장 선택 -->

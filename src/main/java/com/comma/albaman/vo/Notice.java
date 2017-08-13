@@ -6,7 +6,7 @@ public class Notice {
 		private String title;
 		private String content;
 		private String regDate;
-		private String image;
+		private String file;
 		private String sid;
 		
 		public String getNseq() {
@@ -33,11 +33,11 @@ public class Notice {
 		public void setRegDate(String regDate) {
 			this.regDate = regDate;
 		}
-		public String getImage() {
-			return image;
+		public String getFile() {
+			return file;
 		}
-		public void setImage(String image) {
-			this.image = image;
+		public void setFile(String file) {
+			this.file = file;
 		}
 		public String getSid() {
 			return sid;
