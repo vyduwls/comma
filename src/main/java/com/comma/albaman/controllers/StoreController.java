@@ -29,6 +29,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.comma.albaman.dao.MemberDAO;
 import com.comma.albaman.dao.NoticeDAO;
@@ -766,6 +767,34 @@ public class StoreController {
 		return "store.addNotice";
 	}
 	
+	// 공지사항 이미지 업로드(위지윅)
+	@RequestMapping(value={"noticeImageUpload.do"}, method=RequestMethod.POST)
+	@ResponseBody
+	public String noticeImageUpload(HttpServletRequest request){
+		System.out.println("\nStoreController의 noticeImageUpload.do(AJAX)");
+		
+		// store/upload 위치로 지정하면 summernote가 인식을 못해서 일단 WEB-INF 바깥으로 설정함
+		// (WEB-INF 내부에는 접근을 하지 못하는 듯)
+		String path = "/images";
+		String realPath = request.getServletContext().getRealPath(path);
+		System.out.println("실제 경로 : " + realPath);
+		
+		MultipartRequest multiReq = null;
+		try {
+			multiReq = new MultipartRequest(request, realPath, 1024*1024*10, "UTF-8", new DefaultFileRenamePolicy());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		String image = multiReq.getFilesystemName("uploadFile");
+		System.out.println("image : " + image);
+		
+		// /images + 파일명
+		String fullPath = path + "/" + image;
+		
+		return fullPath;
+	}
+	
 	// 공지사항 등록
 	@RequestMapping(value={"addNotice.do"}, method=RequestMethod.POST)
 	public String addNoticeProc(HttpServletRequest request){
@@ -799,7 +828,7 @@ public class StoreController {
 			return "redirect:addNotice.do?sid=" + sid + "&add=fail";
 		} else {
 			System.out.println("공지사항 등록 성공");
-			return "redirect:notice.do";
+			return "redirect:notice.do?sid=" + sid;
 		}
 	}
 	

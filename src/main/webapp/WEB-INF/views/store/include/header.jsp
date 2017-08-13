@@ -47,7 +47,7 @@
 				</c:if>
 				<li class="col-lg-2"><a href="attendance.do">근태 관리</a></li>
 				
-				<li class="col-lg-2"><a href="notice.do">공지사항 관리</a></li>
+				<li class="col-lg-2"><a href="notice.do">공지사항</a></li>
 			</ul>
 		</div>
 		
