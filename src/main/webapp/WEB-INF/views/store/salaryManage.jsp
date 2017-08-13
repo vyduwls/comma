@@ -28,7 +28,7 @@
 			<form id="frm" class="form-inline" action="salaryManage.do" method="get">				
 				<!-- 매장 선택 -->
 				<div class="col-lg-9">
-					<select class="form-control selectStore" style="margin-top: 20px;">
+					<select name="sid" class="form-control selectStore" style="margin-top: 20px;">
 						<c:forEach items="${storeList}" var="n">
 							<c:if test="${n.sid==storeInfo.sid}">
 								<option value="${n.sid}" selected="selected">${n.name}</option>
@@ -86,13 +86,13 @@
 					<c:forEach items="${salaryManageList}" var="n">
 						<tr class="recruit_tr">		
 							<td class="salaryTd name">
-								<input type="hidden" name="mid" value="${n.mid}"><a href="checkSalary.do?mid=${n.mid}">${n.name}</a>
+								<a href="checkSalary.do?mid=${n.mid}">${n.name}</a>
 							</td>
 							<td class="salaryTd wage">${n.wage}</td>
 							<td class="salaryTd totalWorkTime">${n.totalTime}</td>
 							<td class="salaryTd weeklyPay">${n.weeklyPay} 원</td>
 							<td class="salaryTd totalExcessPay">${n.excessPay} 원</td>
-							<td class="salaryTd totalOverTimePay">${n.excessPay} 원</td>
+							<td class="salaryTd totalOverTimePay">${n.overTimePay} 원</td>
 							<td class="salaryTd1 totalSalary">${n.totalPay} 원</td>
 						</tr>
 					</c:forEach>
@@ -101,7 +101,7 @@
 							<td class="salaryTd totalWorkTime">${sm.totalTime}</td>
 							<td class="salaryTd weeklyPay">${sm.weeklyPay} 원</td>
 							<td class="salaryTd totalExcessPay">${sm.excessPay} 원</td>
-							<td class="salaryTd totalOverTimePay">${sm.excessPay} 원</td>
+							<td class="salaryTd totalOverTimePay">${sm.overTimePay} 원</td>
 							<td class="salaryTd1 totalSalary" style="color: red;">${sm.totalPay} 원</td>
 						</tr>
 				</tbody>

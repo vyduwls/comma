@@ -59,6 +59,10 @@ public class CustomerController {
 				request.getSession().setAttribute("mid", mid);
 				request.getSession().setAttribute("checkPosition", "1");
 				error = "0";
+			}else if(member.getPosition().equals("관리자")){
+				request.getSession().setAttribute("mid", mid);
+				request.getSession().setAttribute("checkPosition", "0");
+				error = "0";
 			}else{
 				request.getSession().setAttribute("mid", mid);
 				request.getSession().setAttribute("checkPosition", "2");

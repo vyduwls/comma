@@ -726,6 +726,7 @@ public class StoreController {
 		StoreDAO storeDAO = sqlSession.getMapper(StoreDAO.class);
 		List<Store> storeList = storeDAO.getAllStore(mid);
 		Store storeInfo=new Store();
+		System.out.println("Sid---"+sid);
 		if(sid==null || sid.equals("")){
 			storeInfo=storeList.get(0);
 		}else{
@@ -834,7 +835,7 @@ public class StoreController {
 			//일별 근무시간 구하기
 			int[] workMinuteTime=scheduleDAO.getWorkDayTime(prework,salaryManage.getMid());
 			List<Schedule> allSchedule=scheduleDAO.getWorkTime(salaryManage.getMid(), prework);
-			
+			System.out.println("getMid----"+salaryManage.getMid());
 
 			int totalWorkTime=0;
 			int totalPlusTime=0;
@@ -959,11 +960,16 @@ public class StoreController {
 			salaryManage.setOverTimePay(totalOverTimePay);
 			salaryManage.setTotalPay(totalSalary);
 			salaryManageList.add(salaryManage);
+
 		}
 		SalaryManage sm=new SalaryManage();
 		for (int i = 0; i < salaryManageList.size(); i++) {
 			if(i==0){
-				sm=salaryManageList.get(i);
+				sm.setExcessPay(salaryManageList.get(i).getExcessPay());
+				sm.setOverTimePay(salaryManageList.get(i).getOverTimePay());
+				sm.setWeeklyPay(salaryManageList.get(i).getWeeklyPay());
+				sm.setTotalTime(salaryManageList.get(i).getTotalTime());
+				sm.setTotalPay(salaryManageList.get(i).getTotalPay());
 			}else{
 				sm.setExcessPay(sm.getExcessPay()+salaryManageList.get(i).getExcessPay());
 				sm.setOverTimePay(sm.getOverTimePay()+salaryManageList.get(i).getOverTimePay());
@@ -971,7 +977,11 @@ public class StoreController {
 				sm.setTotalTime(sm.getTotalTime()+salaryManageList.get(i).getTotalTime());
 				sm.setTotalPay(sm.getTotalPay()+salaryManageList.get(i).getTotalPay());
 			}
+			
+			
 		}
+		
+		
 	model.addAttribute("sm",sm);
 	model.addAttribute("year",selectYear);
 	model.addAttribute("month",selectMonth);
