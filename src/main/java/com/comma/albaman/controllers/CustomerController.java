@@ -229,4 +229,21 @@ public class CustomerController {
 			return "0";
 		}
 	}
+	
+	@RequestMapping(value={"myPage.do"}, method=RequestMethod.GET)
+	public String myPage(HttpServletRequest request,Model model){
+		
+		String mid=(String) request.getSession().getAttribute("mid");
+		
+		//멤버 정보 가져오기
+		MemberDAO memberDao=sqlSession.getMapper(MemberDAO.class);
+		Member member=memberDao.getMember(mid);
+		//가게 정보 가져오기
+		StoreDAO storeDao=sqlSession.getMapper(StoreDAO.class);
+		List<Store> storeList=storeDao.getAllStore(mid);
+		
+		model.addAttribute("member", member);
+		model.addAttribute("storeList", storeList);
+		return "customer.myPage";
+	}
 }

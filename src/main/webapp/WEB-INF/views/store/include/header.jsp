@@ -63,7 +63,7 @@
 									<li><a href="admin/adminPage.do">관리페이지</a></li>
 								</c:when>
 								<c:when test="${checkPosition == '1'}">
-									<li><a href="">마이페이지</a></li>
+									<li><a href="${pageContext.request.contextPath}/customer/myPage.do">마이페이지</a></li>
 								</c:when>
 								<c:when test="${checkPosition == '2' and onWork != 0}">
 									<li><a id="onWork" style="cursor: pointer;">출근하기</a></li>

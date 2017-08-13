@@ -52,7 +52,7 @@
 				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="index.do"><b>ALBAMAN</b></a>
+			<a class="navbar-brand" href="../index.do"><b>ALBAMAN</b></a>
 		</div>
 		
 		<div class="col-lg-1"></div>
@@ -60,35 +60,35 @@
 		<!-- 상단 메뉴 -->
 		<div class="menubar col-lg-9">
 			<ul>
-				<li class="col-lg-2"><a href="store/recruit.do">인사 관리</a>
+				<li class="col-lg-2"><a href="${pageContext.request.contextPath}/store/recruit.do">인사 관리</a>
 					<ul class="col-lg-12">
-						<li><a href="store/addRecruit.do">직원 정보 등록</a></li>
-						<li><a href="store/recruit.do">직원 정보 조회</a></li>
+						<li><a href="${pageContext.request.contextPath}/store/addRecruit.do">직원 정보 등록</a></li>
+						<li><a href="${pageContext.request.contextPath}/store/recruit.do">직원 정보 조회</a></li>
 					</ul>
 				</li>
-				<li class="col-lg-2"><a href="store/calendar.do">스케줄 관리</a>
+				<li class="col-lg-2"><a href="${pageContext.request.contextPath}/store/calendar.do">스케줄 관리</a>
 					<ul class="col-lg-12">
-						<li><a href="store/editSchedule.do">스케줄 등록</a></li>
-						<li><a href="store/calendar.do">스케줄 조회</a></li>
+						<li><a href="${pageContext.request.contextPath}/store/editSchedule.do">스케줄 등록</a></li>
+						<li><a href="${pageContext.request.contextPath}/store/calendar.do">스케줄 조회</a></li>
 					</ul>
 				</li>
 				<c:if test="${checkPosition==1}">
-					<li class="col-lg-2"><a href="store/salaryManage.do">급여 관리</a>
+					<li class="col-lg-2"><a href="${pageContext.request.contextPath}/store/salaryManage.do">급여 관리</a>
 						<ul class="col-lg-12">
-							<li><a href="store/salaryManage.do">급여 조회</a></li>
+							<li><a href="${pageContext.request.contextPath}/store/salaryManage.do">급여 조회</a></li>
 						</ul>
 					</li>
 				</c:if>
 				<c:if test="${checkPosition==2}">
-					<li class="col-lg-2"><a href="store/checkSalary.do">급여 관리</a>
+					<li class="col-lg-2"><a href="${pageContext.request.contextPath}/store/checkSalary.do">급여 관리</a>
 						<ul class="col-lg-12">
-							<li><a href="store/checkSalary.do">급여 조회</a></li>
+							<li><a href="${pageContext.request.contextPath}/store/checkSalary.do">급여 조회</a></li>
 						</ul>
 					</li>
 				</c:if>
-				<li class="col-lg-2"><a href="store/attendance.do">근태 관리</a></li>
+				<li class="col-lg-2"><a href="${pageContext.request.contextPath}/store/attendance.do">근태 관리</a></li>
 				
-				<li class="col-lg-2"><a href="store/notice.do">공지사항</a></li>
+				<li class="col-lg-2"><a href="${pageContext.request.contextPath}/store/notice.do">공지사항</a></li>
 			</ul>
 		</div>
 		
@@ -110,10 +110,10 @@
 							<ul class="col-lg-12">
 								<c:choose>
 									<c:when test="${member.position == '관리자'}">
-										<li><a href="admin/adminPage.do">관리페이지</a></li>
+										<li><a href="${pageContext.request.contextPath}/admin/adminPage.do">관리페이지</a></li>
 									</c:when>
 									<c:when test="${member.position == '점주'}">
-										<li><a href="">마이페이지</a></li>
+										<li><a href="${pageContext.request.contextPath}/customer/myPage.do">마이페이지</a></li>
 									</c:when>
 									<c:when test="${onWork != 0}">
 										<li><a id="onWork" style="cursor: pointer;">출근하기</a></li>
