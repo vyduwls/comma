@@ -21,38 +21,38 @@
 			<ul>
 				<!-- 점주 -->
 				<c:if test="${checkPosition==1}">
-					<li class="col-lg-2"><a href="manageRecruit.do">인사 관리</a>
+					<li class="col-lg-2"><a href="../store/manageRecruit.do">인사 관리</a>
 						<ul class="col-lg-12">
-							<li><a href="addRecruit.do">직원 정보 등록</a></li>
-							<li><a href="manageRecruit.do">직원 정보 조회</a></li>
+							<li><a href="../store/addRecruit.do">직원 정보 등록</a></li>
+							<li><a href="../store/manageRecruit.do">직원 정보 조회</a></li>
 						</ul>
 					</li>
 					
-					<li class="col-lg-2"><a href="calendar.do">스케줄 관리</a>
+					<li class="col-lg-2"><a href="../store/calendar.do">스케줄 관리</a>
 						<ul class="col-lg-12">
-							<li><a href="editSchedule.do">스케줄 등록</a></li>
-							<li><a href="calendar.do">스케줄 조회</a></li>
+							<li><a href="../store/editSchedule.do">스케줄 등록</a></li>
+							<li><a href="../store/calendar.do">스케줄 조회</a></li>
 						</ul>
 					</li>
 					
-					<li class="col-lg-2"><a href="salaryManage.do">급여 관리</a></li>
+					<li class="col-lg-2"><a href="../store/salaryManage.do">급여 관리</a></li>
 					
-					<li class="col-lg-2"><a href="manageAttendance.do">근태 관리</a></li>
+					<li class="col-lg-2"><a href="../store/manageAttendance.do">근태 관리</a></li>
 					
-					<li class="col-lg-2"><a href="notice.do">공지사항</a></li>
+					<li class="col-lg-2"><a href="../store/notice.do">공지사항</a></li>
 				</c:if>
 				
 				<!-- 직원 -->
 				<c:if test="${checkPosition==2}">
-					<li class="col-lg-2"><a href="checkRecruit.do">직원 정보 조회</a></li>
+					<li class="col-lg-2"><a href="../store/checkRecruit.do">직원 정보 조회</a></li>
 				
-					<li class="col-lg-2"><a href="calendar.do">스케줄 조회</a></li>
+					<li class="col-lg-2"><a href="../store/calendar.do">스케줄 조회</a></li>
 				
-					<li class="col-lg-2"><a href="checkSalary.do">급여 조회</a></li>
+					<li class="col-lg-2"><a href="../store/checkSalary.do">급여 조회</a></li>
 				
-					<li class="col-lg-2"><a href="checkAttendance.do">근태 조회</a></li>
+					<li class="col-lg-2"><a href="../store/checkAttendance.do">근태 조회</a></li>
 					
-					<li class="col-lg-2"><a href="notice.do">공지사항</a></li>
+					<li class="col-lg-2"><a href="../store/notice.do">공지사항</a></li>
 				</c:if>
 				
 				<!-- 관리자 -->

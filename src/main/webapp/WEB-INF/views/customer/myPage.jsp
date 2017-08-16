@@ -9,41 +9,63 @@
 	});
 </script>
 
+<div id="body" class="container">
 
-<div id="body_menu" >
-		<p class="pTagMember" style="">회원 정보</p>
-		<p class="pTag">아이디    :<input type="text" name="mid" value="${member.mid}" class="form-control mypageInput" readonly="readonly"></p>
-		<p class="pTag">비밀번호 :<input type="text" name="pwd" value="${member.pwd}" class="form-control mypageInput"></p>
-		<p class="pTag">이름      :<input type="text" name="name" value="${member.name}" class="form-control mypageInput"></p>
-		<p class="pTag">전화번호 :<input type="text" name="phoneNumber" value="${member.phone}" class="form-control mypageInput"></p>
-		<p class="pTag">이메일    :<input type="text" name="email" value="${member.email}" class="form-control mypageInput"></p>
-		<button class="btn btn-primary" style="width: 80%;height: 40px;font-size: 20px;margin-top:20px;">정보 저장</button>
-		<button class="btn btn-default" style="width: 80%;height: 40px;font-size: 20px;margin-top:60px;">문의사항</button>
-</div>
-<div id="body_content" style="overflow-x:auto;">
-		<h2>가게 List</h2>
-		<button class="btn btn-default" style="width: 10%;height: 35px;font-size: 18px;margin:0px 0px 10px 80%;">가게 등록</button>
-			<table id="storeTable" class="table table-bordered">
-				<thead>
-					<tr>
-						<th class="storeTh">가게명</th>
-						<th class="storeTh">이미지</th>
-						<th class="storeTh1">주소</th>
-						<th class="storeTh">전화번호</th>
-						<th class="storeTh">ip</th>
-						<th class="storeTh">등록일</th>
-					</tr>
-				</thead>
-				<tbody>
+	<div id="body-title" class="col-lg-12">
+		<h3 id="body-title">
+			<b>마이 페이지</b>
+		</h3>
+	</div>
+
+
+	<!-- 사이드바 -->
+	<div id="side" class="col-lg-3" style="height: 800px">
+		<div class="profile" style="margin-top:52px;">
+			<!-- 프로필 버튼 -->
+			<div class="button">
+				<a id="myPage" type="button" class="btn btn-default btn-block myPage-active"
+					href="${pageContext.request.contextPath}/customer/modifyMember.do">회원정보수정</a>
+				<a id="message" type="button" class="btn btn-default btn-block"
+					href="${pageContext.request.contextPath}/customer/myPage.do" >가게 정보 등록/변경
+				</a> <a id="modify" type="button" class="btn btn-default btn-block"
+					href="${pageContext.request.contextPath}/customer/qnaList.do">문의사항</a> 
+<%-- 					<c:if test="${m.mid=='admin'}"> --%>
+<%-- 						<a id="manageMember" type="button" class="btn btn-default btn-block" href="${pageContext.request.contextPath}/customer/manageMember.do">회원관리</a> --%>
+<%-- 					</c:if>	 --%>
+			</div>
+		</div>
+	</div>
+	
+	
+<div class="tab-content">
+	<b style="margin-left:34%; font-size: 17px;">가게 List</b>
+	<a href="addStore.do" class="btn btn-default" style="font-size: 13px;margin:0px 0px 10px 66%;">가게 등록</a>
+		<!-- 게시글 리스트 -->
+	<div id="sell" >
+			<div class="col-lg-9" style="height: 600px; overflow: auto">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+						<th class="col-lg-2" style="text-align: center;">가게명</th>
+						<th class="col-lg-3" style="text-align: center;">주소</th>
+						<th class="col-lg-2" style="text-align: center;">전화번호</th>
+						<th class="col-lg-2" style="text-align: center;">ip</th>
+						<th class="col-lg-2" style="text-align: center;">등록일</th>
+						<th class="col-lg-1" style="text-align: center;">수정</th>
+						</tr>
+					</thead>
+					<tbody>
 					<c:if test="${!empty storeList}">
 						<c:forEach items="${storeList}" var="n">
-							<tr class="store_tr">
-								<td class="storeTd storeName"><input type="hidden" name="sid" value="${n.sid}">${n.name}</td>
-								<td class="storeTd">${n.image}</td>
+							<tr class="store_tr" style="cursor: pointer;">
+								<td class="storeTd">${n.name}</td>
 								<td class="storeTd">${n.address}</td>
 								<td class="storeTd">${n.storeNumber}</td>
 								<td class="storeTd">${n.ip}</td>
 								<td class="storeTd">${n.regDate}</td>
+								<td class="storeTd">
+								<a href="modifyStore.do?sid=${n.sid}" class="btn btn-primary" style="font-size: 13px;">수정</a>
+								</td>
 							</tr>
 						</c:forEach>
 					</c:if>
@@ -57,6 +79,9 @@
 								<td class="storeTd">-</td>
 							</tr>
 					</c:if>
-				</tbody>
-			</table>
-</div>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		</div>
+	</div>

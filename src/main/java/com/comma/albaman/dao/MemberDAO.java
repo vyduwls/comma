@@ -2,6 +2,7 @@ package com.comma.albaman.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -41,4 +42,11 @@ public interface MemberDAO {
 	// 회원 정보 수정
 	@Update("UPDATE MEMBER SET PWD=#{pwd}, NAME=#{name}, POSITION=#{position}, PHONE=#{phone} WHERE MID=#{mid}")
 	public int modifyMember(@Param("mid")String mid, @Param("pwd")String pwd, @Param("name")String name, @Param("position")String position, @Param("phone")String phone);
+	
+	@Update("UPDATE MEMBER SET PWD=#{pwd}, NAME=#{name}, EMAIL=#{email}, PHONE=#{phone} WHERE MID=#{mid}")
+	public int modifyStoreOwner(Member member);
+	
+	@Delete("DELETE FROM MEMBER WHERE MID=#{mid}")
+	public int withDraw(String mid);
+
 }

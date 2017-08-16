@@ -16,7 +16,92 @@
 }
 
 /*myPage.jsp*/
-#body_menu {
+#body {
+	margin-top: 50px;
+	padding-bottom: 100px;
+}
+#body-title {
+	margin-bottom: 15px;
+}
+.profile {
+	border-top: 1px solid lightGrey;
+    margin: 0 0 20px 0;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+.profile-info {
+    padding: 4px 8px 10px;
+    border-left: 1px solid lightGrey;
+    border-right: 1px solid lightGrey;
+}
+.profile-info .mid {
+	margin-top: 15px;
+    margin-bottom: 4px;
+    font-size: 24px;
+    line-height: 1;
+    color: #262626;
+    vertical-align: middle;
+}
+.profile-info .content {
+	margin-top: 10px;
+    overflow: hidden;
+    line-height: 20px;
+    color: #737373;
+    text-overflow: ellipsis;
+    margin-bottom: 20px;
+}
+.profile-info .content a {
+	text-decoration: none;
+	cursor: pointer;
+}
+.profile-info .content a:hover {
+	opacity: 0.8;
+}
+.profile-info .content .label {
+    background-color: rgb(81, 210, 183);
+    padding: 5px 5px 5px 5px;
+    border-radius: 27px;
+}
+.profile .button #myPage, #message, #modify, #manageMember{
+	border-radius: 0px;	
+	margin-bottom: -5px;
+	border-bottom: none;
+	padding: 10px 10px;
+}
+.profile .button #manage {
+	padding: 10px 10px;
+	border-radius: 0px;
+}
+.profile .button .myPage-active{
+	border-left: 3px solid rgb(66,133,244);
+}
+.profile .button .label {
+	background-color: rgb(81, 210, 183);
+    padding: 5px 10px 5px 10px;
+    border-radius: 27px;
+}
+#total {
+	text-align: center;
+	border: 1px solid lightGrey;
+	padding: 10px 0px 10px 0px;
+}
+#standard {
+	margin-bottom: 20px;
+	padding-top: 50px;
+}
+#standard li{
+	text-align: center;
+}
+.storeTd{
+	text-align: center;
+}
+.table {
+	margin-left: 10px;
+}
+
+/* #body_menu {
 	width: 24%;
 	height : 700px;
 	border-right: 1px solid #a8b0ad;
@@ -66,7 +151,7 @@
 #storeTable{
 	width: 90%;
 	margin:auto;
-}
+} */
 .storeTd{
 	cursor: pointer;
 }

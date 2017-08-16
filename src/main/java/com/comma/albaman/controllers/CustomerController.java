@@ -232,7 +232,7 @@ public class CustomerController {
 	
 	@RequestMapping(value={"myPage.do"}, method=RequestMethod.GET)
 	public String myPage(HttpServletRequest request,Model model){
-		
+		System.out.println("\nCustomerController의 myPage.do");
 		String mid=(String) request.getSession().getAttribute("mid");
 		
 		//멤버 정보 가져오기
@@ -245,5 +245,93 @@ public class CustomerController {
 		model.addAttribute("member", member);
 		model.addAttribute("storeList", storeList);
 		return "customer.myPage";
+	}
+	
+	@RequestMapping(value={"addStore.do"}, method=RequestMethod.GET)
+	public String addStore(HttpServletRequest request,Model model){
+		System.out.println("\nCustomerController의 addStore.do");
+		return "customer.addStore";
+	}
+	
+	@RequestMapping(value={"modifyStore.do"}, method=RequestMethod.GET)
+	public String modifyStore(HttpServletRequest request,Model model,String sid){
+		System.out.println("\nCustomerController의 modifyStore.do");
+		StoreDAO storeDao=sqlSession.getMapper(StoreDAO.class);
+		Store store=storeDao.getStore(sid);
+		
+		model.addAttribute("store", store);
+		return "customer.modifyStore";
+	}
+	
+	@RequestMapping(value={"modifyMember.do"}, method=RequestMethod.GET)
+	public String modifyMember(HttpServletRequest request,Model model){
+		System.out.println("\nCustomerController의 modifyMember.do");
+		String mid=(String) request.getSession().getAttribute("mid");
+		
+		//멤버 정보 가져오기
+		MemberDAO memberDao=sqlSession.getMapper(MemberDAO.class);
+		Member member=memberDao.getMember(mid);
+		
+		model.addAttribute("member", member);
+		return "customer.modifyMember";
+	}
+	
+	@RequestMapping(value={"saveMember.do"}, method=RequestMethod.POST)
+	@ResponseBody
+	public String saveMember(HttpServletRequest request,Model model,Member member){
+		System.out.println("\nCustomerController의 saveMember.do");
+		MemberDAO memberDao=sqlSession.getMapper(MemberDAO.class);
+		String data=Integer.toString(memberDao.modifyStoreOwner(member));
+		System.out.println("data---"+data);
+		return data;
+	}
+	
+	@RequestMapping(value={"withDraw.do"}, method=RequestMethod.GET)
+	public String withDraw(HttpServletRequest request,Model model){
+		System.out.println("\nCustomerController의 withDraw.do");
+		
+		String mid=(String) request.getSession().getAttribute("mid");
+		MemberDAO memberDao=sqlSession.getMapper(MemberDAO.class);
+		int data=memberDao.withDraw(mid);
+		
+		System.out.println("DATA----"+data);
+		request.getSession().invalidate();
+		
+		return "redirect:../index.do";
+	}
+	
+	@RequestMapping(value={"insertStore.do"}, method=RequestMethod.POST)
+	@ResponseBody
+	public String insertStore(HttpServletRequest request,Model model,Store store){
+		System.out.println("\nCustomerController의 insertStore.do");
+		
+		String mid=(String) request.getSession().getAttribute("mid");
+		store.setMid(mid);
+		StoreDAO storeDao=sqlSession.getMapper(StoreDAO.class);
+		String data=Integer.toString(storeDao.addStore(store));
+		
+		return data;
+	}
+	
+	@RequestMapping(value={"saveStore.do"}, method=RequestMethod.POST)
+	@ResponseBody
+	public String saveStore(HttpServletRequest request,Model model,Store store){
+		System.out.println("\nCustomerController의 saveStore.do");
+
+		StoreDAO storeDao=sqlSession.getMapper(StoreDAO.class);
+		String data=Integer.toString(storeDao.updateStore(store));
+		
+		return data;
+	}
+	
+	@RequestMapping(value={"deleteStore.do"}, method=RequestMethod.POST)
+	@ResponseBody
+	public String deleteStore(HttpServletRequest request,Model model,String sid){
+		System.out.println("\nCustomerController의 deleteStore.do");
+
+		StoreDAO storeDao=sqlSession.getMapper(StoreDAO.class);
+		String data=Integer.toString(storeDao.deleteStore(sid));
+		
+		return data;
 	}
 }
