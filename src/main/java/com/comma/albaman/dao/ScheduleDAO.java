@@ -24,7 +24,7 @@ public interface ScheduleDAO {
 	public int insertSchedule(@Param("preOnWork")String preOnWork,@Param("preOffWork")String preOffWork,@Param("rid")String rid);
 
 	// 스케줄 지우기
-	@Delete("DELETE FROM SCHEDULE WHERE SUBSTRING_INDEX(PREONWORK,'-','2')=#{deleteDate} AND RID=#{rid}")
+	@Delete("DELETE FROM SCHEDULE WHERE SUBSTRING_INDEX(PREONWORK,' ','1')=#{deleteDate} AND RID=#{rid}")
 	public int deleteSchedule(@Param("rid") String rid,@Param("deleteDate") String deleteDate);
 	
 	//시간별 직원 스케줄 추출
@@ -72,9 +72,8 @@ public interface ScheduleDAO {
 			+ "IF(S.PREOFFWORK - S.OFFWORK > 0,'조퇴','정상') AS OFFWORKSTATE FROM RECRUIT AS R INNER JOIN SCHEDULE AS S "
 			+ "ON R.RID = S.RID AND R.SID = #{sid} AND DATE(S.PREONWORK) <= CURDATE() ORDER BY DATE(S.PREONWORK) DESC")
 	public List<Attendance> getAttendance(String sid);
-	
 	// 근태 기록 검색 기능
-	@Select("SELECT * FROM (SELECT S.SEQ AS SSEQ, DATE(S.PREONWORK) AS DATE, R.RID AS MID, (SELECT NAME FROM MEMBER WHERE MID=R.RID) AS NAME, (SELECT POSITION FROM MEMBER WHERE MID=R.RID) AS POSITION, "
+	@Select("SELECT * FROM (SELECT S.SSEQ AS SSEQ, DATE(S.PREONWORK) AS DATE, R.RID AS MID, (SELECT NAME FROM MEMBER WHERE MID=R.RID) AS NAME, (SELECT POSITION FROM MEMBER WHERE MID=R.RID) AS POSITION, "
 			+ "TIME(S.PREONWORK) AS PREONWORK, TIME(S.PREOFFWORK) AS PREOFFWORK, TIME(S.ONWORK) AS ONWORK, TIME(S.OFFWORK) AS OFFWORK, IF(S.ONWORK - S.PREONWORK > 0,'지각','정상') AS ONWORKSTATE, "
 			+ "IF(S.PREOFFWORK - S.OFFWORK > 0,'조퇴','정상') AS OFFWORKSTATE FROM RECRUIT AS R INNER JOIN SCHEDULE AS S "
 			+ "ON R.RID = S.RID AND R.SID = #{sid} AND DATE(S.PREONWORK) BETWEEN #{startDate} AND #{endDate} AND DATE(S.PREONWORK) <= CURDATE()) ORIGIN "

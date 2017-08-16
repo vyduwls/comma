@@ -303,28 +303,39 @@
 	   	     /*ajax로 스케줄 저장시 스케줄배열 String 변환*/
 	   	     var stringSchedule="";
 	   	     for(var i=0;i<scheduleArray.length;i++){
-	    		if(i==scheduleArray.length-1){
-	    			stringSchedule+=scheduleArray[i];
-	    		}else{
-	    			stringSchedule+=scheduleArray[i]+",";
-	    		}
+	   	    	var scheduleYear=scheduleArray[i].split("_")[1].split("-")[0];
+	   	    	var scheduleMonth=Number(scheduleArray[i].split("_")[1].split("-")[1]);
+	   	    	var scheduleDay=Number(scheduleArray[i].split("_")[1].split("-")[2].split(" ")[0]);
+	   	      	if((scheduleYear>nowDate.getFullYear())  || (scheduleYear==nowDate.getFullYear() && scheduleMonth>(nowDate.getMonth()+1)) ||
+	   	      	   (scheduleYear==nowDate.getFullYear() && scheduleMonth==(nowDate.getMonth()+1) && scheduleDay>nowDate.getDate())){
+		    		if(i==scheduleArray.length-1){
+		    			stringSchedule+=scheduleArray[i];
+		    		}else{
+		    			stringSchedule+=scheduleArray[i]+",";
+		    		}
+	   	      	}
+
 	   	    }
 	   	     var stringEndSchedule="";
 	   	     for(var i=0;i<endScheduleArray.length;i++){
-	    		if(i==endScheduleArray.length-1){
-	    			stringEndSchedule+=endScheduleArray[i];
-	    		}else{
-	    			stringEndSchedule+=endScheduleArray[i]+",";
-	    		}
+		   	    var scheduleYear=scheduleArray[i].split("_")[1].split("-")[0];
+		   	    var scheduleMonth=Number(scheduleArray[i].split("_")[1].split("-")[1]);
+		   	    var scheduleDay=Number(scheduleArray[i].split("_")[1].split("-")[2].split(" ")[0]);
+		   	    if((scheduleYear>nowDate.getFullYear())  || (scheduleYear==nowDate.getFullYear() && scheduleMonth>(nowDate.getMonth()+1)) ||
+		   	       (scheduleYear==nowDate.getFullYear() && scheduleMonth==(nowDate.getMonth()+1) && scheduleDay>nowDate.getDate())){
+		    		if(i==endScheduleArray.length-1){
+		    			stringEndSchedule+=endScheduleArray[i];
+		    		}else{
+		    			stringEndSchedule+=endScheduleArray[i]+",";
+		    		}
+		   	    }
 	   	    }
 	   	     $.ajax({
 	   	    	 url:"saveSchedule.do",
 	   	    	 type:"GET",
 	   	    	 data:{
 	   	    		 "stringSchedule":stringSchedule,
-	   	    		 "stringEndSchedule":stringEndSchedule,
-	   	    		 "allEmployeeRids":"${allEmployeeRids}",
-	   	    		 "deleteDate":year+"-"+month
+	   	    		 "stringEndSchedule":stringEndSchedule
 	   	    	 },
 	   	    	 dateType:"text",
 	   	    	 success : function(data){
@@ -428,7 +439,7 @@
 	   	     var startSchedule=employRid+"_"+year+"-"+month+"-"+editDay+" "+startTime;
       		 var endSchedule=employRid+"_"+year+"-"+month+"-"+endDay+" "+endTime;
 
-      		if( (month>(nowDate.getMonth()+1)) ||( month==(nowDate.getMonth()+1) && selectDay>=nowDate.getDate())){
+      		if( (month>(nowDate.getMonth()+1)) ||( month==(nowDate.getMonth()+1) && selectDay>nowDate.getDate())){
     			/*근무 지정할 때, 데이터 변화시켜주기*/
 	          		if(data=="0"){
 	          			/*배열에 저장*/

@@ -17,7 +17,6 @@
 		
 		var tableInput="";
 		for (var i = 0; i < salaryList.length; i++) {
-			alert(salaryList[i].split("_")[0]);
 			tableInput+="<tr class='recruit_tr'><td class='salaryTd name'><a href='checkSalary.do?mid="+salaryList[i].split("_")[0]+"'>"
 			+salaryList[i].split("_")[1]+"</a></td><td class='salaryTd wage'>"+numberWithCommas(salaryList[i].split("_")[2])+" 원</td>"
 			+"<td class='salaryTd workTime'>"+Math.floor(salaryList[i].split("_")[3]/60)+"시간 "+salaryList[i].split("_")[3]%60+"분</td>"

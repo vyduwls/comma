@@ -285,18 +285,19 @@ public class StoreController {
 	//스케줄 저장 ajax
 	@RequestMapping(value={"saveSchedule.do"},method=RequestMethod.GET)
 	@ResponseBody
-	public String saveSchedule(String stringSchedule,String stringEndSchedule,String allEmployeeRids,String deleteDate){
+	public String saveSchedule(String stringSchedule,String stringEndSchedule){
 		System.out.println("\nStoreController의 saveSchedule.do(GET)");	
 		ScheduleDAO scheduleDAO=sqlSession.getMapper(ScheduleDAO.class);
 
 		String[] schedules=stringSchedule.split(",");
 		String[] endSchedules=stringEndSchedule.split(",");
-		String[] memberRids=allEmployeeRids.split(",");
+
 		//기존 스케줄 지우기
-		System.out.println("deleteDate[---"+deleteDate);
-		for (int i = 0; i < memberRids.length; i++) {
-			String rid=memberRids[i];
+		for (int i = 0; i < schedules.length; i++) {
+			String rid=schedules[i].split("_")[0];
 			System.out.println("rid[---"+rid);
+			String deleteDate=schedules[i].split("_")[1].split(" ")[0];
+			System.out.println("deleteDate==="+deleteDate);
 			int a=scheduleDAO.deleteSchedule(rid, deleteDate);
 			System.out.println("a[---"+a);
 		}
@@ -305,8 +306,8 @@ public class StoreController {
 			System.out.println("stringSchedule---"+stringSchedule);
 			for (int i = 0; i < schedules.length; i++) {
 				String rid=schedules[i].split("_")[0];
-				String preOnWork=deleteDate+"-"+schedules[i].split("_")[1].split("-")[2];
-				String preOffWork=deleteDate+"-"+endSchedules[i].split("_")[1].split("-")[2];
+				String preOnWork=schedules[i].split("_")[1];
+				String preOffWork=endSchedules[i].split("_")[1];
 				System.out.println("preOnWork---"+preOnWork);
 				System.out.println("preOffWork---"+preOffWork);
 				System.out.println("rid---"+rid);
