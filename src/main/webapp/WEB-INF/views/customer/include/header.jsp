@@ -11,7 +11,7 @@
 				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="index.do"><b>ALBAMAN</b></a>
+			<a class="navbar-brand" href="../index.do"><b>ALBAMAN</b></a>
 		</div>
 		
 		<div class="col-lg-1"></div>
@@ -19,39 +19,44 @@
 		<!-- 상단 메뉴 -->
 		<div class="menubar col-lg-9">
 			<ul>
-				<li class="col-lg-2"><a href="${pageContext.request.contextPath}/store/recruit.do">인사 관리</a>
-					<ul class="col-lg-12">
-						<li><a href="${pageContext.request.contextPath}/store/addRecruit.do">직원 정보 등록</a></li>
-						<li><a href="${pageContext.request.contextPath}/store/recruit.do">직원 정보 조회</a></li>
-					</ul>
-				</li>
-				<li class="col-lg-2"><a href="${pageContext.request.contextPath}/store/calendar.do">스케줄 관리</a>
-					<ul class="col-lg-12">
-						<li><a href="${pageContext.request.contextPath}/store/calendar.do">스케줄 등록</a></li>
-						<li><a href="${pageContext.request.contextPath}/store/calendar.do">스케줄 조회</a></li>
-					</ul>
-				</li>
+				<!-- 점주 -->
 				<c:if test="${checkPosition==1}">
-					<li class="col-lg-2"><a href="${pageContext.request.contextPath}/store/salaryManage.do">급여 관리</a>
+					<li class="col-lg-2"><a href="manageRecruit.do">인사 관리</a>
 						<ul class="col-lg-12">
-							<li><a href="${pageContext.request.contextPath}/store/salaryManage.do">급여 조회</a></li>
+							<li><a href="addRecruit.do">직원 정보 등록</a></li>
+							<li><a href="manageRecruit.do">직원 정보 조회</a></li>
 						</ul>
 					</li>
+					
+					<li class="col-lg-2"><a href="calendar.do">스케줄 관리</a>
+						<ul class="col-lg-12">
+							<li><a href="editSchedule.do">스케줄 등록</a></li>
+							<li><a href="calendar.do">스케줄 조회</a></li>
+						</ul>
+					</li>
+					
+					<li class="col-lg-2"><a href="salaryManage.do">급여 관리</a></li>
+					
+					<li class="col-lg-2"><a href="manageAttendance.do">근태 관리</a></li>
+					
+					<li class="col-lg-2"><a href="notice.do">공지사항</a></li>
 				</c:if>
+				
+				<!-- 직원 -->
 				<c:if test="${checkPosition==2}">
-					<li class="col-lg-2"><a href="${pageContext.request.contextPath}/store/checkSalary.do">급여 관리</a>
-						<ul class="col-lg-12">
-							<li><a href="${pageContext.request.contextPath}/store/checkSalary.do">급여 조회</a></li>
-						</ul>
-					</li>
+					<li class="col-lg-2"><a href="checkRecruit.do">직원 정보 조회</a></li>
+				
+					<li class="col-lg-2"><a href="calendar.do">스케줄 조회</a></li>
+				
+					<li class="col-lg-2"><a href="checkSalary.do">급여 조회</a></li>
+				
+					<li class="col-lg-2"><a href="checkAttendance.do">근태 조회</a></li>
+					
+					<li class="col-lg-2"><a href="notice.do">공지사항</a></li>
 				</c:if>
-				<li class="col-lg-2"><a href="">공지사항 관리</a>
-					<ul class="col-lg-12">
-						<li><a href="">공지사항 등록</a></li>
-						<li><a href="">공지사항 조회</a></li>
-					</ul>
-				</li>
-				<li class="col-lg-2"><a href="lecture/lecture.do?kind=translation">문의 게시판</a></li>
+				
+				<!-- 관리자 -->
+				<!-- 개발 필요 -->
 			</ul>
 		</div>
 		
@@ -59,30 +64,14 @@
 		<div class="collapse navbar-collapse col-lg-1" id="myNavbar">
 			<div class="menubar">
 				<ul class="navbar-right">
-					<c:if test="${empty mid}">
-						<li><a><span class="glyphicon glyphicon-user"></span>
-								GUEST</a>
-							<ul class="col-lg-12">
-								<li><a id="login" href="#">로그인</a></li>
-								<li><a id="join" href="#">회원가입</a></li>
-							</ul></li>
-					</c:if>
-
-					<!-- 로그인 후 -->
 					<li><a><span class="glyphicon glyphicon-user"></span> ${sessionScope.mid} 님</a>
 						<ul class="col-lg-12">
 							<c:choose>
-								<c:when test="${checkPosition == '0'}">
+								<c:when test="${checkPosition == 0}">
 									<li><a href="admin/adminPage.do">관리페이지</a></li>
 								</c:when>
-								<c:when test="${checkPosition == '1'}">
+								<c:when test="${checkPosition == 1}">
 									<li><a href="myPage.do">마이페이지</a></li>
-								</c:when>
-								<c:when test="${checkPosition == '2' and onWork != 0}">
-									<li><a id="onWork" style="cursor: pointer;">출근하기</a></li>
-								</c:when>
-								<c:when test="${checkPosition == '2' and offWork != 0}">
-									<li><a id="offWork" style="cursor: pointer;">퇴근하기</a></li>
 								</c:when>
 							</c:choose>
 							<li><a href="../customer/logout.do">로그아웃</a></li>

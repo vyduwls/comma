@@ -30,6 +30,10 @@ public interface MemberDAO {
 	@Select("SELECT * FROM MEMBER INNER JOIN RECRUIT ON MID = RID AND SID = #{sid} ORDER BY JOINDATE DESC")
 	public List<Employee> getEmployee(String sid);
 	
+	// 특정 직원 정보 조회
+	@Select("SELECT * FROM MEMBER INNER JOIN RECRUIT ON MID = RID AND MID = #{mid}")
+	public Employee getEmployeeForEmployee(String mid);
+	
 	// 특정 조건의 가게 직원 정보 조회
 	@Select("SELECT * FROM MEMBER INNER JOIN RECRUIT ON MID = RID AND SID = #{sid} AND ${category} LIKE '%${query}%' AND( JOINDATE <= #{endDate} AND ( RESIGNDATE >= #{startDate} OR RESIGNDATE IS NULL)) ORDER BY JOINDATE DESC")
 	public List<Employee> searchEmployee(@Param("sid")String store, @Param("category")String category, @Param("query")String query, @Param("startDate")String startDate, @Param("endDate")String endDate);

@@ -320,10 +320,10 @@ public class StoreController {
 		return stringSchedule;
 	}
 
-	// 직원 정보 조회 페이지
-	@RequestMapping(value={"recruit.do"},method=RequestMethod.GET)
-	public String recruit(HttpServletRequest request, Model model) {
-		System.out.println("\nStoreController의 recruit.do(GET)");
+	// 직원 정보 조회 페이지(점주)
+	@RequestMapping(value={"manageRecruit.do"},method=RequestMethod.GET)
+	public String manageRecruit(HttpServletRequest request, Model model) {
+		System.out.println("\nStoreController의 manageRecruit.do(GET)");
 
 		String mid = (String) request.getSession().getAttribute("mid");
 
@@ -338,7 +338,28 @@ public class StoreController {
 		List<Employee> employeeList = memberDAO.getEmployee(storeList.get(0).getSid());
 		model.addAttribute("employeeList",employeeList);
 
-		return "store.recruit";
+		return "store.manageRecruit";
+	}
+	
+	// 직원 정보 조회 페이지(직원)
+	@RequestMapping(value={"checkRecruit.do"},method=RequestMethod.GET)
+	public String checkRecruit(HttpServletRequest request, Model model) {
+		System.out.println("\nStoreController의 checkRecruit.do(GET)");
+
+		String mid = (String) request.getSession().getAttribute("mid");
+
+		// 직원 전체 정보 가져오기
+		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
+		Employee employee = memberDAO.getEmployeeForEmployee(mid);
+		
+		// 가게 정보 가져오기
+		StoreDAO storeDAO = sqlSession.getMapper(StoreDAO.class);
+		Store store = storeDAO.getStore(employee.getSid());
+		
+		model.addAttribute(employee);
+		model.addAttribute(store);
+
+		return "store.checkRecruit";
 	}
 
 	// 직원 정보 등록 페이지
@@ -414,7 +435,7 @@ public class StoreController {
 
 		if(result ==2) {
 			System.out.println("직원 회원가입 성공");
-			return "redirect:recruit.do";			
+			return "redirect:manageRecruit.do";			
 		} else {
 			System.out.println("직원 회원가입 실패");
 			return null;
@@ -520,10 +541,10 @@ public class StoreController {
 		return Integer.toString(result);
 	}
 
-	// 직원 근태관리 페이지
-	@RequestMapping(value={"attendance.do"},method=RequestMethod.GET)
-	public String attendance(HttpServletRequest request, Model model) {
-		System.out.println("\nStoreController의 attendance.do(GET)");
+	// 직원 근태관리 페이지(점주)
+	@RequestMapping(value={"manageAttendance.do"},method=RequestMethod.GET)
+	public String manageAttendance(HttpServletRequest request, Model model) {
+		System.out.println("\nStoreController의 manageAttendance.do(GET)");
 
 		String mid = (String) request.getSession().getAttribute("mid");
 
@@ -532,13 +553,50 @@ public class StoreController {
 		List<Store> storeList = storeDAO.getAllStore(mid);
 		model.addAttribute("storeList", storeList);
 
-		// 직원 전체 정보 가져오기
+		// 스케줄 전체 정보 가져오기
 		ScheduleDAO scheduleDAO = sqlSession.getMapper(ScheduleDAO.class);
 		System.out.println("storeList.get(0).getSid() : " + storeList.get(0).getSid());
 		List<Attendance> attendanceList = scheduleDAO.getAttendance(storeList.get(0).getSid());
 		model.addAttribute("attendanceList",attendanceList);
 
-		return "store.attendance";
+		return "store.manageAttendance";
+	}
+	
+	// 직원 근태관리 페이지(직원)
+	@RequestMapping(value={"checkAttendance.do"},method=RequestMethod.GET)
+	public String checkAttendance(HttpServletRequest request, Model model) {
+		System.out.println("\nStoreController의 checkAttendance.do(GET)");
+
+		String mid = (String) request.getSession().getAttribute("mid");
+				
+		// 직원 전체 정보 가져오기
+		ScheduleDAO scheduleDAO = sqlSession.getMapper(ScheduleDAO.class);
+		List<Attendance> attendanceList = scheduleDAO.getAttendanceForEmployee(mid);
+		model.addAttribute("attendanceList",attendanceList);
+
+		return "store.checkAttendance";
+	}
+	
+	// 직원 근태관리 검색 기능(직원)
+	@RequestMapping(value={"searchAttendanceForEmployee.do"},method=RequestMethod.POST)
+	@ResponseBody
+	public String searchAttendanceForEmployee(String startDate, String endDate, HttpServletRequest request, Model model) {
+		System.out.println("\nStoreController의 searchAttendanceForEmployee.do(AJAX)");
+
+		String mid = (String) request.getSession().getAttribute("mid");
+		
+		System.out.println("startDate : " + startDate);
+		System.out.println("endDate : " + endDate);
+				
+		// 직원 전체 정보 가져오기
+		ScheduleDAO scheduleDAO = sqlSession.getMapper(ScheduleDAO.class);
+		List<Attendance> attendanceList = scheduleDAO.searchAttendanceForEmployee(mid, startDate, endDate);
+		
+		Gson gson = new GsonBuilder().serializeNulls().create();
+		String result = gson.toJson(attendanceList);
+		System.out.println(result);
+
+		return result;
 	}
 
 	// 다른 매장 근태 관리 검색

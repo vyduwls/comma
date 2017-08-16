@@ -19,30 +19,45 @@
 		<!-- 상단 메뉴 -->
 		<div class="menubar col-lg-9">
 			<ul>
-				<li class="col-lg-2"><a href="">인사 관리</a>
-					<ul class="col-lg-12">
-						<li><a href="">직원 정보 등록</a></li>
-						<li><a href="">직원 정보 조회</a></li>
-					</ul>
-				</li>
-				<li class="col-lg-2"><a href="">스케줄 관리</a>
-					<ul class="col-lg-12">
-						<li><a href="">스케줄 등록</a></li>
-						<li><a href="">스케줄 조회</a></li>
-					</ul>
-				</li>
-				<li class="col-lg-2"><a href="">급여 관리</a>
-					<ul class="col-lg-12">
-						<li><a href="">급여 조회</a></li>
-					</ul>
-				</li>
-				<li class="col-lg-2"><a href="">공지사항 관리</a>
-					<ul class="col-lg-12">
-						<li><a href="">공지사항 등록</a></li>
-						<li><a href="">공지사항 조회</a></li>
-					</ul>
-				</li>
-				<li class="col-lg-2"><a href="">문의 게시판</a></li>
+				<!-- 점주 -->
+				<c:if test="${checkPosition==1}">
+					<li class="col-lg-2"><a href="manageRecruit.do">인사 관리</a>
+						<ul class="col-lg-12">
+							<li><a href="addRecruit.do">직원 정보 등록</a></li>
+							<li><a href="manageRecruit.do">직원 정보 조회</a></li>
+						</ul>
+					</li>
+					
+					<li class="col-lg-2"><a href="calendar.do">스케줄 관리</a>
+						<ul class="col-lg-12">
+							<li><a href="editSchedule.do">스케줄 등록</a></li>
+							<li><a href="calendar.do">스케줄 조회</a></li>
+						</ul>
+					</li>
+					
+					<li class="col-lg-2"><a href="salaryManage.do">급여 관리</a></li>
+					
+					<li class="col-lg-2"><a href="manageAttendance.do">근태 관리</a></li>
+					
+					<li class="col-lg-2"><a href="notice.do">공지사항</a></li>
+				</c:if>
+				
+				<!-- 직원 -->
+				<c:if test="${checkPosition==2}">
+					<li class="col-lg-2"><a href="checkRecruit.do">직원 정보 조회</a></li>
+				
+					<li class="col-lg-2"><a href="calendar.do">스케줄 조회</a></li>
+				
+					<li class="col-lg-2"><a href="checkSalary.do">급여 조회</a></li>
+				
+					<!-- 개발 필요 -->
+					<li class="col-lg-2"><a href="checkAttendance.do">근태 조회</a></li>
+					
+					<li class="col-lg-2"><a href="notice.do">공지사항</a></li>
+				</c:if>
+				
+				<!-- 관리자 -->
+				<!-- 개발 필요 -->
 			</ul>
 		</div>
 		
