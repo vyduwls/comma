@@ -138,6 +138,13 @@
 				$.each(test, function(index,item) {
 					var tr = $("<tr class='attendance_tr'></tr>");
 					
+					// state를 완성하기 위한 플래그
+					var date;
+					var preOnWork;
+					var preOffWork;
+					var onWork;
+					var offWork;
+					
 					$.each(item, function(key,value) {
 						if(key!="rid" && key!="sid") {
 							switch(key) {

@@ -42,7 +42,7 @@
 		<br><br>
 		<form action="addRecruit.do" method="post">
 			<div class="col-lg-6">
-				<div class="forl-group" style="margin-bottom: 14px">
+				<div class="form-group" style="margin-bottom: 14px">
 					<label>매장 선택</label> 
 					<select class="form-control" name="store" id="store">
 						<c:forEach items="${storeList}"  var="storeList" varStatus="status">

@@ -2,6 +2,45 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<script type="text/javascript">
+	$(document).ready(function() {
+		
+		// 출근하기
+		$("#onWork").click(function() {
+			$.ajax({
+				url : '../customer/onWork.do',
+				type : 'post',
+				datatype : 'text',
+				data : {'rid' : '${sessionScope.mid}'},
+				success : function(data) {
+					if($.trim(data)=="1") {
+						alert("출근 완료");
+					} else {
+						alert("출근 실패");
+					}
+				}
+			});
+		});
+		
+		// 퇴근하기
+		$("#offWork").click(function() {
+			$.ajax({
+				url : '../customer/offWork.do',
+				type : 'post',
+				datatype : 'text',
+				data : {'rid' : '${sessionScope.mid}'},
+				success : function(data) {
+					if($.trim(data)=="1") {
+						alert("퇴근 완료");
+					} else {
+						alert("퇴근 실패");
+					}
+				}
+			});
+		});
+	});
+</script>
+
 <!-- 네비바 -->
 <nav class="navbar navbar-collapse navbar-inverse navbar-fixed-top">
 	<div class="container-fluid">
@@ -19,35 +58,45 @@
 		<!-- 상단 메뉴 -->
 		<div class="menubar col-lg-9">
 			<ul>
-				<li class="col-lg-2"><a href="recruit.do">인사 관리</a>
-					<ul class="col-lg-12">
-						<li><a href="addRecruit.do">직원 정보 등록</a></li>
-						<li><a href="recruit.do">직원 정보 조회</a></li>
-					</ul>
-				</li>
-				<li class="col-lg-2"><a href="calendar.do">스케줄 관리</a>
-					<ul class="col-lg-12">
-						<li><a href="editSchedule.do">스케줄 등록</a></li>
-						<li><a href="calendar.do">스케줄 조회</a></li>
-					</ul>
-				</li>
+				<!-- 점주 -->
 				<c:if test="${checkPosition==1}">
-					<li class="col-lg-2"><a href="salaryManage.do">급여 관리</a>
+					<li class="col-lg-2"><a href="manageRecruit.do">인사 관리</a>
 						<ul class="col-lg-12">
-							<li><a href="salaryManage.do">급여 조회</a></li>
+							<li><a href="addRecruit.do">직원 정보 등록</a></li>
+							<li><a href="manageRecruit.do">직원 정보 조회</a></li>
 						</ul>
 					</li>
-				</c:if>
-				<c:if test="${checkPosition==2}">
-					<li class="col-lg-2"><a href="checkSalary.do">급여 관리</a>
+					
+					<li class="col-lg-2"><a href="calendar.do">스케줄 관리</a>
 						<ul class="col-lg-12">
-							<li><a href="checkSalary.do">급여 조회</a></li>
+							<li><a href="editSchedule.do">스케줄 등록</a></li>
+							<li><a href="calendar.do">스케줄 조회</a></li>
 						</ul>
 					</li>
+					
+					<li class="col-lg-2"><a href="salaryManage.do">급여 관리</a></li>
+					
+					<li class="col-lg-2"><a href="manageAttendance.do">근태 관리</a></li>
+					
+					<li class="col-lg-2"><a href="notice.do">공지사항</a></li>
 				</c:if>
-				<li class="col-lg-2"><a href="attendance.do">근태 관리</a></li>
 				
-				<li class="col-lg-2"><a href="notice.do">공지사항</a></li>
+				<!-- 직원 -->
+				<c:if test="${checkPosition==2}">
+					<li class="col-lg-2"><a href="checkRecruit.do">직원 정보 조회</a></li>
+				
+					<li class="col-lg-2"><a href="calendar.do">스케줄 조회</a></li>
+				
+					<li class="col-lg-2"><a href="checkSalary.do">급여 조회</a></li>
+				
+					<!-- 개발 필요 -->
+					<li class="col-lg-2"><a href="checkAttendance.do">근태 조회</a></li>
+					
+					<li class="col-lg-2"><a href="notice.do">공지사항</a></li>
+				</c:if>
+				
+				<!-- 관리자 -->
+				<!-- 개발 필요 -->
 			</ul>
 		</div>
 		
@@ -55,26 +104,19 @@
 		<div class="collapse navbar-collapse col-lg-1" id="myNavbar">
 			<div class="menubar">
 				<ul class="navbar-right">
-					<c:if test="${empty mid}">
-						<li><a><span class="glyphicon glyphicon-user"></span>
-								GUEST</a>
-							<ul class="col-lg-12">
-								<li><a id="login" href="#">로그인</a></li>
-								<li><a id="join" href="#">회원가입</a></li>
-							</ul></li>
-					</c:if>
-
-					<%-- <!-- 로그인 후 -->
-					<c:if test="${!empty mid}">
-						<li><a id="info"><span class="glyphicon glyphicon-user"></span>
-								${mid}
-								<button class="btn btn-success btn-xs btn-count"
-									onclick="location.href='customer/getMessage.do'">0</button> </a>
-							<ul>
-								<li><a href="customer/myPage.do">마이페이지</a></li>
-								<li><a href="customer/logout.do">로그아웃</a></li>
-							</ul></li>
-					</c:if> --%>
+					<li><a><span class="glyphicon glyphicon-user"></span> ${sessionScope.mid} 님</a>
+						<ul class="col-lg-12">
+							<c:choose>
+								<c:when test="${checkPosition == 0}">
+									<li><a href="admin/adminPage.do">관리페이지</a></li>
+								</c:when>
+								<c:when test="${checkPosition == 1}">
+									<li><a href="">마이페이지</a></li>
+								</c:when>
+							</c:choose>
+							<li><a href="../customer/logout.do">로그아웃</a></li>
+						</ul>
+					</li>
 				</ul>
 			</div>
 		</div>
