@@ -57,7 +57,7 @@
 				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="index.do"><b>ALBAMAN</b></a>
+			<a class="navbar-brand" href="../index.do"><b>ALBAMAN</b></a>
 		</div>
 		
 		<div class="col-lg-1"></div>
@@ -105,7 +105,6 @@
 					
 						<li class="col-lg-2"><a href="store/checkSalary.do">급여 조회</a></li>
 					
-						<!-- 개발 필요 -->
 						<li class="col-lg-2"><a href="store/checkAttendance.do">근태 조회</a></li>
 						
 						<li class="col-lg-2"><a href="store/notice.do">공지사항</a></li>

@@ -15,25 +15,60 @@
 	text-align: center;
 }
 
-/*salaryManage.jsp css*/
-.salaryTh{
+/*myPage.jsp*/
+#body_menu {
+	width: 24%;
+	height : 700px;
+	border-right: 1px solid #a8b0ad;
+	text-align: center;	
+	background-color:white;
+	float: left;
+}
+#body_content {
+	padding: 40px 0px 70px 0px;
+	width: 76%;
+	height : 700px;
+	text-align: center;
+	background-color:white;	
+	float: left;
+}
+
+.mypageInput{
+	height:40px;
+	width: 70%;
+	margin: 0px 2% 0px 0px;
+	float: right;
+}
+.pTag{
+	height:40px;
+	width: 90%;
+	margin: 10px 2% 0px 2%;
+	font-size: 17px;
+	color:rgba(4, 4, 39, 0.73)
+
+}
+.pTagMember{
+	margin:40px auto 0px auto;
+	width: 40%;
+	height: 50px;
+	color:rgb(66, 81, 136);
+	font-size: 30px;
+}
+
+.storeTh, .storeTd{
 	width: 8%;	
 	text-align: center;
 }
- .salaryTh1{
- 	width: 9%;
- 	text-align: center;
- }
-.salaryTd, .salaryTd1,.salaryTd2{
+.storeTh1{
+	width: 25%;	
 	text-align: center;
 }
-.salaryTd1{
-	background-color: #fbecc4;
-	font-weight: bold;
+#storeTable{
+	width: 90%;
+	margin:auto;
 }
-.salaryTd2{
-	background-color: #fefaef;
-	font-weight: bold;
+.storeTd{
+	cursor: pointer;
 }
 /* 폰트 */
 @font-face{

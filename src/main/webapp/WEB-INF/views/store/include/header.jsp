@@ -89,7 +89,6 @@
 				
 					<li class="col-lg-2"><a href="checkSalary.do">급여 조회</a></li>
 				
-					<!-- 개발 필요 -->
 					<li class="col-lg-2"><a href="checkAttendance.do">근태 조회</a></li>
 					
 					<li class="col-lg-2"><a href="notice.do">공지사항</a></li>
@@ -111,7 +110,7 @@
 									<li><a href="admin/adminPage.do">관리페이지</a></li>
 								</c:when>
 								<c:when test="${checkPosition == 1}">
-									<li><a href="">마이페이지</a></li>
+									<li><a href="../customer/myPage.do">마이페이지</a></li>
 								</c:when>
 							</c:choose>
 							<li><a href="../customer/logout.do">로그아웃</a></li>

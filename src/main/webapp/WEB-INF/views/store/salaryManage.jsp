@@ -12,6 +12,29 @@
  		var storeName="${storeInfo.name}";
 		$(".payMantitle").text(storeName+"의 "+year+"년 "+month+"월 급여관리대장");
 		
+		var stringSalary="${stringSalary}";
+		var salaryList=stringSalary.split(",");
+		
+		var tableInput="";
+		for (var i = 0; i < salaryList.length; i++) {
+			alert(salaryList[i].split("_")[0]);
+			tableInput+="<tr class='recruit_tr'><td class='salaryTd name'><a href='checkSalary.do?mid="+salaryList[i].split("_")[0]+"'>"
+			+salaryList[i].split("_")[1]+"</a></td><td class='salaryTd wage'>"+numberWithCommas(salaryList[i].split("_")[2])+" 원</td>"
+			+"<td class='salaryTd workTime'>"+Math.floor(salaryList[i].split("_")[3]/60)+"시간 "+salaryList[i].split("_")[3]%60+"분</td>"
+			+"<td class='salaryTd weeklyPay'>"+numberWithCommas(salaryList[i].split("_")[4])+" 원</td>"
+			+"<td class='salaryTd excessPay'>"+numberWithCommas(salaryList[i].split("_")[5])+" 원</td>"
+			+"<td class='salaryTd overTimePay'>"+numberWithCommas(salaryList[i].split("_")[6])+" 원</td>"
+			+"<td class='salaryTd salary'>"+numberWithCommas(salaryList[i].split("_")[7])+" 원</td></tr>"
+		}
+			$(".tbodyInTr").after(tableInput);
+		
+
+			$(".totalWorkTime").text(Math.floor($(".totalWorkTime").text()/60)+"시간 "+$(".totalWorkTime").text()%60+"분");
+			$(".totalweeklyPay").text(numberWithCommas($(".totalweeklyPay").text())+" 원");
+			$(".totalExcessPay").text(numberWithCommas($(".totalExcessPay").text())+" 원");
+			$(".totalOverTimePay").text(numberWithCommas($(".totalOverTimePay").text())+" 원");
+			$(".totalSalary").text(numberWithCommas($(".totalSalary").text())+" 원");
+		
 	});
 	function numberWithCommas(x) {
 	    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -28,7 +51,7 @@
 			<form id="frm" class="form-inline" action="salaryManage.do" method="get">				
 				<!-- 매장 선택 -->
 				<div class="col-lg-9">
-					<select class="form-control selectStore" style="margin-top: 20px;">
+					<select name="sid" class="form-control selectStore" style="margin-top: 20px;">
 						<c:forEach items="${storeList}" var="n">
 							<c:if test="${n.sid==storeInfo.sid}">
 								<option value="${n.sid}" selected="selected">${n.name}</option>
@@ -82,27 +105,15 @@
 						<th class="salaryTh1">총 월급</th>
 					</tr>
 				</thead>
-				<tbody>
-					<c:forEach items="${salaryManageList}" var="n">
-						<tr class="recruit_tr">		
-							<td class="salaryTd name">
-								<input type="hidden" name="mid" value="${n.mid}"><a href="checkSalary.do?mid=${n.mid}">${n.name}</a>
-							</td>
-							<td class="salaryTd wage">${n.wage}</td>
-							<td class="salaryTd totalWorkTime">${n.totalTime}</td>
-							<td class="salaryTd weeklyPay">${n.weeklyPay} 원</td>
-							<td class="salaryTd totalExcessPay">${n.excessPay} 원</td>
-							<td class="salaryTd totalOverTimePay">${n.excessPay} 원</td>
-							<td class="salaryTd1 totalSalary">${n.totalPay} 원</td>
-						</tr>
-					</c:forEach>
+				<tbody id="salaryTbody">
+						<tr class="tbodyInTr"></tr>
 						<tr>
 							<td class="salaryTd" colspan="2" >총합</td>
 							<td class="salaryTd totalWorkTime">${sm.totalTime}</td>
-							<td class="salaryTd weeklyPay">${sm.weeklyPay} 원</td>
-							<td class="salaryTd totalExcessPay">${sm.excessPay} 원</td>
-							<td class="salaryTd totalOverTimePay">${sm.excessPay} 원</td>
-							<td class="salaryTd1 totalSalary" style="color: red;">${sm.totalPay} 원</td>
+							<td class="salaryTd totalweeklyPay">${sm.weeklyPay}</td>
+							<td class="salaryTd totalExcessPay">${sm.excessPay}</td>
+							<td class="salaryTd totalOverTimePay">${sm.overTimePay}</td>
+							<td class="salaryTd1 totalSalary" style="color: red;">${sm.totalPay}</td>
 						</tr>
 				</tbody>
 			</table>	

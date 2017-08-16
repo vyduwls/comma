@@ -981,6 +981,7 @@ public class StoreController {
 		if(mid==null || mid.equals("")){
 			mid = (String) request.getSession().getAttribute("mid");
 		}
+		
 		// 직원 전체 정보 가져오기
 		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
 		Member memberData=memberDAO.getMember(mid);
@@ -1084,7 +1085,6 @@ public class StoreController {
 						+"_"+recruitData.getWage()+",";
 			}
 		}
-
 		model.addAttribute("stringworkTime",stringworkTime);
 		model.addAttribute("joinYear", recruitData.getJoinDate().split("-")[0]);
 		model.addAttribute("totalMoney",totalMoney);
@@ -1108,6 +1108,7 @@ public class StoreController {
 		StoreDAO storeDAO = sqlSession.getMapper(StoreDAO.class);
 		List<Store> storeList = storeDAO.getAllStore(mid);
 		Store storeInfo=new Store();
+		System.out.println("Sid---"+sid);
 		if(sid==null || sid.equals("")){
 			storeInfo=storeList.get(0);
 		}else{
@@ -1216,7 +1217,6 @@ public class StoreController {
 			//일별 근무시간 구하기
 			int[] workMinuteTime=scheduleDAO.getWorkDayTime(prework,salaryManage.getMid());
 			List<Schedule> allSchedule=scheduleDAO.getWorkTime(salaryManage.getMid(), prework);
-			
 
 			int totalWorkTime=0;
 			int totalPlusTime=0;
@@ -1251,7 +1251,6 @@ public class StoreController {
 							totalWeekWorkTime=Integer.parseInt(totalWeekTime.get(k).split("_")[1]);
 						}
 					}
-					System.out.println("totalWeekWorkTime-----"+totalWeekWorkTime);
 					
 					/* 한 주 총 근무시간이 40시간 이상/이하 비교*/
 		 			if(totalWeekWorkTime>=2400){
@@ -1262,7 +1261,6 @@ public class StoreController {
 		 				}else{
 		 					hourCheck+=totalWorkMinute;	
 		 				}
-		 				System.out.println("hourCheck----"+hourCheck);
 		 				 /*주 40시간 이상 근무시 추가 시간만큼 1.5배 해주기*/
 		 				 if(hourCheck>=2400 && check!=1){
 		 					check=1;
@@ -1341,11 +1339,16 @@ public class StoreController {
 			salaryManage.setOverTimePay(totalOverTimePay);
 			salaryManage.setTotalPay(totalSalary);
 			salaryManageList.add(salaryManage);
+
 		}
 		SalaryManage sm=new SalaryManage();
 		for (int i = 0; i < salaryManageList.size(); i++) {
 			if(i==0){
-				sm=salaryManageList.get(i);
+				sm.setExcessPay(salaryManageList.get(i).getExcessPay());
+				sm.setOverTimePay(salaryManageList.get(i).getOverTimePay());
+				sm.setWeeklyPay(salaryManageList.get(i).getWeeklyPay());
+				sm.setTotalTime(salaryManageList.get(i).getTotalTime());
+				sm.setTotalPay(salaryManageList.get(i).getTotalPay());
 			}else{
 				sm.setExcessPay(sm.getExcessPay()+salaryManageList.get(i).getExcessPay());
 				sm.setOverTimePay(sm.getOverTimePay()+salaryManageList.get(i).getOverTimePay());
@@ -1353,7 +1356,23 @@ public class StoreController {
 				sm.setTotalTime(sm.getTotalTime()+salaryManageList.get(i).getTotalTime());
 				sm.setTotalPay(sm.getTotalPay()+salaryManageList.get(i).getTotalPay());
 			}
+			
+			
 		}
+		String stringSalary="";
+		for (int i = 0; i < salaryManageList.size(); i++) {
+			if(i==salaryManageList.size()-1){
+				stringSalary+=salaryManageList.get(i).getMid()+"_"+salaryManageList.get(i).getName()+"_"+salaryManageList.get(i).getWage()+"_"+
+						salaryManageList.get(i).getTotalTime()+"_"+salaryManageList.get(i).getWeeklyPay()+"_"+
+						salaryManageList.get(i).getExcessPay()+"_"+salaryManageList.get(i).getOverTimePay()+"_"+salaryManageList.get(i).getTotalPay();
+			}else{
+				stringSalary+=salaryManageList.get(i).getMid()+"_"+salaryManageList.get(i).getName()+"_"+salaryManageList.get(i).getWage()+"_"+
+						salaryManageList.get(i).getTotalTime()+"_"+salaryManageList.get(i).getWeeklyPay()+"_"+
+						salaryManageList.get(i).getExcessPay()+"_"+salaryManageList.get(i).getOverTimePay()+"_"+salaryManageList.get(i).getTotalPay()+",";
+			}
+		}
+
+	model.addAttribute("stringSalary",stringSalary);
 	model.addAttribute("sm",sm);
 	model.addAttribute("year",selectYear);
 	model.addAttribute("month",selectMonth);

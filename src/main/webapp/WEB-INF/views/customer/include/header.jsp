@@ -50,7 +50,6 @@
 				
 					<li class="col-lg-2"><a href="checkSalary.do">급여 조회</a></li>
 				
-					<!-- 개발 필요 -->
 					<li class="col-lg-2"><a href="checkAttendance.do">근태 조회</a></li>
 					
 					<li class="col-lg-2"><a href="notice.do">공지사항</a></li>
@@ -67,8 +66,15 @@
 				<ul class="navbar-right">
 					<li><a><span class="glyphicon glyphicon-user"></span> ${sessionScope.mid} 님</a>
 						<ul class="col-lg-12">
-							<li><a href="myPage.do">마이페이지</a></li>
-							<li><a href="logout.do">로그아웃</a></li>
+							<c:choose>
+								<c:when test="${checkPosition == 0}">
+									<li><a href="admin/adminPage.do">관리페이지</a></li>
+								</c:when>
+								<c:when test="${checkPosition == 1}">
+									<li><a href="myPage.do">마이페이지</a></li>
+								</c:when>
+							</c:choose>
+							<li><a href="../customer/logout.do">로그아웃</a></li>
 						</ul>
 					</li>
 				</ul>

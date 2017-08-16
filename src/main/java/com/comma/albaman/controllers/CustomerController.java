@@ -59,6 +59,10 @@ public class CustomerController {
 				request.getSession().setAttribute("mid", mid);
 				request.getSession().setAttribute("checkPosition", "1");
 				error = "0";
+			}else if(member.getPosition().equals("관리자")){
+				request.getSession().setAttribute("mid", mid);
+				request.getSession().setAttribute("checkPosition", "0");
+				error = "0";
 			}else{
 				request.getSession().setAttribute("mid", mid);
 				request.getSession().setAttribute("checkPosition", "2");
@@ -224,5 +228,22 @@ public class CustomerController {
 			System.out.println("퇴근 실패");
 			return "0";
 		}
+	}
+	
+	@RequestMapping(value={"myPage.do"}, method=RequestMethod.GET)
+	public String myPage(HttpServletRequest request,Model model){
+		
+		String mid=(String) request.getSession().getAttribute("mid");
+		
+		//멤버 정보 가져오기
+		MemberDAO memberDao=sqlSession.getMapper(MemberDAO.class);
+		Member member=memberDao.getMember(mid);
+		//가게 정보 가져오기
+		StoreDAO storeDao=sqlSession.getMapper(StoreDAO.class);
+		List<Store> storeList=storeDao.getAllStore(mid);
+		
+		model.addAttribute("member", member);
+		model.addAttribute("storeList", storeList);
+		return "customer.myPage";
 	}
 }
