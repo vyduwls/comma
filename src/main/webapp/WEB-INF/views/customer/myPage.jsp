@@ -12,8 +12,8 @@
 <div id="body" class="container">
 
 	<div id="body-title" class="col-lg-12">
-		<h3 id="body-title">
-			<b>마이 페이지</b>
+		<h3 id="body-title"
+			><b>마이 페이지</b>
 		</h3>
 	</div>
 

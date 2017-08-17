@@ -25,11 +25,7 @@
 	<body>
 		<tiles:insertAttribute name="header"/>
 		
-		<div class="container-fluid">
-			<tiles:insertAttribute name="side"/>
-			
-			<tiles:insertAttribute name="content"/>
-		</div>
+		<tiles:insertAttribute name="content"/>
 		
 		<tiles:insertAttribute name="footer"/>
 		
