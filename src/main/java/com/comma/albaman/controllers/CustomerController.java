@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.comma.albaman.dao.MemberDAO;
-import com.comma.albaman.dao.NoticeDAO;
 import com.comma.albaman.dao.QnaDAO;
 import com.comma.albaman.dao.RecruitDAO;
 import com.comma.albaman.dao.ScheduleDAO;
@@ -34,7 +33,6 @@ import com.comma.albaman.dao.StoreDAO;
 import com.comma.albaman.util.SendMail;
 import com.comma.albaman.vo.Employee;
 import com.comma.albaman.vo.Member;
-import com.comma.albaman.vo.Notice;
 import com.comma.albaman.vo.Qna;
 import com.comma.albaman.vo.Recruit;
 import com.comma.albaman.vo.Schedule;
@@ -347,11 +345,11 @@ public class CustomerController {
 		
 		return data;
 	}
-/*	
+	
 	// 문의사항 페이지
 		@RequestMapping(value={"qna.do"}, method=RequestMethod.GET)
 		public String qna(String category, String query, String pg, HttpServletRequest request, Model model) {
-			System.out.println("\nStoreController의 notice.do(GET)");
+			System.out.println("\nCustomerController의 qna.do(GET)");
 
 			String mid = (String) request.getSession().getAttribute("mid");
 			String checkPosition = (String) request.getSession().getAttribute("checkPosition");
@@ -369,10 +367,15 @@ public class CustomerController {
 				ipg = 1;
 			}
 			QnaDAO qnaDAO = sqlSession.getMapper(QnaDAO.class);
+			int total=0;
 			
-//			int total = qnaDAO.getAllMax(category, query, mid);
+			if(checkPosition.equals("0")){
+				total=qnaDAO.getAllMax(category,query);
+			}else{
+				total = qnaDAO.getMax(category, query, mid);				
+			}
 
-//			int lastPage = total/10 + (total%10==0? 0 : 1);
+			int lastPage = total/10 + (total%10==0? 0 : 1);
 			int startPage = ipg - (ipg-1)%5;
 			int start = (ipg-1)*10;
 			int end = ipg*10;
@@ -384,57 +387,59 @@ public class CustomerController {
 			System.out.println("end : " + end);
 			
 			List<Qna> qnaList =new ArrayList<Qna>();
-//			qnaList= qnaDAO.getNotices(mid, category, query, start, end);
-
+			if(checkPosition.equals("0")){
+				qnaList= qnaDAO.getAllQna(category, query, start, end);				
+			}else{
+				qnaList= qnaDAO.getQnaList(mid,category, query, start, end);
+			}
 			
-			System.out.println("noticeList 크기 : " + qnaList.size());
+			System.out.println("qnaList 크기 : " + qnaList.size());
 			
 			model.addAttribute("pg", ipg);
 			model.addAttribute("category", category);
 			model.addAttribute("query", query);
-//			model.addAttribute("lastPage", lastPage);
+			model.addAttribute("lastPage", lastPage);
 			model.addAttribute("startPage", startPage);
-			model.addAttribute("noticeList", qnaList);
+			model.addAttribute("qnaList", qnaList);
 			
-			return "store.notice";
+			return "customer.qna";
 		}
 		
 		// 문의사항 세부 페이지
-		@RequestMapping(value={"noticeDetail.do"}, method=RequestMethod.GET)
-		public String noticeDetail(String nseq, String sid, String category, String query, String pg, Model model, String delete){
-			System.out.println("\nStoreController의 noticeDetail.do(GET)");
+		@RequestMapping(value={"qnaDetail.do"}, method=RequestMethod.GET)
+		public String qnaDetail(String no,String qseq,String category, String query, String pg, Model model, String delete){
+			System.out.println("\nCustomerController의 qnaDetail.do(GET)");
 			
-			NoticeDAO noticeDAO = sqlSession.getMapper(NoticeDAO.class);
-			Notice notice = noticeDAO.getNotice(nseq);
+			QnaDAO qnaDAO = sqlSession.getMapper(QnaDAO.class);
+			Qna qna=qnaDAO.getQna(qseq);
 			
 			// 파일명 encoding(한글깨짐 방지)
-			if(notice.getFile()!=null) {
+			if(qna.getFile()!=null) {
 				String fileName = null;
 				try {
-					fileName =  URLEncoder.encode(notice.getFile(), "UTF-8");
+					fileName =  URLEncoder.encode(qna.getFile(), "UTF-8");
 				} catch (UnsupportedEncodingException e) {
 					System.out.println("파일명 인코딩 실패");
 					e.printStackTrace();
 				}
 				model.addAttribute("fileName", fileName);
 			}
-			model.addAttribute("notice", notice);
-			model.addAttribute("sid", sid);
+			model.addAttribute("qna", qna);
+			model.addAttribute("no",no);
 			model.addAttribute("category", category);
 			model.addAttribute("query", query);
 			model.addAttribute("pg", pg);
 			model.addAttribute("delete", delete);
 			
-			System.out.println("nseq : " + nseq);
 			System.out.println("delete : " + delete);
 			
-			return "store.noticeDetail";
+			return "customer.qnaDetail";
 		}
 		
 		// 첨부파일 다운로드
 		@RequestMapping(value={"download.do"}, method={RequestMethod.GET})
 		public String download(String path, String fileName, HttpServletRequest request, HttpServletResponse response) {
-			System.out.println("\nStoreController의 download.do(GET)");
+			System.out.println("\nCustomerController의 download.do(GET)");
 			
 			// 받아온 fileName을 decoding(한글깨짐 방지)
 			String fileNameDecoded = null;
@@ -475,24 +480,22 @@ public class CustomerController {
 		}
 		
 		// 문의사항 등록 페이지
-		@RequestMapping(value={"addNotice.do"}, method=RequestMethod.GET)
-		public String addNotice(String sid, Model model, String add){
-			System.out.println("\nStoreController의 addNotice.do(GET)");
+		@RequestMapping(value={"addQna.do"}, method=RequestMethod.GET)
+		public String addQna(String sid, Model model, String add){
+			System.out.println("\nCustomerController의 addQna.do(GET)");
 			
 			StoreDAO storeDAO = sqlSession.getMapper(StoreDAO.class);
-			Store store = storeDAO.getStore(sid);
-			
-			model.addAttribute("store", store);
+		
 			model.addAttribute("add",add);
 			
-			return "store.addNotice";
+			return "customer.addQna";
 		}
 		
 		// 문의사항 이미지 업로드(위지윅)
-		@RequestMapping(value={"noticeImageUpload.do"}, method=RequestMethod.POST)
+		@RequestMapping(value={"qnaImageUpload.do"}, method=RequestMethod.POST)
 		@ResponseBody
-		public String noticeImageUpload(HttpServletRequest request){
-			System.out.println("\nStoreController의 noticeImageUpload.do(AJAX)");
+		public String qnaImageUpload(HttpServletRequest request){
+			System.out.println("\nCustomerController의 qnaImageUpload.do(AJAX)");
 			
 			// store/upload 위치로 지정하면 summernote가 인식을 못해서 일단 WEB-INF 바깥으로 설정함
 			// (WEB-INF 내부에는 접근을 하지 못하는 듯)
@@ -517,11 +520,11 @@ public class CustomerController {
 		}
 		
 		// 문의사항 등록
-		@RequestMapping(value={"addNotice.do"}, method=RequestMethod.POST)
-		public String addNoticeProc(HttpServletRequest request){
-			System.out.println("\nStoreController의 addNotice.do(POST)");
+		@RequestMapping(value={"addQna.do"}, method=RequestMethod.POST)
+		public String addQnaProc(HttpServletRequest request){
+			System.out.println("\nCustomerController의 addQna.do(POST)");
 			
-			String path = "/WEB-INF/views/store/upload";
+			String path = "/WEB-INF/views/customer/upload";
 			String realPath = request.getServletContext().getRealPath(path);
 			System.out.println("실제 경로 : " + realPath);
 			
@@ -535,51 +538,45 @@ public class CustomerController {
 			String title = multiReq.getParameter("title");
 			String content = multiReq.getParameter("content");
 			String file = multiReq.getFilesystemName("file");
-			String sid = multiReq.getParameter("sid");
-			
+			String mid=(String) request.getSession().getAttribute("mid");
 			System.out.println("title : " + title);
 			System.out.println("content : " + content);
 			System.out.println("file : " + file);
-			System.out.println("sid : " + sid);
+			System.out.println("mid : " + mid);
 			
-			NoticeDAO noticeDAO = sqlSession.getMapper(NoticeDAO.class);
-			int result = noticeDAO.addNotice(title, content, file, sid);
+			QnaDAO qnaDAO=sqlSession.getMapper(QnaDAO.class);
+			int result = qnaDAO.addQna(title, content, file, mid);
 			if(result==0) {
 				System.out.println("공지사항 등록 실패");
-				return "redirect:addNotice.do?sid=" + sid + "&add=fail";
+				return "redirect:addQna.do?add=fail";
 			} else {
 				System.out.println("공지사항 등록 성공");
-				return "redirect:notice.do?sid=" + sid;
+				return "redirect:qna.do";
 			}
 		}
 		
 		// 문의사항 수정 페이지
-		@RequestMapping(value={"modifyNotice.do"}, method=RequestMethod.GET)
-		public String modifyNotice(String nseq, String sid, String category, String query, String pg, Model model, String modify){
-			System.out.println("\nStoreController의 modifyNotice.do(GET)");
+		@RequestMapping(value={"modifyQna.do"}, method=RequestMethod.GET)
+		public String modifyQna(String qseq, String category, String query, String pg, Model model, String modify){
+			System.out.println("\nCustomerController의 modifyQna.do(GET)");
 			
-			StoreDAO storeDAO = sqlSession.getMapper(StoreDAO.class);
-			Store store = storeDAO.getStore(sid);
 			
-			model.addAttribute("store", store);
+			QnaDAO qnaDAO=sqlSession.getMapper(QnaDAO.class);
+			Qna qna=qnaDAO.getQna(qseq);
 			
-			NoticeDAO noticeDAO = sqlSession.getMapper(NoticeDAO.class);
-			Notice notice = noticeDAO.getNotice(nseq);
-			
-			model.addAttribute("notice", notice);
-			model.addAttribute("sid", sid);
+			model.addAttribute("qna", qna);
 			model.addAttribute("category", category);
 			model.addAttribute("query", query);
 			model.addAttribute("pg", pg);
 			model.addAttribute("modify",modify);
 			
-			return "store.modifyNotice";
+			return "customer.modifyQna";
 		}
 		
 		// 문의사항 수정
-		@RequestMapping(value={"modifyNotice.do"}, method=RequestMethod.POST)
+		@RequestMapping(value={"modifyQna.do"}, method=RequestMethod.POST)
 		public String modifyNoticeProc(HttpServletRequest request){
-			System.out.println("\nStoreController의 modifyNotice.do(POST)");
+			System.out.println("\nCustomerController의 modifyQna.do(POST)");
 			
 			String path = "/WEB-INF/views/store/upload";
 			String realPath = request.getServletContext().getRealPath(path);
@@ -592,10 +589,10 @@ public class CustomerController {
 				e.printStackTrace();
 			}
 			
+			String qseq = multiReq.getParameter("qseq");
 			String title = multiReq.getParameter("title");
 			String content = multiReq.getParameter("content");
 			String file = multiReq.getFilesystemName("file");
-			String sid = multiReq.getParameter("sid");
 			String category = multiReq.getParameter("category");
 			String query = multiReq.getParameter("query");
 			String pg = multiReq.getParameter("pg");
@@ -603,37 +600,36 @@ public class CustomerController {
 			System.out.println("title : " + title);
 			System.out.println("content : " + content);
 			System.out.println("file : " + file);
-			System.out.println("sid : " + sid);
 			System.out.println("category : " + category);
 			System.out.println("query : " + query);
 			System.out.println("pg : " + pg);
 			
-			NoticeDAO noticeDAO = sqlSession.getMapper(NoticeDAO.class);
-			int result = noticeDAO.addNotice(title, content, file, sid);
+			QnaDAO qnaDAO=sqlSession.getMapper(QnaDAO.class);
+			int result = qnaDAO.updateQna(qseq,title,content,file);
 			if(result==0) {
 				System.out.println("공지사항 수정 실패");
-				return "redirect:modifyNotice.do?sid=" + sid + "&category=" + category + "&query=" + query + "&pg=" + pg + "&modify=fail";
+				return "redirect:modifyQna.do?category=" + category + "&query=" + query + "&pg=" + pg + "&modify=fail";
 			} else {
 				System.out.println("공지사항 수정 성공");
-				return "redirect:notice.do?sid=" + sid + "&category=" + category + "&query=" + query + "&pg=" + pg;
+				return "redirect:qna.do?category=" + category + "&query=" + query + "&pg=" + pg;
 			}
 		}
 		
 		// 문의사항 삭제
-		@RequestMapping(value={"deleteNotice.do"}, method=RequestMethod.GET)
-		public String deleteNotice(String nseq, String sid, String category, String query, String pg, Model model){
-			System.out.println("\nStoreController의 deleteNotice.do(GET)");
+		@RequestMapping(value={"deleteQna.do"}, method=RequestMethod.GET)
+		public String deleteQna(String qseq, String category, String query, String pg, Model model){
+			System.out.println("\nCustomerController의 deleteQna.do(GET)");
 			
-			System.out.println("nseq : " + nseq);
+			System.out.println("qseq : " + qseq);
 			
-			NoticeDAO noticeDAO = sqlSession.getMapper(NoticeDAO.class);
-			int result = noticeDAO.deleteNotice(nseq);
+			QnaDAO qnaDAO=sqlSession.getMapper(QnaDAO.class);
+			int result = qnaDAO.deleteQna(qseq);
 			if(result == 0) {
 				System.out.println("삭제 실패");
-				return "redirect:noticeDetail.do?nseq=" + nseq + "&sid=" + sid + "&category=" + category + "&query=" + query + "&pg=" + pg + "&delete=fail";
+				return "redirect:noticeDetail.do?qseq=" + qseq +"&category=" + category + "&query=" + query + "&pg=" + pg + "&delete=fail";
 			} else {
 				System.out.println("삭제 성공");
-				return "redirect:notice.do?sid=" + sid + "&category=" + category + "&query=" + query + "&pg=" + pg;			
+				return "redirect:qna.do?category=" + category + "&query=" + query + "&pg=" + pg;			
 			}
-		}*/
+		}
 }

@@ -18,20 +18,19 @@
 		<h2><b>공지사항 수정</b></h2>
 		<br><br>
 		
-		<form action="modifyNotice.do" method="post" enctype="multipart/form-data">
+		<form action="modifyQna.do" method="post" enctype="multipart/form-data">
 			<div>			
 				<!-- 제목 -->
 				<div>
-					<label>제목 (${store.name})</label>
-					<input type="hidden" name="sid" value="${store.sid}">
-					<input type="text" class="form-control" name="title" value="${notice.title}">
+					<label>제목</label>
+					<input type="text" class="form-control" name="title" value="${qna.title}">
 				</div>
 				
 				<!-- 내용 -->
 				<div style="margin-top: 17px">
 					<label>내용</label>
 				</div>
-				<textarea id="summernote" name="content">${notice.content}</textarea>
+				<textarea id="summernote" name="content">${qna.content}</textarea>
 				<script type="text/javascript">
 				    $(document).ready(function() {
 				        $('#summernote').summernote({
@@ -53,6 +52,7 @@
 				<input type="hidden" name="category" value="${category}">
 				<input type="hidden" name="query" value="${query}">
 				<input type="hidden" name="pg" value="${pg}">
+				<input type="hidden" name="qseq" value="${qna.qseq}">
 				
 				<!-- 버튼 -->
 				<div id="btn-group" style="margin-top: 20px">

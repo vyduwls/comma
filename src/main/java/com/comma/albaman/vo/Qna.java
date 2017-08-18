@@ -6,17 +6,10 @@ public class Qna {
 		private String title;
 		private String content;
 		private String regDate;
-		private String image;
+		private String file;
 		private String mid;
-		private String qnaCategory;
 		
 		
-		public String getQnaCategory() {
-			return qnaCategory;
-		}
-		public void setQnaCategory(String qnaCategory) {
-			this.qnaCategory = qnaCategory;
-		}
 		public String getQseq() {
 			return qseq;
 		}
@@ -41,11 +34,12 @@ public class Qna {
 		public void setRegDate(String regDate) {
 			this.regDate = regDate;
 		}
-		public String getImage() {
-			return image;
+		
+		public String getFile() {
+			return file;
 		}
-		public void setImage(String image) {
-			this.image = image;
+		public void setFile(String file) {
+			this.file = file;
 		}
 		public String getMid() {
 			return mid;

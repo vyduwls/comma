@@ -8,22 +8,21 @@
 <script>
 	$(document).ready(function() {
 		if("${add}" == "fail") {
-			alert("공지사항 등록 실패");
+			alert("문의사항 등록 실패");
 		}
 	});
 </script>
 
 <div id="content">
 	<div class="container">
-		<h2><b>공지사항 등록</b></h2>
+		<h2><b>문의사항 등록</b></h2>
 		<br><br>
 		
-		<form action="addNotice.do" method="post" enctype="multipart/form-data">
+		<form action="addQna.do" method="post" enctype="multipart/form-data">
 			<div>			
 				<!-- 제목 -->
 				<div>
-					<label>제목 (${store.name})</label>
-					<input type="hidden" name="sid" value="${store.sid}">
+					<label>제목</label>
 					<input type="text" class="form-control" name="title">
 				</div>
 				
@@ -52,7 +51,7 @@
 				        $.ajax({
 				            data : data,
 				            type : "POST",
-				            url : "noticeImageUpload.do",
+				            url : "qnaImageUpload.do",
 				            cache : false,
 				            contentType : false,
 				            processData : false,

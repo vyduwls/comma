@@ -21,16 +21,8 @@ $(document).ready(function() {
 			<form id="frm" class="form-inline" action="qna.do" method="get">
 
 				
-				<!-- 문의 내용 선택 -->
-				<div class="form-group">
-					<select class="form-control" name="category">
-					    <option value="title" ${category=="title" ? "selected" : ""}>제목</option>
-					    <option value="content" ${category=="content" ? "selected" : ""}>내용</option>
-			  		</select>
-		  		</div>
-		  		
 		  		<!-- 검색창 -->
-		  		<div class="form-group">
+		  		<div class="form-group" style="float: right;">
 					<div class="input-group">
 	    				<input type="text" class="form-control" name="query" value="${query}">
 	   					<div class="input-group-btn">
@@ -38,6 +30,14 @@ $(document).ready(function() {
 	   					</div>
 		  			</div>
 		  		</div>
+				<!-- 문의 내용 선택 -->
+				<div class="form-group" style="float: right;">
+					<select class="form-control" name="category">
+					    <option value="title" ${category=="title" ? "selected" : ""}>제목</option>
+					    <option value="content" ${category=="content" ? "selected" : ""}>내용</option>
+			  		</select>
+		  		</div>
+		  		
 			</form>
 		</div>
 		
@@ -54,7 +54,7 @@ $(document).ready(function() {
 					<c:forEach var="qnaList" items="${qnaList}" varStatus="n">
 						<tr>
 							<td>${n.index+1}</td>
-							<td><a href="qnaDetail.do?qseq=${qnaList.qseq}&category=${category}&query=${query}&pg=${pg}">${qnaList.title}</a></td>
+							<td><a href="qnaDetail.do?no=${n.index+1}&qseq=${qnaList.qseq}&category=${category}&query=${query}&pg=${pg}">${qnaList.title}</a></td>
 							<td>${qnaList.regDate}</td>
 						</tr>
 					</c:forEach>

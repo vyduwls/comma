@@ -19,28 +19,32 @@ $(document).ready(function() {
 			<table class="table table-bordered" id="notice_detail_table">
 					<tr>
 						<th style="width: 20px" class="active">No.</th>
-						<td style="width: 20px">${notice.nseq}</td>
+						<td style="width: 20px">${no}</td>
 						<th style="width: 20px" class="active">제목</th>
-						<td style="width: 200px">${notice.title}</td>
+						<td style="width: 200px">${qna.title}</td>
 						<th style="width: 20px" class="active">등록일</th>
-						<td style="width: 50px">${notice.regDate}</td>
+						<td style="width: 50px">${qna.regDate}</td>
 					</tr>		
 					<tr>
 						<th style="width: 20px" class="active">내용</th>
 						<td colspan="5">
-							<div id="notice_detail_content">${notice.content}</div>
+							<div id="notice_detail_content">${qna.content}</div>
 						</td>
 					</tr>
 					<tr>
 						<th style="width: 20px" class="active">첨부</th>
-						<td colspan="5"><a href="download.do?path=/WEB-INF/views/store/upload&fileName=${fileName}">${notice.file}</a></td>
+						<td colspan="5"><a href="download.do?path=/WEB-INF/views/customer/upload&fileName=${fileName}">${qna.file}</a></td>
 					</tr>		
 			</table>
 			<div id="btn-group">
-				<a class="btn btn-default btn-xs" href="notice.do?sid=${sid}&category=${category}&query=${query}&pg=${pg}">목록</a>
+				<a class="btn btn-default btn-xs" href="qna.do?category=${category}&query=${query}&pg=${pg}">목록</a>
 				<c:if test="${checkPosition=='1'}">
-					<a class="btn btn-primary btn-xs" href="modifyNotice.do?nseq=${notice.nseq}&sid=${sid}&category=${category}&query=${query}&pg=${pg}">수정</a>
-					<a class="btn btn-danger btn-xs" href="deleteNotice.do?nseq=${notice.nseq}&sid=${sid}&category=${category}&query=${query}&pg=${pg}">삭제</a>
+					<a class="btn btn-primary btn-xs" href="modifyQna.do?qseq=${qna.qseq}&category=${category}&query=${query}&pg=${pg}">수정</a>
+					<a class="btn btn-danger btn-xs" href="deleteQna.do?qseq=${qna.qseq}&category=${category}&query=${query}&pg=${pg}">삭제</a>
+				</c:if>
+				<c:if test="${checkPosition=='0'}">
+					<a class="btn btn-primary btn-xs" href="reQna.do?qseq=${qna.qseq}&category=${category}&query=${query}&pg=${pg}">답글</a>
+					<a class="btn btn-danger btn-xs" href="deleteQna.do?qseq=${qna.qseq}&category=${category}&query=${query}&pg=${pg}">삭제</a>
 				</c:if>
 			</div>
 		</div>

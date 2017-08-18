@@ -74,7 +74,7 @@
 									<li><a href="myPage.do">마이페이지</a></li>
 								</c:when>
 							</c:choose>
-							<li><a href="../customer/logout.do">로그아웃</a></li>
+							<li><a href="logout.do">로그아웃</a></li>
 						</ul>
 					</li>
 				</ul>
