@@ -425,6 +425,13 @@ public class StoreController {
 		member.setPhone(phone);
 		member.setEmail(email);
 		member.setPosition(position);
+		
+		System.out.println("mid : " + mid);
+		System.out.println("pwd : " + pwd);
+		System.out.println("name : " + name);
+		System.out.println("phone : " + phone);
+		System.out.println("email : " + email);
+		System.out.println("position : " + position);
 
 		RecruitDAO recruitDAO = sqlSession.getMapper(RecruitDAO.class);
 		Recruit recruit = new Recruit();
@@ -434,6 +441,13 @@ public class StoreController {
 		recruit.setWage(wage);
 		recruit.setJoinDate(joinDate);
 		recruit.setSid(store);
+		
+		System.out.println("rid : " + mid);
+		System.out.println("birth : " + birth);
+		System.out.println("address : " + address);
+		System.out.println("wage : " + wage);
+		System.out.println("joinDate : " + joinDate);
+		System.out.println("store : " + store);
 
 		int result = 0;
 		TransactionDefinition td = new DefaultTransactionDefinition();
@@ -441,7 +455,9 @@ public class StoreController {
 		try {
 			System.out.println("트랜잭션 완료");
 			result = memberDAO.addMember(member);
+			System.out.println("result--"+result);
 			result += recruitDAO.addRecruit(recruit);
+			System.out.println("11result--"+result);
 			ptm.commit(ts);
 		} catch (Exception e) {
 			ptm.rollback(ts);

@@ -122,14 +122,7 @@ public class CustomerController {
 	@RequestMapping(value={"join.do"},method=RequestMethod.POST)
 	public String join(Member member) {
 		System.out.println("\nCustomerContoller의 join.do(POST)");
-		
-		System.out.println("mid : " + member.getMid());
-		System.out.println("pwd : " + member.getPwd());
-		System.out.println("name : " + member.getName());
-		System.out.println("phone : " + member.getPhone());
-		System.out.println("email : " + member.getEmail());
-		System.out.println("position : " + member.getPosition());
-		
+
 		member.setPosition("점주");
 		
 		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
@@ -306,6 +299,7 @@ public class CustomerController {
 		
 		String mid=(String) request.getSession().getAttribute("mid");
 		MemberDAO memberDao=sqlSession.getMapper(MemberDAO.class);
+		int a=memberDao.deleteAllMember(mid);
 		int data=memberDao.withDraw(mid);
 		
 		System.out.println("DATA----"+data);
@@ -342,13 +336,18 @@ public class CustomerController {
 	@ResponseBody
 	public String deleteStore(HttpServletRequest request,Model model,String sid){
 		System.out.println("\nCustomerController의 deleteStore.do");
-
+		
+		// member에 있는 직원들 지우기
+		MemberDAO memberDao=sqlSession.getMapper(MemberDAO.class);
+		int a=memberDao.deleteMember(sid);
+		System.out.println("a==="+a);
+		//가게 지우기
 		StoreDAO storeDao=sqlSession.getMapper(StoreDAO.class);
 		String data=Integer.toString(storeDao.deleteStore(sid));
 		
 		return data;
 	}
-	
+/*	
 	// 문의사항 페이지
 		@RequestMapping(value={"qna.do"}, method=RequestMethod.GET)
 		public String qna(String category, String query, String pg, HttpServletRequest request, Model model) {
@@ -636,5 +635,5 @@ public class CustomerController {
 				System.out.println("삭제 성공");
 				return "redirect:notice.do?sid=" + sid + "&category=" + category + "&query=" + query + "&pg=" + pg;			
 			}
-		}
+		}*/
 }

@@ -20,7 +20,7 @@ public interface MemberDAO {
 	public Member getMember(String mid);
 	
 	// 회원 추가
-	@Insert("INSERT INTO MEMBER VALUES(#{mid},#{pwd},#{name},#{phone},#{email},#{position})")
+	@Insert("INSERT INTO MEMBER VALUES (#{mid},#{pwd},#{name},#{phone},#{email},#{position})")
 	public int addMember(Member member);
 	
 	// mid로 전체 회원 조회
@@ -51,5 +51,11 @@ public interface MemberDAO {
 	//현재 일하는 직원만 가져오기
 	@Select("SELECT * FROM MEMBER INNER JOIN RECRUIT ON MID = RID AND SID = #{sid} WHERE SUBSTRING_INDEX(JOINDATE,'-',2)<=#{prework} AND (SUBSTRING_INDEX(RESIGNDATE,'-',2)>=#{prework} OR RESIGNDATE IS NULL) ORDER BY JOINDATE DESC")
 	public List<Employee> getNowWorkEmployee(@Param("sid")String sid,@Param("prework")String prework);
+	//가게 삭제할 때, 멤버 지우기
+	@Delete("DELETE FROM  M USING MEMBER M JOIN  RECRUIT R ON M.MID=R.RID WHERE R.SID=#{sid}")
+	public int deleteMember(String sid);
+	
+	@Delete("DELETE FROM  M USING MEMBER M JOIN  RECRUIT R ON M.MID=R.RID JOIN STORE S ON S.SID=R.SID WHERE S.MID=#{mid}")
+	public int deleteAllMember(String mid);
 
 }
