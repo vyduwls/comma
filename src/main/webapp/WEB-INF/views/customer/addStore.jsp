@@ -44,12 +44,12 @@
 		<div class="profile" style="margin-top:52px;">
 			<!-- 프로필 버튼 -->
 			<div class="button">
-				<a id="myPage" type="button" style="border-left:1px solid #ccc"   class="btn btn-default btn-block myPage-active"
+				<a id="myPage" type="button" class="btn btn-default btn-block"
 					href="${pageContext.request.contextPath}/customer/modifyMember.do">회원정보수정</a>
-				<a id="message" type="button" style="border-left:3px solid rgb(66,133,244)"  class="btn btn-default btn-block"
+				<a id="message" type="button" class="btn btn-default btn-block myPage-active"
 					href="${pageContext.request.contextPath}/customer/myPage.do" >가게 정보 등록/변경
 				</a> <a id="modify" type="button" class="btn btn-default btn-block"
-					href="${pageContext.request.contextPath}/customer/qnaList.do">문의사항</a> 
+					href="${pageContext.request.contextPath}/customer/myPageQNA.do">문의사항</a> 
 <%-- 					<c:if test="${m.mid=='admin'}"> --%>
 <%-- 						<a id="manageMember" type="button" class="btn btn-default btn-block" href="${pageContext.request.contextPath}/customer/manageMember.do">회원관리</a> --%>
 <%-- 					</c:if>	 --%>

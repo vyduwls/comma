@@ -46,7 +46,8 @@ $(document).ready(function() {
 				<thead>
 					<tr>
 						<th class="col-lg-1 active">No.</th>
-						<th class="col-lg-9 active">제목</th>
+						<th class="col-lg-7 active">제목</th>
+						<th class="col-lg-2 active">작성자</th>
 						<th class="col-lg-2 active">등록일</th>
 					</tr>
 				</thead>
@@ -55,6 +56,7 @@ $(document).ready(function() {
 						<tr>
 							<td>${n.index+1}</td>
 							<td><a href="qnaDetail.do?no=${n.index+1}&qseq=${qnaList.qseq}&category=${category}&query=${query}&pg=${pg}">${qnaList.title}</a></td>
+							<td>${qnaList.mid}</td>
 							<td>${qnaList.regDate}</td>
 						</tr>
 					</c:forEach>
@@ -74,10 +76,10 @@ $(document).ready(function() {
 					<ul class="pagination pagination-sm">
 						<c:if test="${startPage!=1}">
 							<li id="btnPrev">
-								<a class="btn btn-default" href="notice.do?pg=
+								<a class="btn btn-default" href="qna.do?pg=
 								<%-- <c:if test="${startPage==1}">${startPage}</c:if> --%>
 								<c:if test="${startPage!=1}">${startPage-1}</c:if>
-								&sid=${sid}&category=${category}&query=${query}" aria-label="Previous"> <span aria-hidden="true">«</span></a></li>
+								&category=${category}&query=${query}" aria-label="Previous"> <span aria-hidden="true">«</span></a></li>
 						</c:if>
 						
 						<c:forEach var="i" begin="0" end="4">

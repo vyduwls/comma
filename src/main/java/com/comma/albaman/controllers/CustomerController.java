@@ -31,9 +31,11 @@ import com.comma.albaman.dao.RecruitDAO;
 import com.comma.albaman.dao.ScheduleDAO;
 import com.comma.albaman.dao.StoreDAO;
 import com.comma.albaman.util.SendMail;
+import com.comma.albaman.vo.Comment;
 import com.comma.albaman.vo.Employee;
 import com.comma.albaman.vo.Member;
 import com.comma.albaman.vo.Qna;
+import com.comma.albaman.vo.QnaList;
 import com.comma.albaman.vo.Recruit;
 import com.comma.albaman.vo.Schedule;
 import com.comma.albaman.vo.Store;
@@ -346,6 +348,47 @@ public class CustomerController {
 		return data;
 	}
 	
+	//마이페이지-문의사항
+	@RequestMapping(value={"myPageQNA.do"}, method=RequestMethod.GET)
+	public String myPageQNA(String pg, HttpServletRequest request, Model model) {
+		System.out.println("\nCustomerController의 myPageQNA.do(GET)");
+
+		String mid = (String) request.getSession().getAttribute("mid");
+		String checkPosition = (String) request.getSession().getAttribute("checkPosition");
+
+		int ipg = 0;
+		if(pg!=null && !pg.equals("")) {
+			ipg = Integer.parseInt(pg);
+		} else {
+			ipg = 1;
+		}
+		QnaDAO qnaDAO = sqlSession.getMapper(QnaDAO.class);
+		
+		int total= qnaDAO.getMaxQseq(mid);				
+		total=total*2;
+
+		int lastPage = total/10 + (total%10==0? 0 : 1);
+		int startPage = ipg - (ipg-1)%5;
+		int start = (ipg-1)*5;
+		int end = ipg*5;
+		
+
+		System.out.println("ipg : " + ipg);
+		System.out.println("start : " + start);
+		System.out.println("end : " + end);
+		
+		List<QnaList> qnaList= qnaDAO.getMypageQna(mid,start, end);
+
+		
+		System.out.println("qnaList 크기 : " + qnaList.size());
+		
+		model.addAttribute("pg", ipg);
+		model.addAttribute("lastPage", lastPage);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("qnaList", qnaList);
+		
+		return "customer.myPageQNA";
+	}	
 	// 문의사항 페이지
 		@RequestMapping(value={"qna.do"}, method=RequestMethod.GET)
 		public String qna(String category, String query, String pg, HttpServletRequest request, Model model) {
@@ -430,12 +473,42 @@ public class CustomerController {
 			model.addAttribute("query", query);
 			model.addAttribute("pg", pg);
 			model.addAttribute("delete", delete);
+			model.addAttribute("comment","no");
 			
 			System.out.println("delete : " + delete);
 			
 			return "customer.qnaDetail";
 		}
-		
+		//답글 DETAIL
+		@RequestMapping(value={"reQNADetail.do"}, method=RequestMethod.GET)
+		public String reQNADetail(String no,String cseq,String category, String query, String pg, Model model, String delete){
+			System.out.println("\nCustomerController의 qnaDetail.do(GET)");
+			
+			QnaDAO qnaDAO = sqlSession.getMapper(QnaDAO.class);
+			Comment qna=qnaDAO.getComment(cseq);
+			
+/*			// 파일명 encoding(한글깨짐 방지)
+			if(qna.getFile()!=null) {
+				String fileName = null;
+				try {
+					fileName =  URLEncoder.encode(qna.getFile(), "UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					System.out.println("파일명 인코딩 실패");
+					e.printStackTrace();
+				}
+				model.addAttribute("fileName", fileName);
+			}*/
+			model.addAttribute("qna", qna);
+			model.addAttribute("no",no);
+			model.addAttribute("category", category);
+			model.addAttribute("query", query);
+			model.addAttribute("pg", pg);
+			model.addAttribute("delete", delete);
+			model.addAttribute("comment","yes");
+			System.out.println("delete : " + delete);
+			
+			return "customer.qnaDetail";
+		}
 		// 첨부파일 다운로드
 		@RequestMapping(value={"download.do"}, method={RequestMethod.GET})
 		public String download(String path, String fileName, HttpServletRequest request, HttpServletResponse response) {

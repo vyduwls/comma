@@ -67,7 +67,6 @@
 	margin-bottom: 15px;
 }
 .profile {
-	border-top: 1px solid lightGrey;
     margin: 0 0 20px 0;
     position: relative;
     overflow: hidden;
@@ -107,13 +106,13 @@
     padding: 5px 5px 5px 5px;
     border-radius: 27px;
 }
-.profile .button #myPage, #message, #modify, #manageMember{
+.profile .button #myPage, #message {
 	border-radius: 0px;	
 	margin-bottom: -5px;
 	border-bottom: none;
 	padding: 10px 10px;
 }
-.profile .button #manage {
+.profile .button #modify {
 	padding: 10px 10px;
 	border-radius: 0px;
 }

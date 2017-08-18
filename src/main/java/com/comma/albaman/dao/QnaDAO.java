@@ -10,8 +10,10 @@ import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Component;
 
+import com.comma.albaman.vo.Comment;
 import com.comma.albaman.vo.Notice;
 import com.comma.albaman.vo.Qna;
+import com.comma.albaman.vo.QnaList;
 
 @Component
 public interface QnaDAO {
@@ -41,6 +43,18 @@ public interface QnaDAO {
 	//문의사항 수정
 	@Update("UPDATE QNA SET TITLE=#{title},CONTENT=#{content},FILE=#{file} WHERE QSEQ=#{qseq}")
 	public int updateQna(@Param("qseq")String qseq,@Param("title") String title,@Param("content") String content,@Param("file")String file);
+	//답글 달린 문의사항 가져오기
+	@Select("SELECT COUNT(*) FROM QNA Q JOIN COMMENT C ON Q.QSEQ=C.QSEQ WHERE Q.MID=#{mid}")
+	public int getMaxQseq(String mid);
+	
+	@Select("SELECT Q.QSEQ AS QSEQ, Q.TITLE AS TITLE, Q.CONTENT AS CONTENT,Q.REGDATE AS REGDATE,"
+			+ "Q.FILE AS FILE, Q.MID AS MID, C.CSEQ AS CSEQ, C.CONTENT AS RECONTENT, C.REGDATE AS REDATE "
+			+ "FROM QNA Q INNER JOIN COMMENT C ON Q.QSEQ=C.QSEQ WHERE Q.MID=#{mid}"
+			+ "ORDER BY CAST(Q.QSEQ AS UNSIGNED) DESC LIMIT ${start}, ${end}")	
+	public List<QnaList> getMypageQna(@Param("mid")String mid, @Param("start")int start, @Param("end")int end);
+	//답글가져오기
+	@Select("SELECT * FROM COMMENT WHERE CSEQ=#{cseq}")
+	public Comment getComment(String cseq);
 
 }
 

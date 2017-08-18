@@ -57,7 +57,7 @@
 				<a id="message" type="button" class="btn btn-default btn-block"
 					href="${pageContext.request.contextPath}/customer/myPage.do" >가게 정보 등록/변경
 				</a> <a id="modify" type="button" class="btn btn-default btn-block"
-					href="${pageContext.request.contextPath}/customer/qnaList.do">문의사항</a> 
+					href="${pageContext.request.contextPath}/customer/myPageQNA.do">문의사항</a> 
 <%-- 					<c:if test="${m.mid=='admin'}"> --%>
 <%-- 						<a id="manageMember" type="button" class="btn btn-default btn-block" href="${pageContext.request.contextPath}/customer/manageMember.do">회원관리</a> --%>
 <%-- 					</c:if>	 --%>
