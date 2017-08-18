@@ -337,7 +337,7 @@ public class StoreController {
 		System.out.println("storeList.get(0).getSid() : " + storeList.get(0).getSid());
 		List<Employee> employeeList = memberDAO.getEmployee(storeList.get(0).getSid());
 		model.addAttribute("employeeList",employeeList);
-
+		
 		return "store.manageRecruit";
 	}
 	
@@ -446,7 +446,7 @@ public class StoreController {
 	@RequestMapping(value={"changeRecruit.do"},method=RequestMethod.POST)
 	@ResponseBody
 	public String changeRecruit(String sid) {
-		System.out.println("\nStoreController의 changeRecruit.do(AJAX)");
+		System.out.println("\nStoreController의 changeRecRruit.do(AJAX)");
 
 		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
 		List<Employee> employeeList = memberDAO.getEmployee(sid);
@@ -523,6 +523,7 @@ public class StoreController {
 
 		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
 		RecruitDAO recruitDAO = sqlSession.getMapper(RecruitDAO.class);
+		ScheduleDAO scheduleDAO = sqlSession.getMapper(ScheduleDAO.class);
 
 		int result = 0;
 		TransactionDefinition td = new DefaultTransactionDefinition();
@@ -530,6 +531,7 @@ public class StoreController {
 		try {
 			result = memberDAO.modifyMember(mid, pwd, name, position, phone);
 			result += recruitDAO.modifyRecruit(mid, birth, address, wage, joinDate);
+			result += scheduleDAO.modifyWageFromTommorow(mid, wage);
 			ptm.commit(ts);
 			System.out.println("트랜잭션 완료");
 		} catch (Exception e) {
@@ -537,7 +539,7 @@ public class StoreController {
 			System.out.println("트랜잭션 실패");
 		}
 
-		// 0 : 실패, 2 : 성공
+		// 0 : 실패, 2이상 : 성공
 		return Integer.toString(result);
 	}
 
@@ -558,6 +560,13 @@ public class StoreController {
 		System.out.println("storeList.get(0).getSid() : " + storeList.get(0).getSid());
 		List<Attendance> attendanceList = scheduleDAO.getAttendance(storeList.get(0).getSid());
 		model.addAttribute("attendanceList",attendanceList);
+		
+		// 오늘 날짜 전송
+		Date _today = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
+		String today = sdf.format(_today);
+		model.addAttribute("today", today);
+		System.out.println("today : " + today);
 
 		return "store.manageAttendance";
 	}
@@ -641,7 +650,7 @@ public class StoreController {
 	// 근태 관리 수정
 	@RequestMapping(value={"modifyAttendance.do"},method=RequestMethod.POST)
 	@ResponseBody
-	public String modifyAttendance(String sseq, String date, String mid, String name, String position, String preOnWork, String preOffWork, String onWork, String offWork) {
+	public String modifyAttendance(String sseq, String date, String mid, String name, String position, String preOnWork, String preOffWork, String onWork, String offWork, String memo, String wage) {
 		System.out.println("\nStoreController의 modifyAttendance.do(AJAX)");
 		
 		System.out.println("sseq : " + sseq);
@@ -653,6 +662,8 @@ public class StoreController {
 		System.out.println("preOffWork : " + preOffWork);
 		System.out.println("onWork : " + onWork);
 		System.out.println("offWork : " + offWork);
+		System.out.println("wage : " + wage);
+		System.out.println("memo : " + memo);
 		
 		preOnWork = date + " " + preOnWork;
 		preOffWork = date + " " + preOffWork;
@@ -660,9 +671,14 @@ public class StoreController {
 		offWork = date + " " + offWork;
 		
 		ScheduleDAO scheduleDAO = sqlSession.getMapper(ScheduleDAO.class);
-		int result = scheduleDAO.modifyAttendance(sseq, preOnWork, preOffWork, onWork, offWork);
+		if(wage==null || wage.equals("")) {
+			int result = scheduleDAO.modifyAttendance(sseq, preOnWork, preOffWork, onWork, offWork, memo);			
+			return Integer.toString(result);
+		} else {
+			int result = scheduleDAO.modifyAttendanceToday(sseq, preOnWork, preOffWork, onWork, offWork, memo, Integer.parseInt(wage));
+			return Integer.toString(result);
+		}
 		
-		return Integer.toString(result);
 	}
 	
 	// 공지사항 페이지

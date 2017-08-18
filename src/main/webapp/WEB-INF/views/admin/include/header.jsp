@@ -67,7 +67,7 @@
 				<ul class="navbar-right">
 					<li><a><span class="glyphicon glyphicon-user"></span> ${sessionScope.mid} 님</a>
 						<ul class="col-lg-12">
-							<li><a href="adminPage.do">관리페이지</a></li>
+							<li><a href="manageMember.do">관리페이지</a></li>
 							<li><a href="../customer/logout.do">로그아웃</a></li>
 						</ul>
 					</li>

@@ -68,7 +68,7 @@
 						<ul class="col-lg-12">
 							<c:choose>
 								<c:when test="${checkPosition == 0}">
-									<li><a href="admin/adminPage.do">관리페이지</a></li>
+									<li><a href="../admin/manageMember.do">관리페이지</a></li>
 								</c:when>
 								<c:when test="${checkPosition == 1}">
 									<li><a href="myPage.do">마이페이지</a></li>

@@ -13,10 +13,27 @@ public class AdminController {
 	@Autowired
 	private SqlSession sqlSession;
 	
-	@RequestMapping(value={"adminPage.do"},method=RequestMethod.GET)
-	public String adminPage() {
-		System.out.println("\nAdminController의 adminPage.do(GET)");
+	// 회원 관리 페이지
+	@RequestMapping(value={"manageMember.do"},method=RequestMethod.GET)
+	public String manageMember() {
+		System.out.println("\nAdminController의 manageMember.do(GET)");
 		
-		return "admin.adminPage";
+		return "admin.manageMember";
+	}
+	
+	// 점포 관리 페이지
+	@RequestMapping(value={"manageStore.do"},method=RequestMethod.GET)
+	public String manageStore() {
+		System.out.println("\nAdminController의 manageStore.do(GET)");
+		
+		return "admin.manageStore";
+	}
+	
+	// 문의 게시판 페이지
+	@RequestMapping(value={"manageQNA.do"},method=RequestMethod.GET)
+	public String manageQNA() {
+		System.out.println("\nAdminController의 manageQNA.do(GET)");
+		
+		return "admin.manageQNA";
 	}
 }

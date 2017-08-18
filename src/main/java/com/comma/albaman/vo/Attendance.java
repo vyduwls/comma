@@ -12,6 +12,8 @@ public class Attendance {
 	String offWork;
 	String onWorkState;
 	String offWorkState;
+	int wage;
+	String memo;
 	
 	public String getSseq() {
 		return sseq;
@@ -78,5 +80,17 @@ public class Attendance {
 	}
 	public void setOffWorkState(String offWorkState) {
 		this.offWorkState = offWorkState;
+	}
+	public int getWage() {
+		return wage;
+	}
+	public void setWage(int wage) {
+		this.wage = wage;
+	}
+	public String getMemo() {
+		return memo;
+	}
+	public void setMemo(String memo) {
+		this.memo = memo;
 	}
 }

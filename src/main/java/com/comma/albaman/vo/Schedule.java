@@ -8,6 +8,8 @@ public class Schedule {
 		private String onWork;
 		private String offWork;
 		private String rid;
+		private int wage;
+		private String memo;
 		
 		public String getSseq() {
 			return sseq;
@@ -46,7 +48,16 @@ public class Schedule {
 		public void setRid(String rid) {
 			this.rid = rid;
 		}
-
-		
-	
+		public int getWage() {
+			return wage;
+		}
+		public void setWage(int wage) {
+			this.wage = wage;
+		}
+		public String getMemo() {
+			return memo;
+		}
+		public void setMemo(String memo) {
+			this.memo = memo;
+		}
 }

@@ -103,6 +103,14 @@ $(document).ready(function() {
 									td.append("(조퇴)");
 								}
 								break;
+							case "wage" :
+								var td = $("<td class='data divide'></td>").text(value);
+								tr.append(td);
+								break;
+							case "memo" :
+								var td = $("<td class='data divide' style='width: 200px'></td>");
+								tr.append(td);
+								break;
 						}
 					}
 				});
@@ -151,6 +159,8 @@ $(document).ready(function() {
 						<th class="divide">퇴근 시간</th>
 						<th>출근 시간(실제)</th>
 						<th class="divide">퇴근 시간(실제)</th>
+						<th class="divide">시급</th>
+						<th class="divide">비고</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -172,6 +182,8 @@ $(document).ready(function() {
 									(${attendanceList.offWorkState})
 								</c:if>
 							</td>
+							<td class="data divide">${attendanceList.wage}</td>
+							<td class="data divide" style="width: 200px">${attendanceList.memo}</td>
 						</tr>
 					</c:forEach>
 				</tbody>
