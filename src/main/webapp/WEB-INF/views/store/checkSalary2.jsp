@@ -148,10 +148,10 @@
 			}
 			if(overTime>=60){
 				salaryState+="<td class='salaryTd'>"+Math.floor(overTime/60)+"시간 "+(overTime%60)+"분</td>";	
-			}else if(overTime<60 && overTime!=0){
+			}else if(overTime<60){
 				salaryState+="<td class='salaryTd'>"+(overTime%60)+"분</td>";	
 			}else{
-				salaryState+="<td class='salaryTd'>-</td>";	
+				salaryState+="<td class='salaryTd'>111</td>";	
 			}	
 		
 			salaryState+="<td class='salaryTd'>"+numberWithCommas(wage)+"</td>";
@@ -159,8 +159,7 @@
 				daySalary=8*wage+Math.round(plusTime*((wage*1.5)/60));
 				daySalary+=Math.round(overTime*((wage*1.5)/60));
 			}else{
-				daySalary=Math.round(totalWorkMinute*(wage/60));
-				daySalary+=Math.round(plusTime*((wage*1.5)/60));
+				daySalary=Math.round(totalWorkMinute*(wage/60))+Math.round(plusTime*((wage*1.5)/60));
 				daySalary+=Math.round(overTime*((wage*1.5)/60));
 			}
 				salaryState+="<td class='salaryTd2'>"+numberWithCommas(daySalary)+" 원</td></tr>";

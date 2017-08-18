@@ -48,5 +48,8 @@ public interface MemberDAO {
 	
 	@Delete("DELETE FROM MEMBER WHERE MID=#{mid}")
 	public int withDraw(String mid);
+	//현재 일하는 직원만 가져오기
+	@Select("SELECT * FROM MEMBER INNER JOIN RECRUIT ON MID = RID AND SID = #{sid} WHERE SUBSTRING_INDEX(RESIGNDATE,'-',2)>=#{prework} OR RESIGNDATE IS NULL ORDER BY JOINDATE DESC")
+	public List<Employee> getNowWorkEmployee(@Param("sid")String sid,@Param("prework")String prework);
 
 }

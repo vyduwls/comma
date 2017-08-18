@@ -8,7 +8,15 @@ public class Qna {
 		private String regDate;
 		private String image;
 		private String mid;
+		private String qnaCategory;
 		
+		
+		public String getQnaCategory() {
+			return qnaCategory;
+		}
+		public void setQnaCategory(String qnaCategory) {
+			this.qnaCategory = qnaCategory;
+		}
 		public String getQseq() {
 			return qseq;
 		}

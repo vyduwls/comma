@@ -19,7 +19,7 @@ public interface RecruitDAO {
 	
 	// 전체 직원 조회
 	@Select("SELECT * FROM RECRUIT WHERE SID=#{sid} AND RESIGNDATE IS NULL")
-	public List<Recruit> getAllRecruit(String sid);
+	public List<Recruit> getAllRecruit(@Param("sid")String sid);
 	
 	// 직원 수 조회
 	@Select("SELECT COUNT(*) FROM RECRUIT WHERE SID = #{sid}")
@@ -40,6 +40,11 @@ public interface RecruitDAO {
 	// 퇴사하기
 	@Update("UPDATE RECRUIT SET RESIGNDATE=CURDATE() WHERE RID=#{rid}")
 	public int resignRecruit(@Param("rid")String rid);
+	@Select("SELECT * FROM RECRUIT WHERE SID=#{sid} AND (RESIGNDATE IS NULL OR SUBSTRING_INDEX(RESIGNDATE,'-',2)>=#{prework})")
+	public List<Recruit> getNowRecruit(@Param("sid")String sid,@Param("prework")String prework);
+	// 시급 가져오기
+	@Select("SELECT WAGE FROM RECRUIT WHERE RID=#{rid}")
+	public int getWage(String rid);
 }
 
 

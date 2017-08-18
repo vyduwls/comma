@@ -8,7 +8,16 @@ public class Schedule {
 		private String onWork;
 		private String offWork;
 		private String rid;
+		private int wage;
 		
+		
+		
+		public int getWage() {
+			return wage;
+		}
+		public void setWage(int wage) {
+			this.wage = wage;
+		}
 		public String getSseq() {
 			return sseq;
 		}

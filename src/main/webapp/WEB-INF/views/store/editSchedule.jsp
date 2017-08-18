@@ -37,11 +37,7 @@
 		$("#h2_selectMonth").text(year+"년"+month+"월 근무일정표");
 		   	for (var day = lastDay; day >= 1; day--) {
  		    	$(".scheduleTable_time_th").after("<th class='scheduleTable_date_th' data-toggle='modal' data-target='#myModal1' id='th"+day+"' style='cursor:pointer;'>"+day+"</th>");
- 		    	if("${checkPosition}"=="1"){
-		    		$(".scheduleTable_time_td").after("<td class='scheduleTable_date_td' id="+day+" style='cursor:pointer;' data-toggle='modal' data-target='#myModal'><input type='hidden' name='color' value='0'></td>");
- 		    	}else{
- 		    		$(".scheduleTable_time_td").after("<td class='scheduleTable_date_td' id="+day+" style='cursor:pointer;' data-toggle='modal' data-target='#myModal'><input type='hidden' name='color' value='0'></td>");
- 		    	}
+		    	$(".scheduleTable_time_td").after("<td class='scheduleTable_date_td' id="+day+" style='cursor:pointer;' data-toggle='modal' data-target='#myModal'><input type='hidden' name='color' value='0'></td>");
 		    	$(".scheduleTable_totalTime_td").after("<td class='scheduleTable_totalDate_td' ><span id="+day+">0</span></td>"); 
 
 		   	}			
@@ -335,7 +331,13 @@
 	   	    	 type:"GET",
 	   	    	 data:{
 	   	    		 "stringSchedule":stringSchedule,
-	   	    		 "stringEndSchedule":stringEndSchedule
+	   	    		 "stringEndSchedule":stringEndSchedule,
+	   	    		 "ridList":"${allEmployeeRids}",
+	   	    		 "lastDay":lastDay,
+	   	    		 "nowDay":nowDate.getDate(),
+	   	    		 "month":month+"-"+(nowDate.getMonth()+1),
+	   	    		 "year":year+"-"+nowDate.getFullYear(),
+	   	    		 "endDate":year+"-"+month+"-"+lastDay
 	   	    	 },
 	   	    	 dateType:"text",
 	   	    	 success : function(data){

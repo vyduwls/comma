@@ -20,12 +20,12 @@ public interface ScheduleDAO {
 	public List<Schedule> getSchedule(@Param("sid") String sid,@Param("prework") String prework);
 	
 	// 스케줄 저장
-	@Insert("INSERT INTO SCHEDULE (SSEQ,PREONWORK,PREOFFWORK,ONWORK,OFFWORK,RID) VALUES ((SELECT * FROM (SELECT IFNULL(MAX(CAST(S.SSEQ AS UNSIGNED)),0)+1 FROM SCHEDULE S) NEXT),#{preOnWork},#{preOffWork},null,null,#{rid})")
-	public int insertSchedule(@Param("preOnWork")String preOnWork,@Param("preOffWork")String preOffWork,@Param("rid")String rid);
+	@Insert("INSERT INTO SCHEDULE (SSEQ,PREONWORK,PREOFFWORK,ONWORK,OFFWORK,RID,WAGE) VALUES ((SELECT * FROM (SELECT IFNULL(MAX(CAST(S.SSEQ AS UNSIGNED)),0)+1 FROM SCHEDULE S) NEXT),#{preOnWork},#{preOffWork},null,null,#{rid},${wage})")
+	public int insertSchedule(@Param("preOnWork")String preOnWork,@Param("preOffWork")String preOffWork,@Param("rid")String rid,@Param("wage") int wage);
 
 	// 스케줄 지우기
-	@Delete("DELETE FROM SCHEDULE WHERE SUBSTRING_INDEX(PREONWORK,' ','1')=#{deleteDate} AND RID=#{rid}")
-	public int deleteSchedule(@Param("rid") String rid,@Param("deleteDate") String deleteDate);
+	@Delete("DELETE FROM SCHEDULE WHERE PREONWORK  BETWEEN #{startDate} AND #{endDate} AND RID=#{rid}")
+	public int deleteSchedule(@Param("rid") String rid,@Param("startDate") String startDate,@Param("endDate") String endDate);
 	
 	//시간별 직원 스케줄 추출
 	@Select("SELECT * FROM SCHEDULE S JOIN RECRUIT R ON S.RID=R.RID WHERE SID =#{sid} AND SUBSTRING_INDEX(PREONWORK,' ','1')=#{prework}")
@@ -116,6 +116,9 @@ public interface ScheduleDAO {
 	//월 총 근무시간 구하기
 	@Select("SELECT IFNULL(SUM(TIMESTAMPDIFF(MINUTE,ONWORK,OFFWORK)),0) FROM  SCHEDULE WHERE SUBSTRING_INDEX(ONWORK,'-','2')=#{prework} AND RID=#{mid} AND ONWORK IS NOT NULL AND OFFWORK IS NOT NULL ORDER BY ONWORK")
 	public int getWorkTotalTime(@Param("prework")String prework, @Param("mid")String mid);
+	//한 주의 평균 시급 구하기
+	@Select("SELECT IFNULL(SUM(WAGE)/COUNT(*),0) FROM  SCHEDULE WHERE ONWORK BETWEEN #{monDay} AND #{sunDay} AND RID=#{mid} AND ONWORK IS NOT NULL AND OFFWORK IS NOT NULL")
+	public int getWeekWage(@Param("monDay")String monDay,@Param("sunDay")String sunDay,@Param("mid")String mid);
 }
 
 

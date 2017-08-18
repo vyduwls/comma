@@ -202,9 +202,27 @@ public class StoreController {
 				storeInfo=storeDAO.getStore(sid);
 			}
 
+		}	
+		//		날짜 변환
+		if(selectMonth==null || selectMonth.equals("")){
+			selectMonth=new SimpleDateFormat("MM").format(new Date());
 		}
+		if(selectYear==null ||selectYear.equals("")){
+			selectYear=new SimpleDateFormat("yyyy").format(new Date());
+		}
+
+		int year=Integer.parseInt(selectYear);
+		int month=Integer.parseInt(selectMonth);
+		String preMonth="";
+		if(month<=9){
+			preMonth="0"+month;
+		}else{
+			preMonth=selectMonth;
+		}
+		String prework=year+"-"+preMonth;
+
 		//		가져온 직원 정보에서 sid로 전체 직원 추출
-		List<Recruit> allEmployee=recruitDao.getAllRecruit(storeInfo.getSid());
+		List<Recruit> allEmployee=recruitDao.getNowRecruit(storeInfo.getSid(),prework);
 		System.out.println("storeInfo.getSid()====="+storeInfo.getSid());
 		//		전체 직원 rid String 으로 변환
 		String allEmployeeRid="";
@@ -223,23 +241,6 @@ public class StoreController {
 		if(allEmployeeRid!=null && !allEmployeeRid.equals("")){
 			memberList=memberDAO.getAllMember(allEmployeeRid);	
 		}
-		//		날짜 변환
-		if(selectMonth==null || selectMonth.equals("")){
-			selectMonth=new SimpleDateFormat("MM").format(new Date());
-		}
-		if(selectYear==null ||selectYear.equals("")){
-			selectYear=new SimpleDateFormat("yyyy").format(new Date());
-		}
-
-		int year=Integer.parseInt(selectYear);
-		int month=Integer.parseInt(selectMonth);
-		String preMonth="";
-		if(month<=9){
-			preMonth="0"+month;
-		}else{
-			preMonth=selectMonth;
-		}
-		String prework=year+"-"+preMonth;
 
 		//      sid와 prework 날짜로 해당 달의 전체 스케줄 받기		
 		List<Schedule> allSchedule=scheduleDAO.getSchedule(storeInfo.getSid(), prework);
@@ -285,34 +286,34 @@ public class StoreController {
 	//스케줄 저장 ajax
 	@RequestMapping(value={"saveSchedule.do"},method=RequestMethod.GET)
 	@ResponseBody
-	public String saveSchedule(String stringSchedule,String stringEndSchedule){
+	public String saveSchedule(String stringSchedule,String stringEndSchedule,String ridList,String lastDay,String nowDay,String month,String year,String endDate){
 		System.out.println("\nStoreController의 saveSchedule.do(GET)");	
 		ScheduleDAO scheduleDAO=sqlSession.getMapper(ScheduleDAO.class);
-
+		RecruitDAO recruitDao=sqlSession.getMapper(RecruitDAO.class);
 		String[] schedules=stringSchedule.split(",");
 		String[] endSchedules=stringEndSchedule.split(",");
-
+		String[] rids=ridList.split(",");
+ 		String startDate="";
+		if(year.split("-")[0].equals(year.split("-")[1]) && 
+		   Integer.parseInt(month.split("-")[0])==Integer.parseInt(month.split("-")[1])){
+			startDate=schedules[0].split("_")[1].substring(0, 7)+"-"+nowDay;
+		}else{
+			startDate=schedules[0].split("_")[1].substring(0, 7)+"-01";
+		}
 		//기존 스케줄 지우기
-		for (int i = 0; i < schedules.length; i++) {
-			String rid=schedules[i].split("_")[0];
-			System.out.println("rid[---"+rid);
-			String deleteDate=schedules[i].split("_")[1].split(" ")[0];
-			System.out.println("deleteDate==="+deleteDate);
-			int a=scheduleDAO.deleteSchedule(rid, deleteDate);
-			System.out.println("a[---"+a);
+		for (int i = 0; i < rids.length; i++) {
+			String rid=rids[i];
+			int a=scheduleDAO.deleteSchedule(rid, startDate,endDate);
 		}
 		// 스케줄 추가
 		if(stringSchedule!=null && !stringSchedule.equals("")){
 			System.out.println("stringSchedule---"+stringSchedule);
 			for (int i = 0; i < schedules.length; i++) {
 				String rid=schedules[i].split("_")[0];
+				int wage=recruitDao.getWage(rid);
 				String preOnWork=schedules[i].split("_")[1];
 				String preOffWork=endSchedules[i].split("_")[1];
-				System.out.println("preOnWork---"+preOnWork);
-				System.out.println("preOffWork---"+preOffWork);
-				System.out.println("rid---"+rid);
-				int a=scheduleDAO.insertSchedule(preOnWork,preOffWork,rid);
-				System.out.println("A-------"+a);
+				int a=scheduleDAO.insertSchedule(preOnWork,preOffWork,rid,wage);
 			}	
 		}else{
 			stringSchedule="0";
@@ -974,7 +975,7 @@ public class StoreController {
 			return "redirect:notice.do?sid=" + sid + "&category=" + category + "&query=" + query + "&pg=" + pg;			
 		}
 	}
-
+//  직원 급여계산
 	@RequestMapping(value={"checkSalary.do"}, method=RequestMethod.GET)
 	public String checkSalary(HttpServletRequest request,Model model,String selectMonth,String selectYear,String mid){
 		System.out.println("\nStoreController의 checkSalary.do(GET)");
@@ -1043,10 +1044,11 @@ public class StoreController {
 				int count=scheduleDAO.checkAbsent(monDay,sunDay,mid);
 				if(count==0){
 					int weekWorkTime=scheduleDAO.getWeekWorkTime(monDay,sunDay,mid);
+					int weekWage=scheduleDAO.getWeekWage(monDay, sunDay, mid);
 					if(weekWorkTime>=900 && weekWorkTime<2400){
-						totalweekMoney=(weekWorkTime/2400.0)*8*recruitData.getWage();
+						totalweekMoney=(weekWorkTime/2400.0)*8*weekWage;
 					}else if(weekWorkTime>=2400){
-						totalweekMoney=8*recruitData.getWage();
+						totalweekMoney=8*weekWage;
 					}
 					totalMoney+=totalweekMoney;
 				}
@@ -1080,10 +1082,10 @@ public class StoreController {
 		for (int i = 0; i < allSchedule.size(); i++) {
 			if(i==allSchedule.size()-1){
 				allScheduleString+=allSchedule.get(i).getOnWork().substring(0, 16)+"_"+allSchedule.get(i).getOffWork().substring(0, 16)
-						+"_"+recruitData.getWage();
+						+"_"+allSchedule.get(i).getWage();
 			}else{
 				allScheduleString+=allSchedule.get(i).getOnWork().substring(0, 16)+"_"+allSchedule.get(i).getOffWork().substring(0, 16)
-						+"_"+recruitData.getWage()+",";
+						+"_"+allSchedule.get(i).getWage()+",";
 			}
 		}
 		model.addAttribute("stringworkTime",stringworkTime);
@@ -1118,15 +1120,6 @@ public class StoreController {
 		model.addAttribute("storeList", storeList);
 		model.addAttribute("storeInfo", storeInfo);
 
-		// 직원 전체 정보 가져오기
-		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
-		List<Employee> employeeList=new ArrayList<Employee>();
-		if(sid==null||sid.equals("")){
-			employeeList = memberDAO.getEmployee(storeList.get(0).getSid());
-		}else{
-			employeeList = memberDAO.getEmployee(sid);
-		}
-		model.addAttribute("employeeList",employeeList);
 
 		ScheduleDAO scheduleDAO=sqlSession.getMapper(ScheduleDAO.class);
 		RecruitDAO recruitDAO=sqlSession.getMapper(RecruitDAO.class);
@@ -1148,6 +1141,16 @@ public class StoreController {
 			preMonth=selectMonth;
 		}
 		String prework=year+"-"+preMonth;
+		
+		// 직원 전체 정보 가져오기
+		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
+		List<Employee> employeeList=new ArrayList<Employee>();
+		if(sid==null||sid.equals("")){
+			employeeList = memberDAO.getNowWorkEmployee(storeInfo.getSid(),prework);
+		}else{
+			employeeList = memberDAO.getNowWorkEmployee(sid,prework);
+		}
+		model.addAttribute("employeeList",employeeList);
 
 		String getWeek=prework+"-01";
 		// 		주휴수당 계산하기		
@@ -1196,10 +1199,12 @@ public class StoreController {
 					int count=scheduleDAO.checkAbsent(monDay,sunDay,salaryManage.getMid());
 					if(count==0){
 						int weekWorkTime=scheduleDAO.getWeekWorkTime(monDay,sunDay,salaryManage.getMid());
+						int weekWage=scheduleDAO.getWeekWage(monDay,sunDay,salaryManage.getMid());
+						System.out.println("weekWage===="+weekWage);
 						if(weekWorkTime>=900 && weekWorkTime<2400){
-							totalweekMoney=(weekWorkTime/2400.0)*8*recruitData.getWage();
+							totalweekMoney=(weekWorkTime/2400.0)*8*weekWage;
 						}else if(weekWorkTime>=2400){
-							totalweekMoney=8*recruitData.getWage();
+							totalweekMoney=8*weekWage;
 						}
 						weeklyPay+=totalweekMoney;
 					}
@@ -1233,6 +1238,12 @@ public class StoreController {
 				for (int i = 0; i < allSchedule.size(); i++) {
 					String onWork=allSchedule.get(i).getOnWork();
 					String offWork=allSchedule.get(i).getOffWork();
+					int wage=allSchedule.get(i).getWage();
+					
+					if(i==allSchedule.size()-1){
+						salaryManage.setWage(wage);
+					}
+					
 					int startDay=Integer.parseInt(onWork.split("-")[2].split(" ")[0]);
 					int endDay=Integer.parseInt(offWork.split("-")[2].split(" ")[0]);
 					//일 총근무 시간
@@ -1322,20 +1333,21 @@ public class StoreController {
 		 			totalPlusTime+=plusTime;
 		 			totalOverTime+=overTime;
 		 			if(totalWorkMinute>=480){
-		 				daySalary=8*salaryManage.getWage()+
-		 						Math.round(plusTime*((salaryManage.getWage()*1.5)/60))+
-		 						Math.round(overTime*((salaryManage.getWage()*1.5)/60));
+		 				daySalary=8*wage+
+		 						Math.round(plusTime*((wage*1.5)/60))+
+		 						Math.round(overTime*((wage*1.5)/60));
 		 			}else{
-		 				daySalary=Math.round(totalWorkMinute*salaryManage.getWage()/60)+
-		 						Math.round(plusTime*((salaryManage.getWage()*1.5)/60))+
-		 						Math.round(overTime*((salaryManage.getWage()*1.5)/60));
+		 				daySalary=Math.round(totalWorkMinute*wage/60)+
+		 						Math.round(plusTime*((wage*1.5)/60))+
+		 						Math.round(overTime*((wage*1.5)/60));
 		 			}
 
-		 			totalExcessPay+=Math.round(plusTime*((salaryManage.getWage()*1.5)/60));
-		 			totalOverTimePay+=Math.round(overTime*((salaryManage.getWage()*1.5)/60));	
+		 			totalExcessPay+=Math.round(plusTime*((wage*1.5)/60));
+		 			totalOverTimePay+=Math.round(overTime*((wage*1.5)/60));	
 					totalSalary+=daySalary;
 				}
 			}
+
 			salaryManage.setExcessPay(totalExcessPay);
 			salaryManage.setOverTimePay(totalOverTimePay);
 			salaryManage.setTotalPay(totalSalary);

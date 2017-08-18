@@ -1,3 +1,46 @@
+/* addQna.jsp css */
+#add_notice_table th {
+	text-align: center;
+	vertical-align: middle;
+}
+#add_notice_table textarea {
+	width: -webkit-fill-available;
+    height: auto;
+    border: none;
+    box-shadow: none;
+}
+#add_notice_table input {
+	width: -webkit-fill-available;
+    height: auto;
+    border: none;
+  	box-shadow: none;
+}
+
+/* qnaDetail.jsp css */
+#notice_detail_table th {
+	text-align: center;
+	vertical-align: middle;
+}
+#notice_detail_content {
+	padding: 20px;
+	text-align: left; 
+	height: 300px; 
+	overflow-y: scroll;
+	word-break: normal;
+}
+#btn-group {
+	margin-top: -10px;
+	float: right;
+}
+
+/* Qna.jsp css */
+#notice_table {
+	margin-top: 50px;
+}
+#notice_table th, td{
+	text-align: center;
+}
+
 /* recruit.jsp css */
 #content {
 	padding: 40px 0px 70px 0px;
