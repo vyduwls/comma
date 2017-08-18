@@ -41,6 +41,8 @@
 		    	$(".scheduleTable_totalTime_td").after("<td class='scheduleTable_totalDate_td' ><span id="+day+">0</span></td>"); 
 
 		   	}			
+		if("${allEmployeeRids}"!=null && "${allEmployeeRids}"!=""){
+		
 		var ridList="${allEmployeeRids}".split(",");
 		var color=new Array();
 		color[0]="rgb(23, 144, 214)";
@@ -58,10 +60,27 @@
 				ridColorList[i][1]=color[i%4];
 			}
 		} 
+		}
 		var allScheduleString="${allScheduleString}";
 		var allEndScheduleString="${allEndScheduleString}";
 		if((allScheduleString!="" && allScheduleString!=null)&&(allEndScheduleString!="" && allEndScheduleString!=null)){
 			inputSchedule(allScheduleString,allEndScheduleString);
+		}
+		if("${allResignDate}"!=null && "${allResignDate}"!=""){
+			var allResignDate="${allResignDate}";
+			var resignDate=allResignDate.split(",");
+			for (var i = 0; i < resignDate.length; i++) {
+				if(resignDate[i].split("_")[1]!=0){
+					if(Number(resignDate[i].split("_")[1].split("-")[1])==month){
+						for (var j = Number(resignDate[i].split("-")[2]); j <= lastDay; j++) {
+							$("#"+resignDate[i].split("_")[0]).siblings("#"+j).removeAttr("style");
+							$("#"+resignDate[i].split("_")[0]).siblings("#"+j).attr("data-toggle","none");
+						}
+							$("#"+resignDate[i].split("_")[0]).siblings("#"+Number(resignDate[i].split("-")[2])).text("퇴사");
+							$("#"+resignDate[i].split("_")[0]).siblings("#"+Number(resignDate[i].split("-")[2])).css("color","red");
+					}
+				}
+			}
 		}
 		/*미니달력 설정*/
         jQuery("#miniCalendar").fullCalendar({
@@ -221,7 +240,6 @@
 								stringHtml+="<td class='timeTable_date_td' style='background-color:"+ridColorList[i][1]+";'>"+dayScheduleArray[i].split("_")[1].split(":")[1]+" 분</td>";			
 							}else if(dayScheduleArray[i].split("_")[1]==dayScheduleArray[i].split("_")[2] && j==0){
 								timeTotalWorker[j]-=1;
-								alert("11111");
 								stringHtml+="<td class='timeTable_date_td'></td>";	
 							}else if(j==Number(dayScheduleArray[i].split("_")[2].split(":")[0])){
 								stringHtml+="<td class='timeTable_date_td' style='background-color:"+ridColorList[i][1]+";'>"+dayScheduleArray[i].split("_")[2].split(":")[1]+" 분</td>";	

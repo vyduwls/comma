@@ -227,15 +227,28 @@ public class StoreController {
 		//		전체 직원 rid String 으로 변환
 		String allEmployeeRid="";
 		String allEmployeeRids="";
+		String allResignDate="";
 		for (int i = 0; i < allEmployee.size(); i++) {
 			if(i==allEmployee.size()-1){
 				allEmployeeRid+="'"+allEmployee.get(i).getRid()+"'";
 				allEmployeeRids+=allEmployee.get(i).getRid();
+				if(allEmployee.get(i).getResignDate()!=null){
+					allResignDate+=allEmployee.get(i).getRid()+"_"+allEmployee.get(i).getResignDate();					
+				}else{
+					allResignDate+=allEmployee.get(i).getRid()+"_0";
+				}
 			}else{
 				allEmployeeRid+="'"+allEmployee.get(i).getRid()+"'"+",";
 				allEmployeeRids+=allEmployee.get(i).getRid()+",";
+				if(allEmployee.get(i).getResignDate()!=null){
+					allResignDate+=allEmployee.get(i).getRid()+"_"+allEmployee.get(i).getResignDate()+",";			
+				}else{
+					allResignDate+=allEmployee.get(i).getRid()+"_0,";
+				}
 			}
 		}
+		
+		System.out.println("allResignDate-----"+allResignDate);
 		List<Member> memberList=new ArrayList<Member>();
 		//		스트링으로 변환한 rid로 멤버 리스트 추출
 		if(allEmployeeRid!=null && !allEmployeeRid.equals("")){
@@ -268,7 +281,8 @@ public class StoreController {
 				memberName+=memberList.get(i).getMid()+"_"+memberList.get(i).getName()+",";
 			}
 		}
-
+		
+		model.addAttribute("allResignDate", allResignDate);
 		model.addAttribute("memberName", memberName);
 		model.addAttribute("allEmployeeRids", allEmployeeRids);
 		model.addAttribute("allScheduleString", allScheduleString);
@@ -1200,7 +1214,6 @@ public class StoreController {
 					if(count==0){
 						int weekWorkTime=scheduleDAO.getWeekWorkTime(monDay,sunDay,salaryManage.getMid());
 						int weekWage=scheduleDAO.getWeekWage(monDay,sunDay,salaryManage.getMid());
-						System.out.println("weekWage===="+weekWage);
 						if(weekWorkTime>=900 && weekWorkTime<2400){
 							totalweekMoney=(weekWorkTime/2400.0)*8*weekWage;
 						}else if(weekWorkTime>=2400){

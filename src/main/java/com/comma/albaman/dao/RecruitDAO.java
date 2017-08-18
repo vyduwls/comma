@@ -40,7 +40,7 @@ public interface RecruitDAO {
 	// 퇴사하기
 	@Update("UPDATE RECRUIT SET RESIGNDATE=CURDATE() WHERE RID=#{rid}")
 	public int resignRecruit(@Param("rid")String rid);
-	@Select("SELECT * FROM RECRUIT WHERE SID=#{sid} AND (RESIGNDATE IS NULL OR SUBSTRING_INDEX(RESIGNDATE,'-',2)>=#{prework})")
+	@Select("SELECT * FROM RECRUIT WHERE SID=#{sid} AND (RESIGNDATE IS NULL OR SUBSTRING_INDEX(RESIGNDATE,'-',2)>=#{prework}) AND SUBSTRING_INDEX(JOINDATE,'-',2)<=#{prework}")
 	public List<Recruit> getNowRecruit(@Param("sid")String sid,@Param("prework")String prework);
 	// 시급 가져오기
 	@Select("SELECT WAGE FROM RECRUIT WHERE RID=#{rid}")
