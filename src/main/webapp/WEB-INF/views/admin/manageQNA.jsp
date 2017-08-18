@@ -3,7 +3,7 @@
 	
 <div id="content">
 	<div id="inner_content" class="container">
-		<h2><b>회원 관리</b></h2>
+		<h2><b>문의 게시판</b></h2>
 		<br><br>
 		
 		<!-- 사이드바 -->
@@ -11,11 +11,11 @@
 			<div class="profile">
 				<!-- 프로필 버튼 -->
 				<div class="button">
-					<a id="manageMember" type="button" class="btn btn-block" style="border-left: 3px solid rgb(66,133,244)"
+					<a id="manageMember" type="button" class="btn btn-block" 
 						href="${pageContext.request.contextPath}/admin/manageMember.do">회원 관리</a>
-					<a id="manageStore" type="button" class="btn btn-block"
+					<a id="manageStore" type="button" class="btn btn-block" 
 						href="${pageContext.request.contextPath}/admin/manageStore.do">점포 관리</a> 
-					<a id="manageQNA" type="button" class="btn btn-block"
+					<a id="manageQNA" type="button" class="btn btn-block" style="border-left: 3px solid rgb(66,133,244)"
 						href="${pageContext.request.contextPath}/admin/manageQNA.do">문의 게시판</a> 
 				</div>
 			</div>

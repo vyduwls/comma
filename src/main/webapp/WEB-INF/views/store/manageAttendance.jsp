@@ -49,6 +49,7 @@
 						var preOffWork;
 						var onWork;
 						var offWork;
+						var today = new Date();
 						
 						$.each(item, function(key,value) {
 							switch(key) {
@@ -111,6 +112,25 @@
 									if(preOffWork.getTime() - offWork.getTime() > 0) {
 										td.append("(조퇴)");
 									}
+									break;
+								case "wage" :
+									var todayDate = today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate();
+									var toDate = new Date(date);
+									var dateDate = toDate.getFullYear() + "-" + toDate.getMonth() + "-" + toDate.getDate();
+							
+									if(todayDate == dateDate) {
+										var input = $("<input style='width: 60px' type='text' name='wage'>").val(value);
+										var td = $("<td class='data divide'></td>");
+										tr.append(td.append(input));
+									} else {
+										var td = $("<td class='data divide'></td>").text(value);
+										tr.append(td);
+									}
+									break;
+								case "memo" :
+									var input = $("<input style='width: 150px' type='text' name='memo'>").val(value);
+									var td = $("<td class='data divide'></td>");
+									tr.append(td.append(input));
 									break;
 							}
 						});
@@ -208,6 +228,25 @@
 										td.append("(조퇴)");
 									}
 									break;
+								case "wage" :
+									var todayDate = today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate();
+									var toDate = new Date(date);
+									var dateDate = toDate.getFullYear() + "-" + toDate.getMonth() + "-" + toDate.getDate();
+							
+									if(todayDate == dateDate) {
+										var input = $("<input style='width: 60px' type='text' name='wage'>").val(value);
+										var td = $("<td class='data divide'></td>");
+										tr.append(td.append(input));
+									} else {
+										var td = $("<td class='data divide'></td>").text(value);
+										tr.append(td);
+									}
+									break;
+								case "memo" :
+									var input = $("<input style='width: 150px' type='text' name='memo'>").val(value);
+									var td = $("<td class='data divide'></td>");
+									tr.append(td.append(input));
+									break;
 							}
 						}
 					});
@@ -237,7 +276,9 @@
 						'preOnWork' : td.eq(4).children("input").val(),
 						'preOffWork' : td.eq(5).children("input").val(),
 						'onWork' : td.eq(6).children("input").val(),
-						'offWork' : td.eq(7).children("input").val()
+						'offWork' : td.eq(7).children("input").val(),
+						'wage' : td.eq(8).children("input").val(),
+						'memo' : td.eq(9).children("input").val()
 				},
 				success : function(data) {
 					if($.trim(data) != "0") {
@@ -318,6 +359,8 @@
 						<th class="divide">퇴근 시간</th>
 						<th>출근 시간(실제)</th>
 						<th class="divide">퇴근 시간(실제)</th>
+						<th class="divide">시급</th>
+						<th class="divide">비고</th>
 						<th>수정</th>
 					</tr>
 				</thead>
@@ -340,6 +383,15 @@
 									(${attendanceList.offWorkState})
 								</c:if>
 							</td>
+							<td class="data divide">
+								<c:if test="${attendanceList.date==today}">
+									<input style="width: 60px" type="text" value="${attendanceList.wage}">
+								</c:if>
+								<c:if test="${attendanceList.date!=today}">
+									${attendanceList.wage}
+								</c:if>
+							</td>
+							<td class="data divide"><input style="width: 150px" type="text" value="${attendanceList.memo}"></td>
 							<td><button class="btn btn-xs btn-primary modifyBtn">저장</button></td>
 						</tr>
 					</c:forEach>

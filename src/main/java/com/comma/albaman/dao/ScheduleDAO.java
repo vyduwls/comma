@@ -69,34 +69,41 @@ public interface ScheduleDAO {
 	// 해당 가게의 모든 근태 기록 불러오기
 	@Select("SELECT S.SSEQ AS SSEQ, DATE(S.PREONWORK) AS DATE, R.RID AS MID, (SELECT NAME FROM MEMBER WHERE MID=R.RID) AS NAME, (SELECT POSITION FROM MEMBER WHERE MID=R.RID) AS POSITION, "
 			+ "TIME(S.PREONWORK) AS PREONWORK, TIME(S.PREOFFWORK) AS PREOFFWORK, TIME(S.ONWORK) AS ONWORK, TIME(S.OFFWORK) AS OFFWORK, IF(S.ONWORK - S.PREONWORK > 0,'지각','정상') AS ONWORKSTATE, "
-			+ "IF(S.PREOFFWORK - S.OFFWORK > 0,'조퇴','정상') AS OFFWORKSTATE FROM RECRUIT AS R INNER JOIN SCHEDULE AS S "
+			+ "IF(S.PREOFFWORK - S.OFFWORK > 0,'조퇴','정상') AS OFFWORKSTATE, S.WAGE AS WAGE, S.MEMO AS MEMO FROM RECRUIT AS R INNER JOIN SCHEDULE AS S "
 			+ "ON R.RID = S.RID AND R.SID = #{sid} AND DATE(S.PREONWORK) <= CURDATE() ORDER BY DATE(S.PREONWORK) DESC")
 	public List<Attendance> getAttendance(String sid);
+	
 	// 해당 직원의 모든 근태 기록 불러오기
 	@Select("SELECT S.SSEQ AS SSEQ, DATE(S.PREONWORK) AS DATE, R.RID AS MID, (SELECT NAME FROM MEMBER WHERE MID=R.RID) AS NAME, (SELECT POSITION FROM MEMBER WHERE MID=R.RID) AS POSITION, "
 			+ "TIME(S.PREONWORK) AS PREONWORK, TIME(S.PREOFFWORK) AS PREOFFWORK, TIME(S.ONWORK) AS ONWORK, TIME(S.OFFWORK) AS OFFWORK, IF(S.ONWORK - S.PREONWORK > 0,'지각','정상') AS ONWORKSTATE, "
-			+ "IF(S.PREOFFWORK - S.OFFWORK > 0,'조퇴','정상') AS OFFWORKSTATE FROM RECRUIT AS R INNER JOIN SCHEDULE AS S "
+			+ "IF(S.PREOFFWORK - S.OFFWORK > 0,'조퇴','정상') AS OFFWORKSTATE, S.WAGE AS WAGE, S.MEMO AS MEMO FROM RECRUIT AS R INNER JOIN SCHEDULE AS S "
 			+ "ON R.RID = S.RID AND R.RID = #{rid} AND DATE(S.PREONWORK) <= CURDATE() ORDER BY DATE(S.PREONWORK) DESC")
 	public List<Attendance> getAttendanceForEmployee(@Param("rid")String rid);
 	
 	// 해당 직원의 근태 기록 검색 기능
 	@Select("SELECT S.SSEQ AS SSEQ, DATE(S.PREONWORK) AS DATE, R.RID AS MID, (SELECT NAME FROM MEMBER WHERE MID=R.RID) AS NAME, (SELECT POSITION FROM MEMBER WHERE MID=R.RID) AS POSITION, "
 			+ "TIME(S.PREONWORK) AS PREONWORK, TIME(S.PREOFFWORK) AS PREOFFWORK, TIME(S.ONWORK) AS ONWORK, TIME(S.OFFWORK) AS OFFWORK, IF(S.ONWORK - S.PREONWORK > 0,'지각','정상') AS ONWORKSTATE, "
-			+ "IF(S.PREOFFWORK - S.OFFWORK > 0,'조퇴','정상') AS OFFWORKSTATE FROM RECRUIT AS R INNER JOIN SCHEDULE AS S "
+			+ "IF(S.PREOFFWORK - S.OFFWORK > 0,'조퇴','정상') AS OFFWORKSTATE, S.WAGE AS WAGE, S.MEMO AS MEMO FROM RECRUIT AS R INNER JOIN SCHEDULE AS S "
 			+ "ON R.RID = S.RID AND R.RID = #{rid} AND DATE(S.PREONWORK) <= CURDATE()  AND DATE(S.PREONWORK) BETWEEN #{startDate} AND #{endDate} ORDER BY DATE(S.PREONWORK) DESC")
 	public List<Attendance> searchAttendanceForEmployee(@Param("rid")String rid, @Param("startDate")String startDate, @Param("endDate")String endDate);
 	
 	// 근태 기록 검색 기능
 	@Select("SELECT * FROM (SELECT S.SSEQ AS SSEQ, DATE(S.PREONWORK) AS DATE, R.RID AS MID, (SELECT NAME FROM MEMBER WHERE MID=R.RID) AS NAME, (SELECT POSITION FROM MEMBER WHERE MID=R.RID) AS POSITION, "
 			+ "TIME(S.PREONWORK) AS PREONWORK, TIME(S.PREOFFWORK) AS PREOFFWORK, TIME(S.ONWORK) AS ONWORK, TIME(S.OFFWORK) AS OFFWORK, IF(S.ONWORK - S.PREONWORK > 0,'지각','정상') AS ONWORKSTATE, "
-			+ "IF(S.PREOFFWORK - S.OFFWORK > 0,'조퇴','정상') AS OFFWORKSTATE FROM RECRUIT AS R INNER JOIN SCHEDULE AS S "
+			+ "IF(S.PREOFFWORK - S.OFFWORK > 0,'조퇴','정상') AS OFFWORKSTATE, S.WAGE AS WAGE, S.MEMO AS MEMO FROM RECRUIT AS R INNER JOIN SCHEDULE AS S "
 			+ "ON R.RID = S.RID AND R.SID = #{sid} AND DATE(S.PREONWORK) BETWEEN #{startDate} AND #{endDate} AND DATE(S.PREONWORK) <= CURDATE()) ORIGIN "
 			+ "WHERE ${category} LIKE '%${query}%' ORDER BY DATE DESC")
 	public List<Attendance> searchAttendance(@Param("sid")String sid, @Param("startDate")String startDate, @Param("endDate")String endDate, @Param("category")String category, @Param("query")String query);
 	
 	// 근태 기록 수정
-	@Update("UPDATE SCHEDULE SET PREONWORK=#{preOnWork},PREOFFWORK=#{preOffWork},ONWORK=#{onWork},OFFWORK=#{offWork} WHERE SSEQ=#{sseq}")
-	public int modifyAttendance(@Param("sseq")String sseq, @Param("preOnWork")String preOnWork, @Param("preOffWork")String preOffWork, @Param("onWork")String onWork, @Param("offWork")String offWork);
+	@Update("UPDATE SCHEDULE SET PREONWORK=#{preOnWork},PREOFFWORK=#{preOffWork},ONWORK=#{onWork},OFFWORK=#{offWork},MEMO=#{memo} WHERE SSEQ=#{sseq}")
+	public int modifyAttendance(@Param("sseq")String sseq, @Param("preOnWork")String preOnWork, @Param("preOffWork")String preOffWork, @Param("onWork")String onWork, @Param("offWork")String offWork,  @Param("memo")String memo);
+	@Update("UPDATE SCHEDULE SET PREONWORK=#{preOnWork},PREOFFWORK=#{preOffWork},ONWORK=#{onWork},OFFWORK=#{offWork},MEMO=#{memo},wage=${wage} WHERE SSEQ=#{sseq}")
+	public int modifyAttendanceToday(@Param("sseq")String sseq, @Param("preOnWork")String preOnWork, @Param("preOffWork")String preOffWork, @Param("onWork")String onWork, @Param("offWork")String offWork,  @Param("memo")String memo, @Param("wage")int wage);
+	
+	// 스케줄 시급 변경(다음날부터)
+	@Update("UPDATE SCHEDULE SET WAGE=${wage} WHERE RID=#{rid} AND DATE(PREONWORK) > CURDATE()")
+	public int modifyWageFromTommorow(@Param("rid")String rid, @Param("wage")int wage);
 	
 	//직원의 결근 횟수 가져오기
 	@Select("SELECT COUNT(*) FROM SCHEDULE WHERE PREONWORK BETWEEN #{monDay} AND #{sunDay} AND RID=#{mid} AND ONWORK IS NULL")
