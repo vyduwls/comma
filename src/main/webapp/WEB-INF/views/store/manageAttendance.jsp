@@ -368,9 +368,9 @@
 					<c:forEach var="attendanceList" items="${attendanceList}">
 						<tr class="attendance_tr" id="${attendanceList.sseq}">
 							<td class="divide" style="width: 100px">${attendanceList.date}<input type="hidden" name="date" value="${attendanceList.date}"></td>
-							<td style="width: 60px">${attendanceList.mid}<input type="hidden" name="date" value="${attendanceList.mid}"></td>
-							<td style="width: 70px">${attendanceList.name}<input type="hidden" name="date" value="${attendanceList.name}"></td>
-							<td class="divide" style="width: 80px">${attendanceList.position}<input type="hidden" name="date" value="${attendanceList.position}"></td>
+							<td style="width: 60px">${attendanceList.mid}<input type="hidden" name="mid" value="${attendanceList.mid}"></td>
+							<td style="width: 70px">${attendanceList.name}<input type="hidden" name="name" value="${attendanceList.name}"></td>
+							<td class="divide" style="width: 80px">${attendanceList.position}<input type="hidden" name="position" value="${attendanceList.position}"></td>
 							<td class="data"><input style="width: 60px" type="text" value="${attendanceList.preOnWork}"></td>
 							<td class="data divide"><input style="width: 60px" type="text" value="${attendanceList.preOffWork}"></td>
 							<td class="data"><input style="width: 60px" type="text" value="${attendanceList.onWork}">

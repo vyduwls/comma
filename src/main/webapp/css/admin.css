@@ -1,4 +1,3 @@
-/* adminPage.jsp css */
 #side div {
 	margin: 0 0 20px 0;
     position: relative;
@@ -29,6 +28,34 @@
 /* .act {
 	border-left: 3px solid rgb(66,133,244);
 } */
+#frm_div {
+	float: right;
+}
+.sticky-headers {
+	margin-top: 20px;
+	height: 500px;
+	background-color: rgb(250,250,250);
+}
+.sticky-headers table thead th {
+	text-align: center;
+}
+.sticky-headers table tbody td {
+	text-align: center;
+	vertical-align: middle;
+	text-overflow: ellipsis;
+}
+.sticky-headers table tbody:LAST-CHILD {
+	border-bottom: 1px solid #ddd;
+}
+.data input {
+	border: none;
+	text-align: center;
+	vertical-align: middle;
+	height: 20px;
+}
+.divide {
+	border-right: 1px solid #ddd;
+}
 
 /* 폰트 */
 @font-face{

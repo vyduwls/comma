@@ -7,7 +7,6 @@ public class Store {
 		private String address;
 		private String storeNumber;
 		private String ip;
-		private String image;
 		private String mid;
 		private String regDate;
 		
@@ -47,12 +46,6 @@ public class Store {
 		}
 		public void setIp(String ip) {
 			this.ip = ip;
-		}
-		public String getImage() {
-			return image;
-		}
-		public void setImage(String image) {
-			this.image = image;
 		}
 		public String getMid() {
 			return mid;

@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Component;
 
 import com.comma.albaman.vo.Store;
+import com.comma.albaman.vo.StoreForAdmin;
 
 @Component
 public interface StoreDAO {
@@ -30,6 +31,10 @@ public interface StoreDAO {
 	
 	@Delete("DELETE FROM STORE WHERE SID=#{sid}")
 	public int deleteStore(String sid);
+	
+	// 전체 가게 검색(ADMIN)
+	@Select("SELECT *, (SELECT COUNT(*) FROM RECRUIT WHERE RECRUIT.SID=STORE.SID AND RESIGNDATE IS NULL AND JOINDATE <= CURDATE()) AS RECRUITCOUNT FROM STORE WHERE ${category} LIKE '%${query}%' ORDER BY REGDATE DESC")
+	public List<StoreForAdmin> getAllStoreByAdmin(@Param("category")String category, @Param("query")String query);
 }
 
 
