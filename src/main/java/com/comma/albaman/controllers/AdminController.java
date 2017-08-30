@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.comma.albaman.dao.CommentDAO;
 import com.comma.albaman.dao.MemberDAO;
+import com.comma.albaman.dao.QnaDAO;
 import com.comma.albaman.dao.StoreDAO;
 import com.comma.albaman.util.SendMail;
+import com.comma.albaman.vo.Qna;
 import com.comma.albaman.vo.Store;
 import com.comma.albaman.vo.StoreForAdmin;
 import com.comma.albaman.vo.StoreMember;
@@ -242,8 +245,45 @@ public class AdminController {
 	
 	// 문의 게시판 페이지
 	@RequestMapping(value={"manageQNA.do"},method=RequestMethod.GET)
-	public String manageQNA() {
+	public String manageQNA(String category, String query, String pg, Model model) {
 		System.out.println("\nAdminController의 manageQNA.do(GET)");
+		
+		if(category==null || category.equals("")) {
+			category = "title";
+		}
+		if(query==null) {
+			query = "";
+		}
+		int ipg = 0;
+		if(pg!=null && !pg.equals("")) {
+			ipg = Integer.parseInt(pg);
+		} else {
+			ipg = 1;
+		}
+		
+		QnaDAO qnaDAO = sqlSession.getMapper(QnaDAO.class);
+	
+		int total = qnaDAO.getAllMax(category, query);
+		int lastPage = total/15 + (total%15==0? 0 : 1);
+		int startPage = ipg -(ipg-1)%5;
+		int start = (ipg-1)*15;
+		int end = ipg*15;
+		
+		System.out.println("category : " + category);
+		System.out.println("query : " + query);
+		System.out.println("ipg : " + ipg);
+		System.out.println("start : " + start);
+		System.out.println("end : " + end);
+		
+		List<Qna> qnaList = qnaDAO.getAllQna(category, query, start, end);
+		System.out.println("qnaList의 크기 : " + qnaList.size()); 
+		
+		model.addAttribute("pg", ipg);
+		model.addAttribute("category", category);
+		model.addAttribute("query", query);
+		model.addAttribute("lastPage", lastPage);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("qnaList", qnaList);
 		
 		return "admin.manageQNA";
 	}

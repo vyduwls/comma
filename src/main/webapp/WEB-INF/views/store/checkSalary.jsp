@@ -251,7 +251,7 @@
 		 		&nbsp;  		
 		  		<!-- 직원 등록 버튼 / 엑셀 다운로드 버튼 -->
 		  		<div class="col-lg-3">
-				<button id="toExcelButton" class="btn btn-warning" style="float: right;margin-bottom: 20px;">엑셀 다운로드</button>	
+				<button id="toExcelButton" class="btn btn-warning" style="float: right;margin-bottom: 20px; margin-right: -15px">엑셀 다운로드</button>	
 				</div>
 		</div>
 		

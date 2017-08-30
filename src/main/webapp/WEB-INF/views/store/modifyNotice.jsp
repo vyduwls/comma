@@ -36,10 +36,32 @@
 				    $(document).ready(function() {
 				        $('#summernote').summernote({
 				        	height: 300,
-				        	lang : 'ko-KR'
+				        	lang : 'ko-KR',
+				        	callbacks : {
+					        	onImageUpload : function(files, editor, welEditable) {
+					        		sendFile(files[0], editor, welEditable);
+					        	}				        		
+				        	}
 				        });
 				        $('textarea[name="content"]').html($('#summernote').code());
 				    });
+				    
+				    function sendFile(file, editor, welEditable) {
+				        data = new FormData();
+				        data.append("uploadFile", file);
+				        $.ajax({
+				            data : data,
+				            type : "POST",
+				            url : "noticeImageUpload.do",
+				            cache : false,
+				            contentType : false,
+				            processData : false,
+				            success : function(data) {
+				            	var image = $("<img>").attr('src', '${pageContext.request.contextPath}' + data);
+				            	$('#summernote').summernote('insertNode', image[0]);
+				            }
+				        });
+				    }
 				</script>
 				
 				<!-- 파일 첨부 -->

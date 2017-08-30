@@ -1,3 +1,11 @@
+/* manageQNA.jsp의 css */
+#qna_table {
+	margin-top: 50px;
+}
+#qna_table th, td{
+	text-align: center;
+}
+
 #side div {
 	margin: 0 0 20px 0;
     position: relative;

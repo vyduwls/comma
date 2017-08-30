@@ -8,6 +8,7 @@ public class Qna {
 		private String regDate;
 		private String file;
 		private String mid;
+		private int comment;
 		
 		
 		public String getQseq() {
@@ -47,6 +48,10 @@ public class Qna {
 		public void setMid(String mid) {
 			this.mid = mid;
 		}
-		
-			
+		public int getComment() {
+			return comment;
+		}
+		public void setComment(int comment) {
+			this.comment = comment;
+		}
 }

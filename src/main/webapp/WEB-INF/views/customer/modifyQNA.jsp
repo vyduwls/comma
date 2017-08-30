@@ -7,30 +7,30 @@
 
 <script>
 	$(document).ready(function() {
-		if("${add}" == "fail") {
-			alert("문의사항 등록 실패");
+		if("${modify}" == "fail") {
+			alert("공지사항 수정 실패");
 		}
 	});
 </script>
 
 <div id="content">
 	<div class="container">
-		<h2><b>문의사항 등록</b></h2>
+		<h2><b>공지사항 수정</b></h2>
 		<br><br>
 		
-		<form action="addQna.do" method="post" enctype="multipart/form-data">
+		<form action="modifyQNA.do" method="post" enctype="multipart/form-data">
 			<div>			
 				<!-- 제목 -->
 				<div>
 					<label>제목</label>
-					<input type="text" class="form-control" name="title">
+					<input type="text" class="form-control" name="title" value="${qna.title}">
 				</div>
 				
 				<!-- 내용 -->
 				<div style="margin-top: 17px">
 					<label>내용</label>
 				</div>
-				<textarea id="summernote" name="content"></textarea>
+				<textarea id="summernote" name="content">${qna.content}</textarea>
 				<script type="text/javascript">
 				    $(document).ready(function() {
 				        $('#summernote').summernote({
@@ -66,12 +66,19 @@
 				<!-- 파일 첨부 -->
 				<div>
 					<label>파일 첨부</label>
+					<!-- 보안상의 이유로 file은 read-only다. 따라서 value값을 불러올 수 없음 -->
 					<input id="file" class="form-control" type="file" name="file">
 				</div>
 				
+				<!-- 넘겨줘야 할 데이터 -->
+				<input type="hidden" name="category" value="${category}">
+				<input type="hidden" name="query" value="${query}">
+				<input type="hidden" name="pg" value="${pg}">
+				<input type="hidden" name="qseq" value="${qna.qseq}">
+				
 				<!-- 버튼 -->
 				<div id="btn-group" style="margin-top: 20px">
-					<button class="btn btn-primary" type="submit">등록</button>
+					<button class="btn btn-primary" type="submit">수정</button>
 					<!-- 뒤로가기를 해서 sid,category,query 등 데이터 안 넘겨줘도 가능 -->
 					<a class="btn btn-default" href="javascript:history.go(-1)">취소</a>
 				</div>

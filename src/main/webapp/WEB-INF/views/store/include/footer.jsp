@@ -18,7 +18,7 @@
 
 		<div id="footer-support" class="col-lg-4">
 			<h5>SUPPORT</h5>
-			<p><a href="../customer/qna.do">Q & A</a></p>
+			<p><a href="">Q & A</a></p>
 		</div>
 	</div>
 

@@ -25,20 +25,20 @@
 			<div class="button">
 				<a id="myPage" type="button" class="btn btn-default btn-block "
 					href="${pageContext.request.contextPath}/customer/modifyMember.do">회원정보수정</a>
-				<a id="message" type="button" class="btn btn-default btn-block myPage-active"
+				<a id="message" type="button" class="btn btn-default btn-block" style="border-left: 3px solid rgb(66,133,244)"
 					href="${pageContext.request.contextPath}/customer/myPage.do" >가게 정보 등록/변경
 				</a> <a id="modify" type="button" class="btn btn-default btn-block"
-					href="${pageContext.request.contextPath}/customer/myPageQNA.do">문의사항</a> 
+					href="${pageContext.request.contextPath}/customer/myPageQNA.do">내 문의사항</a> 
 			</div>
 		</div>
 	</div>
 	
 	
-<div class="tab-content">
-	<b style="margin-left:34%; font-size: 17px;">가게 List</b>
-	<a href="addStore.do" class="btn btn-default" style="font-size: 13px;margin:0px 0px 10px 66%;">가게 등록</a>
+	<div class="tab-content">
+		<p><b style="margin-left:34%; font-size: 17px;">가게 리스트</b></p>
+		<a href="addStore.do" class="btn btn-default" style="font-size: 13px; float: right">가게 등록</a>
 		<!-- 게시글 리스트 -->
-	<div id="sell" >
+		<div id="sell" >
 			<div class="col-lg-9" style="height: 600px; overflow: auto">
 				<table class="table table-hover">
 					<thead>
@@ -61,24 +61,24 @@
 								<td class="storeTd">${n.ip}</td>
 								<td class="storeTd">${n.regDate}</td>
 								<td class="storeTd">
-								<a href="modifyStore.do?sid=${n.sid}" class="btn btn-primary" style="font-size: 13px;">수정</a>
+								<a href="modifyStore.do?sid=${n.sid}" class="btn btn-primary btn-xs" style="font-size: 13px;">수정</a>
 								</td>
 							</tr>
 						</c:forEach>
 					</c:if>
 					<c:if test="${empty storeList}">
-							<tr class="store_tr">
-								<td class="storeTd">-</td>
-								<td class="storeTd">-</td>
-								<td class="storeTd">-</td>
-								<td class="storeTd">-</td>
-								<td class="storeTd">-</td>
-								<td class="storeTd">-</td>
-							</tr>
+						<tr class="store_tr">
+							<td class="storeTd">-</td>
+							<td class="storeTd">-</td>
+							<td class="storeTd">-</td>
+							<td class="storeTd">-</td>
+							<td class="storeTd">-</td>
+							<td class="storeTd">-</td>
+						</tr>
 					</c:if>
 					</tbody>
 				</table>
 			</div>
 		</div>
-		</div>
 	</div>
+</div>
